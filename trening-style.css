@@ -1,0 +1,200 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&display=swap');
+
+/*========== Удалить ==========*/
+:root {
+    --bej-color: #D5BAAF;
+    --button-padding: 15px 32px;
+    --font-size: 16px;
+}
+/.header-trainigs img {
+display: none;    
+}
+.container{
+margin-left: 5% !important;    
+}
+body {
+background: #FAFAFA;   
+}
+[class*="lesson-id-"] {    
+
+}
+
+/*========== Оформление списка тренигов ==========*/
+.training-row{
+display: block !important;
+}
+.training-row td > a {
+display: block;
+}
+
+.training-row td{
+display: block !important;
+background: #fff;
+filter: drop-shadow(0px 0px 18.5px rgba(0, 0, 0, 0.07));
+border-radius: 15px;
+background-image: url("data:image/svg+xml,%3Csvg%20viewBox%3D%220%200%20854%20262%22%20fill%3D%22none%22%20xmlns%3D%22http://www.w3.org/2000/svg%22%3E%3Cpath%20d%3D%22M2%20233.109C85.363%20251.051%20288.375%20304.177%20471.606%20191.742C654.838%2079.3073%20804.056%20112.169%20851%20165.329%22%20stroke%3D%22%23D5BAAF%22/%3E%3Cpath%20d%3D%22M1%20211.416C97%20201.916%20321.7%20142.714%20500.5%2041.9138C679.3%20-58.8862%20814.333%2050.9156%20853.5%20110.916%22%20stroke%3D%22%23D5BAAF%22/%3E%3Cpath%20d%3D%22M2%20225.73C70.4434%20235.083%20310.58%20257.607%20467.597%20152.983C624.614%2048.3588%20767.291%2079.4164%20851%20123.01%22%20stroke%3D%22%23D5BAAF%22/%3E%3C/svg%3E");
+background-repeat: no-repeat;
+background-position: center calc(100% + 10px);
+background-size: 100% auto !important;
+min-height: 180px !important;
+margin-bottom: 30px;
+height: auto !important; /* обязательно! */
+transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.training-row td:hover{
+transform: translateY(-10px);
+box-shadow: 0 10px 38.5px rgba(0, 0, 0, 0.1);   
+}
+
+.stream-table tr td:hover {
+background: #fff;
+filter: drop-shadow(0px 0px 18.5px rgba(0, 0, 0, 0.07));
+border-radius: 15px;
+background-image: url("data:image/svg+xml,%3Csvg%20width%3D%22854%22%20height%3D%22262%22%20viewBox%3D%220%200%20854%20262%22%20fill%3D%22none%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cpath%20d%3D%22M2%20233.109C85.363%20251.051%20288.375%20304.177%20471.606%20191.742C654.838%2079.3073%20804.056%20112.169%20851%20165.329%22%20stroke%3D%22%23D5BAAF%22/%3E%3Cpath%20d%3D%22M1%20211.416C97%20201.916%20321.7%20142.714%20500.5%2041.9138C679.3%20-58.8862%20814.333%2050.9156%20853.5%20110.916%22%20stroke%3D%22%23D5BAAF%22/%3E%3Cpath%20d%3D%22M2%20225.73C70.4434%20235.083%20310.58%20257.607%20467.597%20152.983C624.614%2048.3588%20767.291%2079.4164%20851%20123.01%22%20stroke%3D%22%23D5BAAF%22/%3E%3C/svg%3E");
+background-repeat: no-repeat;
+background-position: center calc(100% + 10px);
+background-size: 100% auto !important;
+}
+@media screen and (max-width: 768px) {
+.training-row td{
+min-height: 120px !important;
+margin-bottom: 20px;
+
+   }
+}
+
+/*========== Оформление списка тренигов !текст! ==========*/
+.training-row td .stream-title{
+display: block;
+font-family: 'Montserrat';
+max-width: 60% !important;
+font-style: normal;
+font-weight: 650;
+font-size: 23px;
+line-height: 31px;
+color: #363636;
+padding-top: 10px;
+text-shadow: 0px 4px 30px #FFFFFF, 0px 4px 10px #FFFFFF, 0px 4px 15px #FFFFFF, 0px 4px 20px #FFFFFF, 0px 4px 30px #FFFFFF ;
+}
+
+.stream-table b {
+font-family: 'Montserrat';
+font-style: normal;
+font-weight: 500;
+font-size: 15px;
+line-height: 22px;
+color: #717171;
+text-shadow: 0px 4px 30px #FFFFFF, 0px 4px 10px #FFFFFF, 0px 4px 15px #FFFFFF, 0px 4px 20px #FFFFFF, 0px 4px 30px #FFFFFF ;  
+}
+.no-children div {
+font-family: 'Montserrat';
+font-style: normal;
+font-weight: 500;
+font-size: 15px;
+line-height: 22px;
+color: #717171;
+text-shadow: 0px 4px 30px #FFFFFF, 0px 4px 10px #FFFFFF, 0px 4px 15px #FFFFFF, 0px 4px 20px #FFFFFF, 0px 4px 30px #FFFFFF ;
+}
+.training-row td .stream-title,
+.training-row td b,
+.training-row td .no-children div {
+text-shadow: 0px 4px 30px #FFFFFF, 0px 4px 10px #FFFFFF, 0px 4px 15px #FFFFFF, 0px 4px 20px #FFFFFF, 0px 4px 30px #FFFFFF ;
+}
+@media screen and (max-width: 768px) {
+.training-row td .stream-title{
+display: block;
+font-family: 'Montserrat';
+max-width: 90% !important;
+font-style: normal;
+font-weight: 650;
+font-size: 15px;
+line-height: 19px;
+color: #363636;
+padding-top: 10px;
+text-shadow: 0px 4px 30px #FFFFFF, 0px 4px 10px #FFFFFF, 0px 4px 15px #FFFFFF, 0px 4px 20px #FFFFFF, 0px 4px 30px #FFFFFF ;
+}
+.stream-table b {
+font-size: 12px;
+    }
+.no-children div {
+font-size: 12px;    
+    }
+}
+
+
+/*========== Оформление списка тренигов !картинка! ==========*/
+@media screen and (min-width: 768px) {  
+[class*="training-image-after-"]::after {
+  position: absolute !important; 
+  top: 20px !important;
+  bottom: auto !important;
+  left: auto !important;
+  right: 15px !important;
+  min-height: 130px !important;
+  width: 130px !important;
+  background-size: cover !important;
+  border-radius: 15px !important;
+}
+}
+@media screen and (max-width: 768px) {  
+[class*="training-image-after-"]::after {
+ display: none;
+}
+}
+
+
+
+/*========== Оформление списка тренигов !Верх! ==========*/
+.breadcrumbs a {    
+font-family: 'Futura PT';
+font-style: normal;
+font-weight: 400;
+font-size: 18px;
+line-height: 23px;
+color: #292929;
+}
+.breadcrumbs a:hover  {
+text-decoration: none !important;   
+}
+.breadcrumbs a:after{ /* Стрелка слева для мини меню возврата назад "< тренинги" */
+content: "";
+display: inline-block; /* Позволяет задать размеры для псевдоэлемента */
+width: 15px; /* Ширина изображения */
+height: 15px; /* Высота изображения */
+mask: url('https://static.tildacdn.com/tild3236-3233-4137-b865-626135396466/Arrow_10.svg') no-repeat center;
+background-color: #292929; /* Тот самый "цвет" SVG */
+background-size: contain; /* Масштабирует изображение, чтобы оно полностью помещалось в элемент */
+margin-left: 5px; /* Отступ слева от псевдоэлемента */
+transform: scale(1.4) rotate(180deg);
+position: relative;
+top: 3px;
+transition: transform 0.5s ease;
+}
+.breadcrumbs a:hover:after{ /* Стрелка слева для мини меню возврата назад "< тренинги" */
+content: "";
+display: inline-block; /* Позволяет задать размеры для псевдоэлемента */
+width: 15px; /* Ширина изображения */
+height: 15px; /* Высота изображения */
+mask: url('https://static.tildacdn.com/tild3236-3233-4137-b865-626135396466/Arrow_10.svg') no-repeat center;
+background-color: #292929; /* Тот самый "цвет" SVG */
+background-size: contain; /* Масштабирует изображение, чтобы оно полностью помещалось в элемент */
+margin-left: 5px; /* Отступ слева от псевдоэлемента */
+transform: scale(1.4) rotate(180deg) translateX(-5px);
+position: relative;
+top: 3px;
+}
+.content-menu {
+display: none;    
+}
+@media screen and (max-width: 768px) {
+.page-header h1{
+font-size: 20px;
+left: -15px;
+position: relative;
+}
+.breadcrumbs {
+left: -15px;
+position: relative;
+    }
+
+}
