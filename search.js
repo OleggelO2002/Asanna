@@ -13,7 +13,7 @@ const searchContainerHTMLMobile = `
 
 // HTML-код для десктопной версии
 const searchContainerHTMLDesktop = `
-  <div id="searchWrapper" style="width: 100%; background-color: #f8f8f8; padding: 10px; box-sizing: border-box;">
+  <div id="searchWrapper" style="width: 100%; background-color: #ffffff; padding: 10px; box-sizing: border-box; background-image: url(data:image/svg+xml,%3Csvg width='1618' height='158' viewBox='0 0 1618 158' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M98.5 1C131.5 33.5 243.3 93.4 426.5 73C655.5 47.5 939.5 -56 1228 73C1458.8 176.2 1583.5 130.333 1617 94.5' stroke='%23D5BAAF'/%3E%3Cpath d='M0.5 53.4992C40.3333 39.3326 92 49.4966 155.5 98.9992C258.058 178.95 387.333 158 485.5 143.5' stroke='%23D5BAAF'/%3E%3C/svg%3E); background-repeat: no-repeat; background-size: cover; background-position: center;">
     <div id="searchContainer" style="position: relative; z-index: 1000; display: flex; align-items: center; background-color: white; border-radius: 20px; padding: 0 10px;">
       <img src="https://static.tildacdn.info/tild3764-3665-4662-b664-373066626139/Search_Magnifying_Gl.svg" alt="Search" style="width: 20px; height: 20px; margin-right: 10px;">
       <input type="text" id="searchInput" placeholder="Введите название тренинга или урока" style="border: none; outline: none; flex-grow: 1;">
