@@ -112,6 +112,21 @@ top: 20px;
   background-image: url('https://static.tildacdn.com/tild3432-3264-4666-b232-343164316664/sale-icon.svg');
 }
 
+.menu-item a[title="Служба заботы"]::before {
+  background-image: url('https://static.tildacdn.info/tild3235-6131-4436-b833-326462346130/paperplane-icon_2.svg');
+}
+.menu-item a[title="Служба поддержки"]::before {
+  background-image: url('https://static.tildacdn.com/tild3933-3231-4535-b633-396432623033/notifications-icon-1.svg');
+}
+
+.menu-item a[title="Покупки"]::before {
+  background-image: url('https://static.tildacdn.com/tild3432-3264-4666-b232-343164316664/sale-icon.svg');
+}
+.menu-item a[title="Mobile"]::before {
+  background-image: url('https://static.tildacdn.com/tild6633-6361-4131-b530-333131313630/chatium-icon-1_2.svg');
+}
+
+
 .gc-account-leftbar.collapsed .menu-item-notifications_button_small::after{
 display: none;    
 }
