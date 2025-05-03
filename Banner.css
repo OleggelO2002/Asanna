@@ -1,0 +1,76 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&display=swap');
+/* Стили для обёртки баннера */
+.custom-banner {
+  position: relative; /* Важный стиль для того, чтобы дочерние элементы с absolute позиционировались относительно баннера */
+  width: 100%;
+  height: auto;
+  margin-top: 60px;
+}
+
+/* Стили для текста на баннере */
+.banner-text {
+  font-family: 'Futura PT', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: clamp(16px, 2vw, 32px);
+  line-height: 32px;
+  text-align: center;
+  letter-spacing: -0.01em;
+  color: #2E2E2E;
+  position: absolute;
+  top: 62%;
+  right: auto;
+  left:  14%;
+  padding: 10px;
+  max-width: 50%;
+}
+
+/* Стили для обёртки кнопок */
+.banner-buttons {
+  width: 100%;
+  position: absolute;
+  top: 85%;
+  font-family: 'Montserrat', sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  margin-left: 10%;
+  display: flex;
+  gap: 20px;
+}
+*/
+/* Стили для кнопок */
+.banner-buttons {
+  width: 100%;
+  position: absolute;
+  top: 85%; /* Располагаем кнопки немного ниже центра */
+  margin-left: 10%;
+  display: flex;
+  gap: 20px;
+}
+
+/* Стили для кнопок */
+.banner-button { 
+  background-color: #fff;
+  font-family: 'Montserrat', sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: clamp(3px, 2vw, 13px);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: #363636;
+  padding: 10px 56px;
+  cursor: pointer;
+  border-radius: 6px !important;
+  transition: background-color 0.3s ease;
+}
+
+.banner-button:hover {
+  background-color: #D3D3D3;
+  color: #333333;
+  text-decoration: none
+}
+
+
+.logo-link  {
+display: none;    
+}
