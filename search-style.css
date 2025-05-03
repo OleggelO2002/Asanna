@@ -1,0 +1,149 @@
+/*===================CSS для поиска===================*/
+@media screen and (min-width: 768px) {
+#searchResults{
+margin-top: 5px;
+border: none !important;
+box-shadow: 0px 5px 8.5px rgba(0, 0, 0, 0.5);
+}
+#searchResults h2{
+margin-top: 15px;
+font-size: 14px;
+font-weight: 600;
+color: #B5705C;
+margin-left: 10px;
+}
+.result-item h3{
+margin-top: 10px;
+font-size: 15px;
+font-weight: 600;
+color: #333333;   
+margin-left: 20px;
+}
+.result-item p{
+font-size: 14px;
+font-weight: 500;
+color: #A9A9A9;
+margin-left: 20px;
+}
+.result-item a{
+padding-left: 15px !important;
+padding-right: 15px !important;
+padding-bottom: 5px;
+padding-top: 5px; 
+margin-left: 20px;
+background: linear-gradient(171.36deg, #C47963 1.76%, #5D3A30 120.93%);
+border-radius: 5px;
+color: #FFFFFF;
+}
+.result-item img{
+display: none;
+
+}
+.lesson-item{
+margin-bottom: 20px;
+}
+#searchContainer {
+height: 50px;
+width: 40% !important;
+border-radius: 10px !important;
+left: 10%;
+}
+
+#searchWrapper{
+background: linear-gradient(171.36deg, #C47963 1.76%, #5D3A30 120.93%);
+height: 70px;
+top: 0;
+bottom: auto;
+position: absolute; 
+}
+}
+
+.logo-link img {
+position: relative;  
+top: -10px; 
+border-radius: 10px;
+}
+.annotate-block {
+position: absolute;
+left: auto;
+right: 40px;
+top: 10px;
+border-radius: 10px;
+background: #fff !important;
+}
+
+@media screen and (max-width: 768px) {
+#searchContainerMobile{
+overflow: visible !important;
+}
+#searchInputMobile{
+border-radius: 30px;    
+}
+#searchResultsMobile{
+margin-top: 5px;
+border: none !important;
+box-shadow: 0px 5px 8.5px rgba(0, 0, 0, 0.5);
+width: 90vw !important;
+left: -10vw !important;
+}
+#searchResultsMobile h2{
+margin-top: 15px;
+font-size: 14px;
+font-weight: 400;
+color: #A9A9A9;
+margin-left: 10px;
+}
+.result-item h3{
+margin-top: 10px;
+font-size: 15px;
+font-weight: 600;
+color: #333333;   
+margin-left: 20px;
+}
+.result-item p{
+font-size: 14px;
+font-weight: 500;
+color: #A9A9A9;
+margin-left: 20px;
+}
+.result-item a{
+padding-left: 15px !important;
+padding-right: 15px !important;
+padding-bottom: 5px;
+padding-top: 5px; 
+margin-left: 20px;
+background: linear-gradient(171.36deg, #C47963 1.76%, #5D3A30 120.93%);
+border-radius: 5px;
+color: #FFFFFF;
+}
+.result-item img{
+display: none;
+}
+.lesson-item{
+margin-bottom: 20px;
+}
+#searchContainerMobile{
+left: auto;
+right: 0;
+position: absolute !important;
+box-shadow: 0px 4px 10.5px rgba(0, 0, 0, 0.08);
+margin-top: 5px;
+margin-right: 50px;
+flex-direction: row-reverse;
+}
+.gc-account-leftbar {
+width: 100vw !important;
+    }
+}
+.gc-user-admin .logo-link img {
+top: -41px !important;
+position: relative;
+}
+.logo-link img {
+top: -58px; 
+position: absolute;
+}
+.gc-user-user .page-header{
+display: none;
+}
+}
