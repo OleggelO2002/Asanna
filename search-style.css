@@ -50,7 +50,7 @@ left: 10%;
 }
 
 #searchWrapper{
-background: #FFFFFF;
+background: #FFFFFF !important;
 height: 70px;
 top: 0;
 bottom: auto;
