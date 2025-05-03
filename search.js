@@ -13,8 +13,8 @@ const searchContainerHTMLMobile = `
 
 // HTML-код для десктопной версии
 const searchContainerHTMLDesktop = `
-  <div id="searchWrapper" style="width: 100%; background-color: #f8f8f8; padding: 10px; box-sizing: border-box; background-image: url('data:image/svg+xml,%3Csvg%20width%3D%221618%22%20height%3D%22158%22%20viewBox%3D%220%200%201618%20158%22%20fill%3D%22none%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cpath%20d%3D%22M98.5%201C131.5%2033.5%20243.3%2093.4%20426.5%2073C655.5%2047.5%20939.5%20-56%201228%2073C1458.8%20176.2%201583.5%20130.333%201617%2094.5%22%20stroke%3D%22%23D5BAAF%22/%3E%3Cpath%20d%3D%22M0.5%2053.4992C40.3333%2039.3326%2092%2049.4966%20155.5%2098.9992C258.058%20178.95%20387.333%20158%20485.5%20143.5%22%20stroke%3D%22%23D5BAAF%22/%3E%3C/svg%3E'); background-repeat: no-repeat; background-size: cover; background-position: center;">
-    <div id="searchContainer" style="position: relative; z-index: 1000; display: flex; align-items: center; background-color: white; border-radius: 20px; padding: 0 10px;">
+   <div id="searchWrapper" style="width: 100%; background-color: #f8f8f8; padding: 10px; box-sizing: border-box;">
+      <div id="searchContainer" style="position: relative; z-index: 1000; display: flex; align-items: center; background-color: white; border-radius: 20px; padding: 0 10px;">
       <img src="https://static.tildacdn.info/tild3764-3665-4662-b664-373066626139/Search_Magnifying_Gl.svg" alt="Search" style="width: 20px; height: 20px; margin-right: 10px;">
       <input type="text" id="searchInput" placeholder="Введите название тренинга или урока" style="border: none; outline: none; flex-grow: 1;">
       <div id="searchResults" style="display: none; position: absolute; top: 100%; left: 0; width: 100%; background-color: white; border: 1px solid #ccc; border-radius: 5px; max-height: 200px; overflow-y: auto; z-index: 1001;"></div>
