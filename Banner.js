@@ -1,59 +1,63 @@
 const container = document.querySelector('.container');
 
-// Создаем новый элемент (например, div)
-const newElement = document.createElement('div');
-newElement.classList.add('new-element-class');
+// Создаем контейнер баннера
+const banner = document.createElement('div');
+banner.classList.add('custom-banner');
 
-// Создаем тег <img>
-const img = document.createElement('img');
+if (window.innerWidth > 768) {
+  // Настройки для десктопа
+  const bannerUrl = 'https://static.tildacdn.info/tild3636-3765-4834-b862-323336663562/Frame_279.png';
+  banner.style.backgroundImage = `url(${bannerUrl})`;
+  banner.style.backgroundSize = 'cover';
+  banner.style.backgroundPosition = 'center';
+  banner.style.width = '100%';
+  banner.style.position = 'relative';
+  
+  // Высота по пропорции (466 / 1287)
+  const aspectRatio = 466 / 1287;
+  const containerWidth = container.offsetWidth;
+  banner.style.height = `${containerWidth * aspectRatio}px`;
 
-// Проверяем ширину экрана
-if (window.innerWidth <= 768) {
-  // Мобильная версия
-  img.src = 'https://static.tildacdn.com/tild6266-3566-4166-b565-353935386661/Group_48097271.png';
+  // Текст
+  const bannerText = document.createElement('div');
+  bannerText.classList.add('banner-text');
+  bannerText.textContent = 'Искусство построения отношений между мужчиной и женщиной'; // Замените на нужный
+
+  // Контейнер для кнопок
+  const buttonWrapper = document.createElement('div');
+  buttonWrapper.classList.add('button-wrapper');
+
+  // Функция для создания кнопки с ссылкой
+  const createButton = (label, url) => {
+    const btnWrapper = document.createElement('a');
+    btnWrapper.href = url;  // Добавляем ссылку
+    btnWrapper.classList.add('banner-button');
+    
+    const btn = document.createElement('button');
+    btn.textContent = label;
+    btn.classList.add('banner-button');
+    
+    btnWrapper.appendChild(btn);
+    return btnWrapper;
+  };
+
+  // Добавляем кнопки с нужными ссылками
+  buttonWrapper.appendChild(createButton('Работа с наставником', 'https://www.example1.com')); // Укажите ссылку для первой кнопки
+  buttonWrapper.appendChild(createButton('Расписание', 'https://www.example2.com')); // Укажите ссылку для второй кнопки
+  buttonWrapper.appendChild(createButton('Отчет', 'https://www.example3.com')); // Укажите ссылку для третьей кнопки
+
+  banner.appendChild(bannerText);
+  banner.appendChild(buttonWrapper);
+
 } else {
-  // Десктопная версия
-  img.src = 'https://static.tildacdn.info/tild3636-3765-4834-b862-323336663562/Frame_279.png';
+  // Мобильная версия — изображение
+  const img = document.createElement('img');
+  img.src = 'https://static.tildacdn.com/tild6266-3566-4166-b565-353935386661/Group_48097271.png';
+  img.alt = 'Mobile banner';
+  img.style.width = '100%';
+  img.style.height = 'auto';
+  banner.appendChild(img);
 }
 
-img.alt = 'Image';  // Альтернативный текст
-img.style.width = '100%';
-img.style.height = 'auto';
-
-// Создаем блок с текстом
-const textBlock = document.createElement('div');
-textBlock.classList.add('banner-text');
-textBlock.textContent = "Искусство построения отношений между мужчиной и женщиной"; // Замените на ваш текст
-
-// Создаем контейнер для кнопок
-const buttonWrapper = document.createElement('div');
-buttonWrapper.classList.add('button-wrapper');
-
-// Создаем кнопки с ссылками
-const button1 = document.createElement('a');
-button1.href = 'https://www.example1.com'; // Укажите ссылку для первой кнопки
-button1.classList.add('banner-button');
-button1.textContent = 'Работа с наставником';
-
-const button2 = document.createElement('a');
-button2.href = 'https://www.example2.com'; // Укажите ссылку для второй кнопки
-button2.classList.add('banner-button');
-button2.textContent = 'Расписание';
-
-const button3 = document.createElement('a');
-button3.href = 'https://www.example3.com'; // Укажите ссылку для третьей кнопки
-button3.classList.add('banner-button');
-button3.textContent = 'Отчет';
-
-// Добавляем кнопки в контейнер
-buttonWrapper.appendChild(button1);
-buttonWrapper.appendChild(button2);
-buttonWrapper.appendChild(button3);
-
-// Добавляем все элементы в баннер
-newElement.appendChild(img);
-newElement.appendChild(textBlock);
-newElement.appendChild(buttonWrapper);
-
-// Добавляем баннер в начало контейнера
-container.prepend(newElement);
+// Вставляем баннер в начало контейнера
+container.prepend(banner);
