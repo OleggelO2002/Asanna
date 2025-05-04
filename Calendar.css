@@ -17,6 +17,14 @@
   transform: translateY(-50%) rotate(180deg);
 }
 
+.header-trainigs img {
+display: none;    
+}
+
+body{
+background: #FAFAFA;
+}
+
 .xdget-lessonSchedule h3 {
 font-family: 'Futura PT', sans-serif;
 font-style: normal;
@@ -58,6 +66,8 @@ background: #C0A093 !important;
 .schedule-block .day-label {
 margin-left: 18px;    
 }
+
+
 
 .schedule-block .event a {
 color: #C0A093;
