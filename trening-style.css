@@ -1,10 +1,29 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&display=swap');
 
+
+
+
 /*========== Удалить ==========*/
-:root {
-    --bej-color: #D5BAAF;
-    --button-padding: 15px 32px;
-    --font-size: 16px;
+@media screen and (max-width: 768px) {
+.page-header h1 {
+font-family: 'Felidae';
+font-style: normal;
+font-weight: 400;
+font-size: 28px !important;
+color: #2E2E2E;
+margin-right: 0px !important;
+margin-bottom: 0px !important;
+}
+.page-actions {
+display: none;
+}
+}
+.page-header h1 {
+font-family: 'Felidae';
+font-style: normal;
+font-weight: 400;
+font-size: 64px;
+color: #2E2E2E;   
 }
 /.header-trainigs img {
 display: none;    
@@ -15,9 +34,7 @@ margin-left: 5% !important;
 body {
 background: #FAFAFA;   
 }
-[class*="lesson-id-"] {    
 
-}
 
 /*========== Оформление списка тренигов ==========*/
 .training-row{
@@ -59,8 +76,17 @@ background-size: 100% auto !important;
 .training-row td{
 min-height: 120px !important;
 margin-bottom: 20px;
-
    }
+    .col-md-12{
+        padding: 0 !important;
+    }
+    .stream-table{
+        margin-left: 0px !important;   
+    }
+    
+    .col-md-8{
+        padding-right: 30px !important;
+    }
 }
 
 /*========== Оформление списка тренигов !текст! ==========*/
