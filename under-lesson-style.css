@@ -1,0 +1,484 @@
+body{
+background: #FAFAFA    
+}
+
+
+@media screen and (min-width: 768px) {
+.header-trainigs img {
+display: none;    
+}
+.standard-logo{
+display: none;
+}
+
+#searchWrapper {
+width: calc(100vw - 280px) !important; 
+}
+.lite-page>* {
+    flex: none !important;
+    -webkit-flex: none !important;
+}
+.container {
+width: calc(100vw - 280px) !important;    
+margin-left: 0px !important;
+margin-right: 0px !important;
+padding-right: 0px !important;
+}
+
+.center-block {
+margin-right: 0px !important;
+max-width: none !important;
+}
+
+/.lite-page.block-set > :not(.lt-lesson-comment-block .col-md-12) {
+justify-content: center !important; /* Центрирует вложенные блоки по горизонтали */
+margin: 0 auto !important;      
+}
+
+.lite-page.block-set{
+justify-content: center !important; /* Центрирует вложенные блоки по горизонтали */
+margin: 0 auto !important;      
+}
+.page-header {
+max-width: 100% !important;
+padding-top: 20px;
+background: #fff;  
+margin-top: 0px !important;
+margin-bottom: 0px;
+border-bottom: 0px;
+}
+.page-header h1{ 
+padding-left: 20px;
+margin-top: 0px !important;
+}
+.lesson-header-block.row-section{
+background: #fff !important;
+}
+
+/*========== Оформление урока !Кнопки! ==========*/
+.lt-block .f-btn {
+background-color: transparent !important;
+background: url('https://static.tildacdn.info/tild3133-3639-4330-b066-393865353137/Group_48097313.svg') no-repeat center center;
+background-size: contain;
+border: none; /* Убираем границу, если она есть */
+min-height: 70px !important;
+}
+.lt-block .f-btn:hover{
+background: url('https://static.tildacdn.info/tild3536-6162-4231-a265-303834613861/Group_48097346.svg')   
+no-repeat center center;
+background-size: contain;
+border: none; /* Убираем границу, если она есть */
+}
+
+
+
+/*========== Оформление урока !Комментарии! ==========*/
+.lite-block-live-wrapper.o-lt-lesson.o-lt-lesson-comment-block{
+background: #fff;
+width: 95%;
+margin-left: 5%;
+padding-left: 100px;
+padding-top: 40px;
+border-radius: 15px 0px 0px 15px !important;
+}
+
+.lesson-answers-title h3 {
+font-family: 'Futura PT';
+font-style: normal;
+font-weight: 500;
+font-size: 40px;
+color: #292929;    
+}
+
+
+
+
+
+
+/*========== Оформление урока !Верх! ==========*/
+
+.lesson-navigation a {
+font-family: 'Montserrat' !important;
+font-style: normal !important;
+font-weight: 500 !important;
+font-size: 16px !important;
+color: #292929 !important;
+}
+.lesson-navigation a:hover{
+text-decoration: none !important;
+}
+.fui-arrow-left::after{
+content: "" !important;
+display: inline-block !important; /* Позволяет задать размеры для псевдоэлемента */
+width: 35px !important; /* Ширина изображения */
+height: 15px !important; /* Высота изображения */
+mask: url('https://static.tildacdn.com/tild3534-3839-4533-b364-616630356631/Arrow_14.svg') no-repeat center;
+background-color: #292929 !important; /* Тот самый "цвет" SVG */
+background-size: contain !important; /* Масштабирует изображение, чтобы оно полностью помещалось в элемент */
+margin-left: 5px !important; /* Отступ слева от псевдоэлемента */
+transform: scale(1.1) rotate(180deg) !important;
+position: relative !important;
+top: 3px !important;
+transition: transform 0.5s ease !important;
+}
+.fui-arrow-left:hover::after{
+transform: translateX(-5px) scale(1.1) rotate(180deg) !important;
+transition: width 0.3s ease !important;
+}
+.lesson-navigation td:first-child:has(a:hover) .fui-arrow-left::after {
+  transform: translateX(-5px) scale(1.1) rotate(180deg) !important;
+  transition: all 0.3s ease !important;
+}
+
+
+.fui-arrow-right::after{
+content: "" !important;
+display: inline-block; /* Позволяет задать размеры для псевдоэлемента */
+width: 35px !important; /* Ширина изображения */
+height: 15px !important; /* Высота изображения */
+mask: url('https://static.tildacdn.com/tild3534-3839-4533-b364-616630356631/Arrow_14.svg') no-repeat center;
+background-color: #292929 !important; /* Тот самый "цвет" SVG */
+background-size: contain !important; /* Масштабирует изображение, чтобы оно полностью помещалось в элемент */
+margin-left: 5px !important; /* Отступ слева от псевдоэлемента */
+transform: scale(1.1) !important ;
+position: relative !important;
+top: 3px !important;
+transition: transform 0.5s ease !important;
+}
+.fui-arrow-right:hover::after{
+transform: translateX(5px) scale(1.1) !important;
+transition: width 0.3s ease !important;
+}
+.lesson-navigation td:last-child:has(a:hover) .fui-arrow-right::after {
+  transform: translateX(5px) scale(1.1) !important;
+  transition: all 0.3s ease !important;
+}
+
+div.hidden-xs {
+margin-left: 45px;    
+}
+.text-right div.hidden-xs {
+margin-right: 45px !important;    
+}
+
+
+@media screen and (min-width: 768px) {
+#searchContainer {
+left: 20% !important;
+}
+}
+
+
+.breadcrumb {
+margin-top: 70px;
+padding-top: 60px !important;
+padding-left: 50px !important;
+max-width: 100% !important;
+background: #fff !important;    
+margin-bottom: 0px !important;
+}
+
+
+.breadcrumb a {    
+font-family: 'Futura PT';
+font-style: normal;
+font-weight: 400;
+font-size: 18px;
+line-height: 23px;
+color: #292929;
+}
+.breadcrumb a:hover  {
+text-decoration: none !important;   
+}
+.breadcrumb a:after{ /* Стрелка слева для мини меню возврата назад "< тренинги" */
+content: "";
+display: inline-block; /* Позволяет задать размеры для псевдоэлемента */
+width: 15px; /* Ширина изображения */
+height: 15px; /* Высота изображения */
+mask: url('https://static.tildacdn.com/tild3236-3233-4137-b865-626135396466/Arrow_10.svg') no-repeat center;
+background-color: #292929; /* Тот самый "цвет" SVG */
+background-size: contain; /* Масштабирует изображение, чтобы оно полностью помещалось в элемент */
+margin-left: 5px; /* Отступ слева от псевдоэлемента */
+transform: scale(1.4) rotate(180deg);
+position: relative;
+top: 3px;
+transition: transform 0.5s ease;
+}
+.breadcrumb a:hover:after{ /* Стрелка слева для мини меню возврата назад "< тренинги" */
+content: "";
+display: inline-block; /* Позволяет задать размеры для псевдоэлемента */
+width: 15px; /* Ширина изображения */
+height: 15px; /* Высота изображения */
+mask: url('https://static.tildacdn.com/tild3236-3233-4137-b865-626135396466/Arrow_10.svg') no-repeat center;
+background-color: #292929; /* Тот самый "цвет" SVG */
+background-size: contain; /* Масштабирует изображение, чтобы оно полностью помещалось в элемент */
+margin-left: 5px; /* Отступ слева от псевдоэлемента */
+transform: scale(1.4) rotate(180deg) translateX(-5px);
+position: relative;
+top: 3px;
+}
+
+@media screen and (max-width: 768px) {
+.page-header h1{
+font-size: 20px;
+left: -15px;
+position: relative;
+}
+.breadcrumb {
+left: -15px;
+position: relative;
+    }
+
+}
+
+.page-header a {
+font-family: 'Felidae';
+font-style: normal;
+font-weight: 400;
+font-size: 35px;
+color: #2E2E2E;    
+text-decoration: none;
+transition: transform 0.5s ease !important;
+}
+
+.page-header a::before {
+content: "";
+display: inline-block; /* Позволяет задать размеры для псевдоэлемента */
+width: 25px; /* Ширина изображения */
+height: 25px; /* Высота изображения */
+mask: url('https://static.tildacdn.com/tild3236-3233-4137-b865-626135396466/Arrow_10.svg') no-repeat center;
+background-color: #292929; /* Тот самый "цвет" SVG */
+background-size: contain; /* Масштабирует изображение, чтобы оно полностью помещалось в элемент */
+margin-left: 5px; /* Отступ слева от псевдоэлемента */
+transform: scale(2);
+position: relative;
+transition: transform 0.5s ease !important;
+}
+.page-header a:hover::before {
+content: "";
+display: inline-block; /* Позволяет задать размеры для псевдоэлемента */
+width: 25px; /* Ширина изображения */
+height: 25px; /* Высота изображения */
+mask: url('https://static.tildacdn.com/tild3236-3233-4137-b865-626135396466/Arrow_10.svg') no-repeat center;
+background-color: #292929; /* Тот самый "цвет" SVG */
+background-size: contain; /* Масштабирует изображение, чтобы оно полностью помещалось в элемент */
+margin-left: 5px; /* Отступ слева от псевдоэлемента */
+transform: scale(2) translateX(-5px);
+position: relative;
+}
+
+
+.lesson-title-value {
+font-family: 'Futura PT';
+font-style: normal;
+font-weight: 500;
+font-size: 45px;
+color: #2E2E2E;    
+text-align: left !important;
+padding-left: 40px;
+margin-bottom: 40px;
+max-width: 70%
+}
+}
+@media screen and (max-width: 768px) {
+/*========== Оформление урока !Кнопки! ==========*/
+.lt-block .f-btn {
+background-color: transparent !important;
+background: url('https://static.tildacdn.info/tild3133-3639-4330-b066-393865353137/Group_48097313.svg') no-repeat center center;
+background-size: contain;
+border: none; /* Убираем границу, если она есть */
+min-height: 70px !important;
+}
+.lt-block .f-btn:hover{
+background: url('https://static.tildacdn.info/tild3536-6162-4231-a265-303834613861/Group_48097346.svg')   
+no-repeat center center;
+background-size: contain;
+border: none; /* Убираем границу, если она есть */
+}    
+
+    
+/*========== Оформление урока !Комментарии! ==========*/
+.lite-block-live-wrapper.o-lt-lesson.o-lt-lesson-comment-block{
+background: #fff;
+padding-top: 1px;
+border-radius: 10px 10px 10px 10px !important;
+box-shadow: 0px 0px 98px rgba(0, 0, 0, 0.07);
+}
+.simple-answer.user-answer{
+background: #fff;        
+}
+.lesson-answers-title .pull-right{
+margin-bottom: 10px;        
+    }    
+.lesson-answers-title h3 {
+font-family: 'Futura PT';
+font-style: normal;
+font-weight: 500;
+font-size: 30px;
+color: #292929;
+margin-left: 10px;
+}
+.container {
+padding-right: 0px !important;
+padding-left: 0px !important
+}
+
+    
+
+/*========== Оформление урока !Верх! ==========*/    
+.breadcrumb {
+padding: 10px 0px 10px 10px !important;
+max-width: 100% !important;
+background: #fff !important;    
+margin-bottom: 0px !important;
+}
+
+
+.breadcrumb a {    
+font-family: 'Futura PT';
+font-style: normal;
+font-weight: 400;
+font-size: 18px;
+line-height: 23px;
+color: #292929;
+}
+.breadcrumb a:hover  {
+text-decoration: none !important;   
+}
+.breadcrumb a:after{ /* Стрелка слева для мини меню возврата назад "< тренинги" */
+content: "";
+display: inline-block; /* Позволяет задать размеры для псевдоэлемента */
+width: 15px; /* Ширина изображения */
+height: 15px; /* Высота изображения */
+mask: url('https://static.tildacdn.com/tild3236-3233-4137-b865-626135396466/Arrow_10.svg') no-repeat center;
+background-color: #292929; /* Тот самый "цвет" SVG */
+background-size: contain; /* Масштабирует изображение, чтобы оно полностью помещалось в элемент */
+margin-left: 5px; /* Отступ слева от псевдоэлемента */
+transform: scale(1.4) rotate(180deg);
+position: relative;
+top: 3px;
+transition: transform 0.5s ease;
+}    
+    
+
+.lesson-navigation a {
+font-family: 'Montserrat' !important;
+font-style: normal !important;
+font-weight: 700 !important;
+font-size: 12px !important;
+color: #292929 !important;
+}
+.lesson-navigation a:hover{
+text-decoration: none !important;
+}
+.fui-arrow-left::after{
+content: "" !important;
+display: inline-block !important; /* Позволяет задать размеры для псевдоэлемента */
+width: 25px !important; /* Ширина изображения */
+height: 15px !important; /* Высота изображения */
+mask: url('https://static.tildacdn.com/tild3534-3839-4533-b364-616630356631/Arrow_14.svg') no-repeat center;
+background-color: #292929 !important; /* Тот самый "цвет" SVG */
+background-size: contain !important; /* Масштабирует изображение, чтобы оно полностью помещалось в элемент */
+margin-left: 0px !important; /* Отступ слева от псевдоэлемента */
+transform: scale(1.1) rotate(180deg) !important;
+position: relative !important;
+top: 3px !important;
+transition: transform 0.5s ease !important;
+}
+    
+.fui-arrow-left:hover::after{
+transform: translateX(-5px) scale(1.1) rotate(180deg) !important;
+transition: width 0.3s ease !important;
+}
+.lesson-navigation td:first-child:has(a:hover) .fui-arrow-left::after {
+  transform: translateX(-5px) scale(1.1) rotate(180deg) !important;
+  transition: all 0.3s ease !important;
+}
+
+
+.fui-arrow-right::after{
+content: "" !important;
+display: inline-block; /* Позволяет задать размеры для псевдоэлемента */
+width: 35px !important; /* Ширина изображения */
+height: 15px !important; /* Высота изображения */
+mask: url('https://static.tildacdn.com/tild3534-3839-4533-b364-616630356631/Arrow_14.svg') no-repeat center;
+background-color: #292929 !important; /* Тот самый "цвет" SVG */
+background-size: contain !important; /* Масштабирует изображение, чтобы оно полностью помещалось в элемент */
+transform: scale(1.1) !important ;
+position: relative !important;
+top: 3px !important;
+transition: transform 0.5s ease !important;
+}
+.fui-arrow-right:hover::after{
+transform: translateX(5px) scale(1.1) !important;
+transition: width 0.3s ease !important;
+}
+.lesson-navigation td:last-child:has(a:hover) .fui-arrow-right::after {
+  transform: translateX(5px) scale(1.1) !important;
+  transition: all 0.3s ease !important;
+}    
+
+.page-header h1{
+margin-top: 0 !important;        
+}
+
+.page-header a {
+font-family: 'Felidae';
+font-style: normal;
+font-weight: 400;
+font-size: 25px;
+color: #2E2E2E;    
+text-decoration: none;
+transition: transform 0.5s ease !important;
+}
+
+.page-header a::before {
+content: "";
+display: inline-block; /* Позволяет задать размеры для псевдоэлемента */
+width: 15px; /* Ширина изображения */
+height: 19px; /* Высота изображения */
+mask: url('https://static.tildacdn.com/tild3236-3233-4137-b865-626135396466/Arrow_10.svg') no-repeat center;
+background-color: #292929; /* Тот самый "цвет" SVG */
+background-size: contain; /* Масштабирует изображение, чтобы оно полностью помещалось в элемент */
+margin-left: 5px; /* Отступ слева от псевдоэлемента */
+transform: scale(1.5);
+position: relative;
+transition: transform 0.5s ease !important;
+}
+.page-header a:hover::before {
+content: "";
+display: inline-block; /* Позволяет задать размеры для псевдоэлемента */
+width: 15px; /* Ширина изображения */
+height: 19px; /* Высота изображения */
+mask: url('https://static.tildacdn.com/tild3236-3233-4137-b865-626135396466/Arrow_10.svg') no-repeat center;
+background-color: #292929; /* Тот самый "цвет" SVG */
+background-size: contain; /* Масштабирует изображение, чтобы оно полностью помещалось в элемент */
+margin-left: 5px; /* Отступ слева от псевдоэлемента */
+transform: scale(1.5) translateX(-5px);
+position: relative;
+}
+
+.lesson-title-value {
+font-family: 'Futura PT';
+font-style: normal;
+font-weight: 500;
+font-size: 35px;
+color: #2E2E2E;    
+margin-bottom: 20px;
+}    
+    
+
+    
+.page-header {
+max-width: 100% !important;
+background: #fff;  
+margin-top: 0px !important;
+margin-bottom: 0px;
+border-bottom: 0px;
+}
+
+}
+.lesson-header-block.row-section{
+background: #fff !important;
+}
+}
