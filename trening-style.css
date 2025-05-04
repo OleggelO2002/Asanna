@@ -22,8 +22,9 @@ display: none;
 font-family: 'Felidae';
 font-style: normal;
 font-weight: 400;
-font-size: 64px;
-color: #2E2E2E;   
+font-size: 54px;
+color: #2E2E2E;
+max-width: 80%;
 }
 /.header-trainigs img {
 display: none;    
