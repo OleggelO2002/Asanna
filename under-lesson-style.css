@@ -35,9 +35,16 @@ justify-content: center !important; /* Центрирует вложенные �
 margin: 0 auto !important;      
 }
 
-.lite-page.block-set{
+/.lite-page.block-set{
 justify-content: center !important; /* Центрирует вложенные блоки по горизонтали */
 margin: 0 auto !important;      
+}
+.lite-page.block-set {
+  display: flex !important;
+  flex-direction: column !important; /* ← Выстраивает дочерние элементы по вертикали */
+  justify-content: center !important; 
+  align-items: center !important;     /* Центрирует элементы по горизонтали */
+  margin: 0 auto !important;
 }
 .page-header {
 max-width: 100% !important;
