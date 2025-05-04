@@ -1,0 +1,73 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&display=swap');
+
+.xdget-lessonSchedule h3::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 20px;
+  width: 20px;
+  height: 12px;
+  background-image: url('https://static.tildacdn.info/tild3663-3837-4263-b339-643965623362/Vector_44.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  transform: translateY(-50%) rotate(0deg);
+  transition: transform 0.3s ease;
+}
+.xdget-lessonSchedule h3.open::after {
+  transform: translateY(-50%) rotate(180deg);
+}
+
+.xdget-lessonSchedule h3 {
+font-family: 'Futura PT', sans-serif;
+font-style: normal;
+font-weight: 500;
+color: #2E2E2E;
+background: #fff;
+padding: 30px 0px 30px 15px;
+border-radius: 15px 15px 15px 15px;
+box-shadow: 0px -6px 21.4px rgba(0, 0, 0, 0.05);
+position: relative;
+padding-right: 14px; /* место под стрелку */
+cursor: pointer;
+}
+
+.schedule-block {
+position: relative;
+top: -10px;
+background: #fff;     
+box-shadow: 0px 16px 21.4px rgba(0, 0, 0, 0.05);
+border-radius: 0px 0px 15px 15px;
+padding-left: 10px !important;
+}
+.bg-block {
+padding-top: 0;
+padding-bottom: 0;
+}    
+.calendar-btn {
+background: #D5BAAF !important; 
+font-style: normal;
+font-weight: 600;
+font-size: 13px;
+text-align: center;
+color: #FFFFFF;
+padding: 10px 20px !important;
+}
+.calendar-btn:hover {
+background: #C0A093 !important; 
+}
+.schedule-block .day-label {
+margin-left: 18px;    
+}
+
+.schedule-block .event a {
+color: #C0A093;
+font-size: 16px;
+}
+
+.schedule-block .event {
+font-family: 'Montserrat';
+font-style: normal;
+font-weight: 550;
+font-size: 13px;
+color: #363636;    
+}
