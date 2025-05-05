@@ -8,6 +8,22 @@ box-shadow: 0px 0px 46px rgba(0, 0, 0, 0.1);
   background-size: cover !important;
   background-position: center !important;
 }
+.gc-account-leftbar .notify-count {
+background: #D5BAAF !important;    
+}
+
+.gc-account-user-submenu-bar {
+  visibility: hidden; /* Скрываем весь блок */
+  position: relative;
+}
+
+.gc-account-user-submenu-bar-notifications_button_small,
+.gc-account-user-submenu-bar-profile {
+  visibility: visible; /* Отображаем нужные элементы */
+  position: absolute; /* Важно: нужно вытащить их из скрытого потока */
+  top: 0; /* Подстрой по необходимости */
+  left: 0; /* Подстрой по необходимости */
+}
 }
 
 @media screen and (max-width: 768px) {
