@@ -91,10 +91,10 @@ margin-bottom: 20px;
 /*========== Оформление списка тренигов !текст! ==========*/
 .training-row td .stream-title{
 display: block;
-font-family: 'Montserrat';
+font-family: 'Futura PT';
 max-width: 60% !important;
 font-style: normal;
-font-weight: 650;
+font-weight: 550;
 font-size: 23px;
 line-height: 31px;
 color: #363636;
