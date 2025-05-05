@@ -83,6 +83,15 @@ background: #fff !important;
 }
 
 @media screen and (max-width: 768px) {
+
+#searchContainerMobile{
+top: 0px ;
+z-index: 999999 !important;
+}
+#searchResultsMobile{
+z-index: 999999 !important;
+}
+
 #searchContainerMobile{
 overflow: visible !important;
 }
@@ -99,8 +108,8 @@ left: -10vw !important;
 #searchResultsMobile h2{
 margin-top: 15px;
 font-size: 14px;
-font-weight: 400;
-color: #A9A9A9;
+font-weight: 600;
+color: #CFB1A5;
 margin-left: 10px;
 }
 .result-item h3{
