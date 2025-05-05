@@ -12,14 +12,21 @@
 html body{
         --container-width: min(var(--content-width), calc(var(--parent-wv, 100vw) - 300px - 20px - 36px)) !important;
     }
-}
 
 #gcAccountUserMenu ~ .gc-main-content.with-left-menu > .container, #gcAccountUserMenu ~ .gc-main-content.with-left-menu > .page-full-block > .main-page-block > .container{
     width: var(--container-width) !important;
     margin: 0 auto;
 }
-
-
+}
+@media (max-width: 768px) {
+.gc-main-content{
+padding-left: 10px;
+padding-right: 10px;
+    }
+.user-answer .addfield {
+background: #EADCD7;    
+}
+}
 /.breadcrumb::before{
 content: " ";    
 position: absolute;
@@ -32,21 +39,6 @@ left: 0px;
 }
     
 
-
-
-/.standard-page-content:not(.block-set)::after{
-content: "";  
-z-index: -1;
-position: absolute;
-background: #ff3d3d;
-width: 100%;
-height: 200px;
-left: 0px;
-top: 70px;
-}
-
-
-/*width: calc(100vw - 520px) !important;*/ 
 body{
 background: #FAFAFA    
 }
@@ -346,14 +338,14 @@ max-width: 70%
 }
 @media screen and (max-width: 768px) {
 /*========== Оформление урока !Кнопки! ==========*/
-.lt-block .f-btn {
+/.lt-block .f-btn {
 background-color: transparent !important;
 background: url('https://static.tildacdn.info/tild3133-3639-4330-b066-393865353137/Group_48097313.svg') no-repeat center center;
 background-size: contain;
 border: none; /* Убираем границу, если она есть */
 min-height: 70px !important;
 }
-.lt-block .f-btn:hover{
+/.lt-block .f-btn:hover{
 background: url('https://static.tildacdn.info/tild3536-6162-4231-a265-303834613861/Group_48097346.svg')   
 no-repeat center center;
 background-size: contain;
