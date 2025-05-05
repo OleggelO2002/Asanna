@@ -5,6 +5,12 @@
 
 /*========== Удалить ==========*/
 @media screen and (max-width: 768px) {
+.breadcrumbs {
+margin-top: 20px;    
+}
+}
+
+@media screen and (max-width: 768px) {
 .page-header h1 {
 font-family: 'Felidae';
 font-style: normal;
