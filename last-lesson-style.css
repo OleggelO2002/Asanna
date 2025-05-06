@@ -1,0 +1,49 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&display=swap');
+
+.col-md-4{
+padding-left: 0px !important;
+}
+
+.lastLessonBlock {
+border: 0px solid rgb(238, 238, 238) !important;
+border-radius: 15px !important;
+padding-top: 10px !important;  
+box-shadow: 0px -6px 21.4px rgba(0, 0, 0, 0.05) !important;  
+}
+.lastLessonBlock .lesson-title {
+font-family: 'Montserrat';
+font-style: normal;
+font-weight: 600;
+font-size: 13px;
+line-height: 15px;
+/* identical to box height, or 115% */    
+}
+
+.lastLessonBlock .lesson-name {
+margin-top: 10px;
+font-family: 'Futura PT';
+font-style: normal;
+font-weight: 450;
+font-size: 24px;
+line-height: 24px;
+color: #363636;
+margin-bottom: 20px;
+}
+
+.lastLessonBlock .lesson-btn {
+padding: 10px 20px 10px 20px;
+background: #D5BAAF;
+font-family: 'Montserrat';
+font-style: normal;
+font-weight: 600;
+font-size: 13px;
+line-height: 15px;
+border-radius: 5px;
+color: #FFF;
+transition: background 0.2s ease;
+}
+
+.lastLessonBlock .lesson-btn:hover{
+background: #BFA59B;
+text-decoration: none;
+}
