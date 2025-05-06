@@ -1,5 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&display=swap');
-
 .center-block {
     max-width: 100% !important;
     margin-bottom: 20px !important;
@@ -13,10 +12,20 @@ html body{
         --container-width: min(var(--content-width), calc(var(--parent-wv, 100vw) - 300px - 20px - 36px)) !important;
     }
 
-#gcAccountUserMenu ~ .gc-main-content.with-left-menu > .container, #gcAccountUserMenu ~ .gc-main-content.with-left-menu > .page-full-block > .main-page-block > .container{
+/#gcAccountUserMenu ~ .gc-main-content.with-left-menu > .container, #gcAccountUserMenu ~ .gc-main-content.with-left-menu > .page-full-block > .main-page-block > .container{
     width: var(--container-width) !important;
     margin: 0 auto;
 }
+#gcAccountUserMenu ~ .gc-main-content.with-left-menu .lite-page.block-set {
+    width: var(--container-width) !important;
+    margin: 0 auto;
+}
+.container{
+width: calc(100vw - 280px) !important; 
+margin-left: 0px !important;
+margin-right: 0px !important;
+padding-right: 0px !important;
+    }
 }
 @media (max-width: 768px) {
 .gc-main-content{
@@ -27,17 +36,11 @@ padding-right: 10px;
 background: #EADCD7;    
 }
 }
-/.breadcrumb::before{
-content: " ";    
-position: absolute;
-background: #ffffff;
-width: 100vw;
-height: 100%;
-z-index: -1;
-top: 0px;
-left: 0px;
+li::before {
+display: none;    
 }
-    
+
+
 
 body{
 background: #FAFAFA    
@@ -52,8 +55,6 @@ box-shadow: 0px 0px 98px rgba(0, 0, 0, 0.07);
 margin-bottom: 30px !important;
 padding-left: 30px !important;
 padding-right: 30px !important;
-
-
 }
 
 .lesson-mission-wrapper{
@@ -68,7 +69,6 @@ font-size: 30px;
 color: #292929;
 margin-left: 10px;
 padding-top: 20px;
-
 }
 
 @media screen and (min-width: 768px) {
@@ -78,17 +78,6 @@ display: none;
 .standard-logo{
 display: none;
 }
-
-
-
-
-
-
-
-
-
-
-
 .page-header {
 max-width: 100% !important;
 padding-top: 20px;
@@ -96,9 +85,33 @@ background: #fff;
 margin-top: 0px !important;
 margin-bottom: 0px;
 border-bottom: 0px;
+padding-left: 38px;
+padding-bottom: 0px;
 }
-.page-header h1{ 
-padding-left: 20px;
+
+/.page-header {
+position: absolute !important;
+max-width: 100% !important;
+padding-top: 80px;
+background: #fff;  
+margin-top: 0px !important;
+margin-bottom: 0px;
+border-bottom: 0px;
+padding-left: 38px;
+top: 70px;
+left: 260px;
+padding-bottom: 0px;
+}
+.page-header h1{
+padding-bottom: 0px;
+margin-bottom: 0px;
+font-family: 'Montserrat';
+font-size: 19px;
+font-weight: 500;
+white-space: nowrap;        /* не переносить текст */
+overflow: hidden;           /* скрыть выходящий за пределы контент */
+text-overflow: ellipsis;    /* троеточие */
+width: 50%;    
 margin-top: 0px !important;
 }
 .lesson-header-block.row-section{
@@ -221,6 +234,7 @@ left: 20% !important;
 
 
 .breadcrumb {
+border-radius: 0px;
 margin-top: 70px;
 padding-top: 60px !important;
 padding-left: 50px !important;
@@ -309,6 +323,7 @@ margin-left: 5px; /* Отступ слева от псевдоэлемента *
 transform: scale(2);
 position: relative;
 transition: transform 0.5s ease !important;
+margin-right: 10px;
 }
 .page-header a:hover::before {
 content: "";
@@ -327,16 +342,29 @@ position: relative;
 .lesson-title-value {
 font-family: 'Futura PT';
 font-style: normal;
-font-weight: 500;
+font-weight: 600;
 font-size: 45px;
 color: #2E2E2E;    
 text-align: left !important;
 padding-left: 40px;
-margin-bottom: 40px;
-max-width: 70%
+margin-top: 50px;
+max-width: 50%
 }
 }
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 768px) {  
+.page-header h1{
+padding-bottom: 0px;
+margin-bottom: 0px;
+font-family: 'Montserrat';
+font-size: 19px;
+font-weight: 500;
+white-space: nowrap;        /* не переносить текст */
+overflow: hidden;           /* скрыть выходящий за пределы контент */
+text-overflow: ellipsis;    /* троеточие */
+width: 100%;    
+margin-top: 0px !important;
+}
+
 /*========== Оформление урока !Кнопки! ==========*/
 /.lt-block .f-btn {
 background-color: transparent !important;
@@ -538,3 +566,24 @@ border-bottom: 0px;
 background: #fff !important;
 }
 } 
+
+/.f-text {
+font-family: 'Montserrat' !important;
+font-style: normal !important;
+font-weight: 500 !important;
+color: #292929 !important;   
+}
+
+.block-set p{
+font-family: 'Montserrat' !important;
+font-style: normal !important;
+font-weight: 500 !important;
+color: #292929 !important;
+font-size: 16px !important;   
+}
+
+
+.header-trainigs img {
+display: none;    
+}
+
