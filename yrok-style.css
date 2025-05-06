@@ -39,9 +39,26 @@ background: #EADCD7;
 li::before {
 display: none;    
 }
+.testing-widget .before-start-block .start-btn {
+background: #D5BAAF !important;   
+padding: 15px 60px 15px 60px;
+border-radius: 5px;
+}
 
+.testing-widget .before-start-block .start-btn:hover {
+background: #BFA59B !important;   
+}
 
-
+.btn-send-answer.btn-primary.btn-lg{
+background: #D5BAAF !important;   
+padding: 15px 60px 15px 60px;
+border-radius: 5px;
+border-color: #D5BAAF !important;
+}
+.btn-send-answer.btn-primary.btn-lg:hover {
+background: #BFA59B !important;   
+border-color: #BFA59B !important;
+}
 body{
 background: #FAFAFA    
 }
@@ -586,4 +603,5 @@ font-size: 16px !important;
 .header-trainigs img {
 display: none;    
 }
+
 
