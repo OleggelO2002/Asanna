@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function () {
       lessonBlock.innerHTML = `
         <div class="lesson-title">Вы остановились на уроке:</div>
         <div class="lesson-name">${lessonTitle}</div>
-        <a href="${lessonUrl}" class="lesson-btn">Продолжить</a>
+        <a href="${lessonUrl}" class="lesson-btn">Продолжить учиться</a>
       `;
 
       // 4. Вставляем блок после .xdget-lessonSchedule
