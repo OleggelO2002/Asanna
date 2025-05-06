@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&display=swap');
 
+.calendar-btn {
+margin-bottom: 30px;    
+}
+
 .xdget-lessonSchedule h3::after {
   content: '';
   position: absolute;
