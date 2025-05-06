@@ -58,8 +58,9 @@ display: none;
 margin-bottom: 20px;
 }
 #searchContainer {
+margin-top: 10px;
 height: 50px;
-width: 40% !important;
+width: 60% !important;
 border-radius: 10px !important;
 left: 10%;
 }
