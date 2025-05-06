@@ -9,7 +9,7 @@
     return;
   }
 
-  // Добавляем анимацию и начальное состояние
+  // Анимация открытия/закрытия расписания
   scheduleBlock.style.overflow = 'hidden';
   scheduleBlock.style.maxHeight = '0';
   scheduleBlock.style.transition = 'max-height 0.5s ease';
@@ -24,11 +24,7 @@
     header.classList.toggle('open', expanded);
     header.classList.toggle('closed', !expanded);
 
-    if (expanded) {
-      scheduleBlock.style.maxHeight = scheduleBlock.scrollHeight + 'px';
-    } else {
-      scheduleBlock.style.maxHeight = '0';
-    }
+    scheduleBlock.style.maxHeight = expanded ? scheduleBlock.scrollHeight + 'px' : '0';
   });
 
   const months = {
@@ -45,85 +41,89 @@
 
   days.forEach(day => {
     const dateLabel = day.querySelector('.day-label');
-    const record = day.querySelector('.record');
-    const timeEl = record?.querySelector('.time');
-    const eventEl = record?.querySelector('.event');
-    const eventLink = eventEl?.querySelector('a');
+    const records = day.querySelectorAll('.record');
 
-    if (!dateLabel || !record || !timeEl || !eventEl || !eventLink) return;
+    if (!dateLabel || !records.length) return;
 
     const dateText = dateLabel.textContent.trim().replace(/\s+/g, ' ');
-    const timeText = timeEl.textContent.trim();
-    const eventTitle = eventLink.textContent.trim();
-    const eventDesc = eventEl.textContent.trim();
 
-    let eventDate = null;
+    records.forEach(record => {
+      const timeEl = record.querySelector('.time');
+      const eventEl = record.querySelector('.event');
+      const eventLink = eventEl?.querySelector('a');
 
-    if (dateText.toLowerCase().includes('сегодня')) {
-      eventDate = new Date(today);
-    } else if (dateText.toLowerCase().includes('завтра')) {
-      eventDate = new Date(today);
-      eventDate.setDate(today.getDate() + 1);
-    } else {
-      const dateMatch = dateText.match(/^(\d{1,2}) (\p{L}+),?/u);
-      if (!dateMatch) return;
-      const [_, dayStr, monthStr] = dateMatch;
-      const month = months[monthStr];
-      if (!month) return;
-      const year = today.getFullYear();
-      eventDate = new Date(`${year}-${month}-${dayStr.padStart(2, '0')}T${timeText}:00`);
-    }
+      if (!timeEl || !eventEl || !eventLink) return;
 
-    const eventDayOnly = new Date(eventDate);
-    eventDayOnly.setHours(0, 0, 0, 0);
+      const timeText = timeEl.textContent.trim();
+      const eventTitle = eventLink.textContent.trim();
+      const eventDesc = eventEl.textContent.trim();
 
-    if (eventDayOnly >= today) {
-      if (record.querySelector('.calendar-btn')) return;
+      let eventDate = null;
 
-      const btn = document.createElement('button');
-      btn.textContent = 'Добавить в календарь';
-      btn.className = 'calendar-btn';
-      btn.style.marginTop = '10px';
-      btn.style.display = 'inline-block';
-      btn.style.padding = '6px 12px';
-      btn.style.background = '#3498db';
-      btn.style.color = 'white';
-      btn.style.border = 'none';
-      btn.style.borderRadius = '4px';
-      btn.style.cursor = 'pointer';
+      if (dateText.toLowerCase().includes('сегодня')) {
+        eventDate = new Date(today);
+      } else if (dateText.toLowerCase().includes('завтра')) {
+        eventDate = new Date(today);
+        eventDate.setDate(today.getDate() + 1);
+      } else {
+        const dateMatch = dateText.match(/^(\d{1,2}) (\p{L}+),?/u);
+        if (!dateMatch) return;
+        const [_, dayStr, monthStr] = dateMatch;
+        const month = months[monthStr];
+        if (!month) return;
+        const year = today.getFullYear();
+        eventDate = new Date(`${year}-${month}-${dayStr.padStart(2, '0')}T${timeText}:00`);
+      }
 
-      btn.addEventListener('click', () => {
-        const [h, m] = timeText.split(':');
-        const pad = n => n.toString().padStart(2, '0');
-        const y = eventDate.getFullYear();
-        const mo = pad(eventDate.getMonth() + 1);
-        const d = pad(eventDate.getDate());
-        const start = `${y}${mo}${d}T${pad(h)}${pad(m)}00`;
-        const endHour = String(Number(h) + 1).padStart(2, '0');
-        const end = `${y}${mo}${d}T${endHour}${pad(m)}00`;
+      const eventDayOnly = new Date(eventDate);
+      eventDayOnly.setHours(0, 0, 0, 0);
 
-        const icsContent = [
-          'BEGIN:VCALENDAR',
-          'VERSION:2.0',
-          'BEGIN:VEVENT',
-          `DTSTART:${start}`,
-          `DTEND:${end}`,
-          `SUMMARY:${eventTitle}`,
-          `DESCRIPTION:${eventDesc}`,
-          'END:VEVENT',
-          'END:VCALENDAR'
-        ].join('\n');
+      if (eventDayOnly >= today && !record.querySelector('.calendar-btn')) {
+        const btn = document.createElement('button');
+        btn.textContent = 'Добавить в календарь';
+        btn.className = 'calendar-btn';
+        btn.style.marginTop = '10px';
+        btn.style.display = 'inline-block';
+        btn.style.padding = '6px 12px';
+        btn.style.background = '#3498db';
+        btn.style.color = 'white';
+        btn.style.border = 'none';
+        btn.style.borderRadius = '4px';
+        btn.style.cursor = 'pointer';
 
-        const blob = new Blob([icsContent], { type: 'text/calendar' });
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = `${eventTitle}.ics`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-      });
+        btn.addEventListener('click', () => {
+          const [h, m] = timeText.split(':');
+          const pad = n => n.toString().padStart(2, '0');
+          const y = eventDate.getFullYear();
+          const mo = pad(eventDate.getMonth() + 1);
+          const d = pad(eventDate.getDate());
+          const start = `${y}${mo}${d}T${pad(h)}${pad(m)}00`;
+          const endHour = String(Number(h) + 1).padStart(2, '0');
+          const end = `${y}${mo}${d}T${endHour}${pad(m)}00`;
 
-      record.appendChild(btn);
-    }
+          const icsContent = [
+            'BEGIN:VCALENDAR',
+            'VERSION:2.0',
+            'BEGIN:VEVENT',
+            `DTSTART:${start}`,
+            `DTEND:${end}`,
+            `SUMMARY:${eventTitle}`,
+            `DESCRIPTION:${eventDesc}`,
+            'END:VEVENT',
+            'END:VCALENDAR'
+          ].join('\n');
+
+          const blob = new Blob([icsContent], { type: 'text/calendar' });
+          const a = document.createElement('a');
+          a.href = URL.createObjectURL(blob);
+          a.download = `${eventTitle}.ics`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+        });
+
+        record.appendChild(btn);
+      }
+    });
   });
 })();
