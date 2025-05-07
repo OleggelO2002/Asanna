@@ -1,5 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&display=swap');
 /* Стили для обёртки баннера */
+@media screen and (max-width: 768px) {
+.custom-banner{
+display: none !important;
+}  
+}
+
 .custom-banner {
   position: relative; /* Важный стиль для того, чтобы дочерние элементы с absolute позиционировались относительно баннера */
   width: 100%;
