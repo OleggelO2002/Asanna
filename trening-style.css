@@ -8,6 +8,9 @@
 .breadcrumbs {
 margin-top: 20px !important;    
 }
+.empty-breadcrumbs{
+margin-bottom: 70px !important;
+}
 .stream-table tr a {
 min-height: 140px;    
 }
