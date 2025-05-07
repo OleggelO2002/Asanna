@@ -29,6 +29,7 @@ font-size: 28px !important;
 color: #2E2E2E;
 margin-right: 0px !important;
 margin-bottom: 0px !important;
+max-width: 100% !important;
 }
 .page-actions {
 display: none;
