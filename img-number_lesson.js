@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const tdElements = document.querySelectorAll('.lesson-list li table td.item-main-td');
     tdElements.forEach((td, index) => {
       const lessonNumber = index + 1;
-      const lessonIdClass = 'custom-lesson-id-' + lessonNumber;
+      const lessonIdClass = 'custom-leson-id-' + lessonNumber;
       td.classList.add(lessonIdClass);
 
       if (!td.querySelector('.lesson-number')) {
