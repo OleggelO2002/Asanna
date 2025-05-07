@@ -82,7 +82,7 @@ min-width: 80%
 [class*="lesson-id-"] {
 min-height: 100px !important;
 border-radius: 10px !important;
-width: 90vw;
+/width: 90vw;
 }
 .col-md-8{
 padding-left: 0px;
