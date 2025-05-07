@@ -1,5 +1,20 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&display=swap');
 
+/*========== ИСПРАВИТЬ ВРЕМЕННОЕ ==========*/
+[class*="custom-leson-"] .lesson-number{
+display: none;
+background: #D5BAAF;
+padding: 8px 15px;
+border-radius: 5px;    
+font-style: normal;
+font-weight: 600;
+font-size: 12px;
+color: #FFFFFF;
+position: absolute;
+top: 10px;
+}   
+/*========== ИСПРАВИТЬ ВРЕМЕННОЕ ==========*/
+
 :root {
     --bej-color: #D5BAAF;
     --button-padding: 15px 32px;
