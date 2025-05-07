@@ -1,5 +1,20 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&display=swap');
 
+@media screen and (max-width: 768px) {
+.xdget-training .lesson-list li{
+padding-left: 10px;
+}
+.xdget-training .lesson-list{
+margin-left: -15px;
+margin-right: -15px;
+}
+
+[class*=" lesson-id-"]{
+margin-right: 0px !important;
+margin-left: 0px !important;
+}
+}
+
 /*========== ИСПРАВИТЬ ВРЕМЕННОЕ ==========*/
 [class*="custom-leson-"] .lesson-number{
 display: none;
