@@ -1,4 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&display=swap');
+@media screen and (min-width: 768px) {
+.xdget-training .lesson-list{
+margin-left: -20px !important;
+}
+[class*=" lesson-id-"]{
+margin-left: 0px !important;
+}
+}
 
 @media screen and (max-width: 768px) {
 .xdget-training .lesson-list li{
