@@ -1,5 +1,10 @@
 /*===================CSS для поиска===================*/
 @media screen and (min-width: 768px) {
+#searchWrapper #searchContainer {
+margin-top: 0px;    
+width: 40% !important;
+}
+
 #searchContainer{
 box-shadow: 0px 0px 46px rgba(0, 0, 0, 0.1);
 }
