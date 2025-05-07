@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   if (window.innerWidth <= 768) {
     // Мобильная версия
-    img.src = 'https://static.tildacdn.com/tild6266-3566-4166-b565-353935386661/Group_48097271.png';
+    img.src = 'https://static.tilda66-b565-353935386661/Group_48097271.png';
   } else {
     // Десктопная версия
     img.src = 'https://static.tildacdn.info/tild3636-3765-4834-b862-323336663562/Frame_279.png';
