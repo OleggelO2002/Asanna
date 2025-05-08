@@ -28,9 +28,7 @@ document.addEventListener('DOMContentLoaded', function () {
   buttonGroup.classList.add('banner-buttons');
 
   const buttonsData = [
-    { label: 'Работа с наставником', link: 'https://example1.com' },
-    { label: 'Расписание', link: 'https://example2.com' },
-    { label: 'Отчет', link: 'https://example3.com' }
+    { label: 'Отзывы ДО/ПОСЛЕ', link: 'https://asanna.online/pl/teach/control/lesson/view?id=342464869' }
   ];
 
   buttonsData.forEach(data => {
