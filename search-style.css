@@ -5,6 +5,10 @@ margin-top: 0px;
 width: 40% !important;
 }
 
+.breadcrumbs #searchContainer {
+margin-bottom: 50px !important;   
+}
+
 #searchContainer{
 box-shadow: 0px 0px 46px rgba(0, 0, 0, 0.1);
 }
