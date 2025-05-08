@@ -5,7 +5,9 @@
 display: none !important;
 }  
 }
-
+.banner-button {
+transform: scale(1.2);    
+}
 .custom-banner {
   position: relative; /* Важный стиль для того, чтобы дочерние элементы с absolute позиционировались относительно баннера */
   width: 100%;
