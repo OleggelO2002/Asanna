@@ -1,8 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&display=swap');
 
-.bg-block.schedule-block{
-max-height: none !important;
-}
+
 
 
 .xdget-row .xdget-container:not(.editable).empty{
