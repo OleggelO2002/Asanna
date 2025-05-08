@@ -74,5 +74,5 @@ document.addEventListener('DOMContentLoaded', function () {
         console.log('Не удалось найти .xdget-lessonSchedule в течение 3 секунд');
       }
     }, 100);
-  }, 1000);
+  }, 100);
 });
