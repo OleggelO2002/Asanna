@@ -204,4 +204,4 @@ $(document).ready(function () {
 
 // ======= Инициализация =======
 addSearchContainer();
-window.addEventListener('resize', addSearchContainer);
+window.addEventListener('resize', addSearchContainer)
