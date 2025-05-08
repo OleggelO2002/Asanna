@@ -46,3 +46,33 @@ document.addEventListener('DOMContentLoaded', function () {
   // Добавляем баннер в начало контейнера
   container.prepend(bannerWrapper);
 });
+
+
+
+document.addEventListener('DOMContentLoaded', function () {
+  const targetContainer = document.querySelector('.col-md-4');
+
+  if (!targetContainer) return;
+
+  // Проверяем, есть ли уже блок .xdget-lessonSchedule
+  if (targetContainer.querySelector('.xdget-lessonSchedule')) return;
+
+  // Загружаем страницу с расписанием
+  fetch('/teach/control/stream/index')
+    .then(response => response.text())
+    .then(htmlText => {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(htmlText, 'text/html');
+
+      const lessonSchedule = doc.querySelector('.xdget-lessonSchedule');
+
+      if (lessonSchedule) {
+        // Клонируем элемент, чтобы вставить без удаления из оригинала
+        const clone = lessonSchedule.cloneNode(true);
+        targetContainer.appendChild(clone);
+      }
+    })
+    .catch(err => {
+      console.error('Ошибка при загрузке расписания:', err);
+    });
+});
