@@ -1,5 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&display=swap');
 
+.xdget-row .xdget-container:not(.editable).empty{
+display: block !important;
+}
 .calendar-btn {
 margin-bottom: 30px;    
 }
