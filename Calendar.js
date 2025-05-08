@@ -26,12 +26,14 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     scheduleBlock.style.overflow = 'hidden';
-    scheduleBlock.style.maxHeight = '0';
     scheduleBlock.style.transition = 'max-height 0.5s ease';
     scheduleBlock.style.display = 'block';
-    header.classList.add('closed');
-
-    let expanded = false;
+    
+    // Изменено здесь: устанавливаем блок как открытый по умолчанию
+    scheduleBlock.style.maxHeight = scheduleBlock.scrollHeight + 'px';
+    header.classList.add('open');
+    
+    let expanded = true; // Изменено: начинаем с открытого состояния
     header.style.cursor = 'pointer';
 
     header.addEventListener('click', () => {
@@ -41,6 +43,7 @@ document.addEventListener('DOMContentLoaded', function () {
       scheduleBlock.style.maxHeight = expanded ? scheduleBlock.scrollHeight + 'px' : '0';
     });
 
+    // Остальной код остается без изменений
     const months = {
       'Январь': '01', 'Февраль': '02', 'Март': '03', 'Апрель': '04',
       'Май': '05', 'Июнь': '06', 'Июль': '07', 'Август': '08',
