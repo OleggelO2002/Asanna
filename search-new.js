@@ -19,82 +19,97 @@ const searchContainerHTMLDesktop = `
   </div>
 `;
 
-// ======= Функция для добавления поиска =======
+// ======= Функция для добавления поиска с проверкой блоков =======
 function addSearchContainer() {
   const isMobile = window.innerWidth <= 768;
   const isTrainingPage = window.location.href.includes('/teach/control/stream/view/id/');
   const isLessonPage = window.location.href.includes('/pl/teach/control/lesson/view/');
 
   if (isMobile) {
-    // Мобильная версия (как было)
-    const mobileObserver = new MutationObserver(() => {
+    // Мобильная версия с повторными попытками
+    let attempts = 0;
+    const maxAttempts = 10;
+    const interval = setInterval(() => {
+      attempts++;
       const leftBar = document.querySelector('.gc-account-leftbar');
-      if (leftBar && !leftBar.querySelector('#searchContainerMobile')) {
-        leftBar.insertAdjacentHTML('afterbegin', searchContainerHTMLMobile);
+      
+      if (leftBar) {
+        clearInterval(interval);
+        if (!leftBar.querySelector('#searchContainerMobile')) {
+          leftBar.insertAdjacentHTML('afterbegin', searchContainerHTMLMobile);
 
-        const searchContainer = document.getElementById('searchContainerMobile');
-        const searchInput = document.getElementById('searchInputMobile');
-        const searchIcon = searchContainer.querySelector('img');
-        const searchResults = document.getElementById('searchResultsMobile');
+          const searchContainer = document.getElementById('searchContainerMobile');
+          const searchInput = document.getElementById('searchInputMobile');
+          const searchIcon = searchContainer.querySelector('img');
+          const searchResults = document.getElementById('searchResultsMobile');
 
-        searchIcon.addEventListener('click', (event) => {
-          event.stopPropagation();
-          const isExpanded = searchContainer.style.width === '72vw';
-          searchContainer.style.width = isExpanded ? '40px' : '72vw';
-          searchInput.style.display = isExpanded ? 'none' : 'block';
-          searchResults.style.display = 'none';
-        });
-
-        searchInput.addEventListener('input', () => {
-          searchResults.style.display = 'block';
-          searchResults.innerHTML = `<p>Результаты для "${searchInput.value}"</p>`;
-        });
-
-        document.addEventListener('click', (event) => {
-          if (!searchContainer.contains(event.target)) {
-            searchContainer.style.width = '40px';
-            searchInput.style.display = 'none';
+          searchIcon.addEventListener('click', (event) => {
+            event.stopPropagation();
+            const isExpanded = searchContainer.style.width === '72vw';
+            searchContainer.style.width = isExpanded ? '40px' : '72vw';
+            searchInput.style.display = isExpanded ? 'none' : 'block';
             searchResults.style.display = 'none';
-          }
-        });
-      }
-    });
-    mobileObserver.observe(document.body, { childList: true, subtree: true });
+          });
 
-  } else {
-    // Десктопная версия (исправленная)
-    const desktopObserver = new MutationObserver(() => {
-      const breadcrumbs = document.querySelector('.breadcrumbs, .empty-breadcrumbs');
-      const mainContentUser = document.querySelector('.gc-main-content.gc-both-main-content.no-menu.account-page-content.with-left-menu.gc-user-logined.gc-user-user');
-      const mainContentAdmin = document.querySelector('.gc-main-content.gc-both-main-content.wide.account-page-content.with-left-menu.gc-user-logined.gc-user-admin');
-      const targetMainContent = mainContentUser || mainContentAdmin;
-
-      if (targetMainContent && !document.querySelector('#searchWrapper')) {
-        // 1. Вставляем searchWrapper (серый фон) в mainContent
-        targetMainContent.insertAdjacentHTML('afterbegin', searchWrapperHTMLDesktop);
-
-        // 2. Вставляем searchContainer (поле поиска) в breadcrumbs (если они есть)
-        if (breadcrumbs) {
-          breadcrumbs.insertAdjacentHTML('afterbegin', searchContainerHTMLDesktop);
-        }
-
-        // 3. Настройка обработчиков событий
-        const searchInput = document.getElementById('searchInput');
-        const searchResults = document.getElementById('searchResults');
-
-        if (searchInput) {
           searchInput.addEventListener('input', () => {
             searchResults.style.display = 'block';
             searchResults.innerHTML = `<p>Результаты для "${searchInput.value}"</p>`;
           });
+
+          document.addEventListener('click', (event) => {
+            if (!searchContainer.contains(event.target)) {
+              searchContainer.style.width = '40px';
+              searchInput.style.display = 'none';
+              searchResults.style.display = 'none';
+            }
+          });
         }
+      } else if (attempts >= maxAttempts) {
+        clearInterval(interval);
       }
-    });
-    desktopObserver.observe(document.body, { childList: true, subtree: true });
+    }, 100);
+
+  } else {
+    // Десктопная версия с повторными попытками
+    let attempts = 0;
+    const maxAttempts = 10;
+    const interval = setInterval(() => {
+      attempts++;
+      const breadcrumbs = document.querySelector('.breadcrumbs, .empty-breadcrumbs');
+      const mainContentUser = document.querySelector('.gc-main-content.gc-both-main-content.no-menu.account-page-content.with-left-menu.gc-user-logined.gc-user-user');
+      const mainContentAdmin = document.querySelector('.gc-main-content.gc-both-main-content.wide.account-page-content.with-left-menu.gc-user-logined.gc-user-admin');
+      const targetMainContent = mainContentUser || mainContentAdmin;
+      
+      if (targetMainContent) {
+        clearInterval(interval);
+        if (!document.querySelector('#searchWrapper')) {
+          // 1. Вставляем searchWrapper в mainContent
+          targetMainContent.insertAdjacentHTML('afterbegin', searchWrapperHTMLDesktop);
+
+          // 2. Вставляем searchContainer в breadcrumbs (если есть)
+          if (breadcrumbs) {
+            breadcrumbs.insertAdjacentHTML('afterbegin', searchContainerHTMLDesktop);
+          }
+
+          // 3. Настройка обработчиков
+          const searchInput = document.getElementById('searchInput');
+          const searchResults = document.getElementById('searchResults');
+
+          if (searchInput) {
+            searchInput.addEventListener('input', () => {
+              searchResults.style.display = 'block';
+              searchResults.innerHTML = `<p>Результаты для "${searchInput.value}"</p>`;
+            });
+          }
+        }
+      } else if (attempts >= maxAttempts) {
+        clearInterval(interval);
+      }
+    }, 100);
   }
 }
 
-// ======= Обработчик поиска (как было) =======
+// ======= Обработчик поиска =======
 $(document).ready(function () {
   let typingTimer;
   const typingDelay = 1000;
@@ -203,5 +218,7 @@ $(document).ready(function () {
 });
 
 // ======= Инициализация =======
-addSearchContainer();
-window.addEventListener('resize', addSearchContainer)
+document.addEventListener('DOMContentLoaded', function() {
+  addSearchContainer();
+});
+window.addEventListener('resize', addSearchContainer);
