@@ -1,8 +1,4 @@
-  // ======= Отвечает за поиск - обработчик + HTML ======= 
-// Этот блок добавляет обработчик для поля поиска и отображает результаты
-// ==========================================================================
-
-// HTML-код для мобильной версии
+// ======= HTML-код для поиска =======
 const searchContainerHTMLMobile = `
   <div id="searchContainerMobile" style="position: relative; z-index: 1000; display: flex; align-items: center; background-color: white; border-radius: 20px; overflow: hidden; width: 40px; transition: width 0.3s ease;">
     <img src="https://static.tildacdn.info/tild3764-3665-4662-b664-373066626139/Search_Magnifying_Gl.svg" alt="Search" style="width: 20px; height: 20px; margin: 10px; cursor: pointer;">
@@ -11,24 +7,26 @@ const searchContainerHTMLMobile = `
   </div>
 `;
 
-// HTML-код для десктопной версии
+const searchWrapperHTMLDesktop = `
+  <div id="searchWrapper" style="width: 100%; background-color: #f8f8f8; padding: 10px; box-sizing: border-box;"></div>
+`;
+
 const searchContainerHTMLDesktop = `
-  <div id="searchWrapper" style="width: 100%; background-color: #f8f8f8; padding: 10px; box-sizing: border-box;">
-    <div id="searchContainer" style="position: relative; z-index: 1000; display: flex; align-items: center; background-color: white; border-radius: 20px; padding: 0 10px;">
-      <img src="https://static.tildacdn.info/tild3764-3665-4662-b664-373066626139/Search_Magnifying_Gl.svg" alt="Search" style="width: 20px; height: 20px; margin-right: 10px;">
-      <input type="text" id="searchInput" placeholder="Введите название тренинга или урока" style="border: none; outline: none; flex-grow: 1;">
-      <div id="searchResults" style="display: none; position: absolute; top: 100%; left: 0; width: 100%; background-color: white; border: 1px solid #ccc; border-radius: 5px; max-height: 200px; overflow-y: auto; z-index: 1001;"></div>
-    </div>
+  <div id="searchContainer" style="position: relative; z-index: 1000; display: flex; align-items: center; background-color: white; border-radius: 20px; padding: 0 10px;">
+    <img src="https://static.tildacdn.info/tild3764-3665-4662-b664-373066626139/Search_Magnifying_Gl.svg" alt="Search" style="width: 20px; height: 20px; margin-right: 10px;">
+    <input type="text" id="searchInput" placeholder="Введите название тренинга или урока" style="border: none; outline: none; flex-grow: 1;">
+    <div id="searchResults" style="display: none; position: absolute; top: 100%; left: 0; width: 100%; background-color: white; border: 1px solid #ccc; border-radius: 5px; max-height: 200px; overflow-y: auto; z-index: 1001;"></div>
   </div>
 `;
 
-// Функция для добавления HTML-кода в нужные элементы
+// ======= Функция для добавления поиска =======
 function addSearchContainer() {
   const isMobile = window.innerWidth <= 768;
   const isTrainingPage = window.location.href.includes('/teach/control/stream/view/id/');
   const isLessonPage = window.location.href.includes('/pl/teach/control/lesson/view/');
 
   if (isMobile) {
+    // Мобильная версия (как было)
     const mobileObserver = new MutationObserver(() => {
       const leftBar = document.querySelector('.gc-account-leftbar');
       if (leftBar && !leftBar.querySelector('#searchContainerMobile')) {
@@ -61,28 +59,26 @@ function addSearchContainer() {
         });
       }
     });
-
     mobileObserver.observe(document.body, { childList: true, subtree: true });
+
   } else {
+    // Десктопная версия (исправленная)
     const desktopObserver = new MutationObserver(() => {
-      const breadcrumbs = document.querySelector('.breadcrumbs');
+      const breadcrumbs = document.querySelector('.breadcrumbs, .empty-breadcrumbs');
       const mainContentUser = document.querySelector('.gc-main-content.gc-both-main-content.no-menu.account-page-content.with-left-menu.gc-user-logined.gc-user-user');
       const mainContentAdmin = document.querySelector('.gc-main-content.gc-both-main-content.wide.account-page-content.with-left-menu.gc-user-logined.gc-user-admin');
+      const targetMainContent = mainContentUser || mainContentAdmin;
 
-      const targetElement = mainContentUser || mainContentAdmin;
+      if (targetMainContent && !document.querySelector('#searchWrapper')) {
+        // 1. Вставляем searchWrapper (серый фон) в mainContent
+        targetMainContent.insertAdjacentHTML('afterbegin', searchWrapperHTMLDesktop);
 
-      if (targetElement && !document.querySelector('#searchWrapper')) {
-        if (isTrainingPage && breadcrumbs) {
-          // Вставить перед breadcrumbs
-          breadcrumbs.parentElement.insertBefore(
-            new DOMParser().parseFromString(searchContainerHTMLDesktop, 'text/html').body.firstChild,
-            breadcrumbs
-          );
-        } else if (isLessonPage && targetElement) {
-          // Вставить как раньше
-          targetElement.insertAdjacentHTML('afterbegin', searchContainerHTMLDesktop);
+        // 2. Вставляем searchContainer (поле поиска) в breadcrumbs (если они есть)
+        if (breadcrumbs) {
+          breadcrumbs.insertAdjacentHTML('afterbegin', searchContainerHTMLDesktop);
         }
 
+        // 3. Настройка обработчиков событий
         const searchInput = document.getElementById('searchInput');
         const searchResults = document.getElementById('searchResults');
 
@@ -94,20 +90,11 @@ function addSearchContainer() {
         }
       }
     });
-
     desktopObserver.observe(document.body, { childList: true, subtree: true });
   }
 }
 
-// Вызов при загрузке
-addSearchContainer();
-window.addEventListener('resize', () => {
-  addSearchContainer();
-});
-
-
-// ===================== Обработчик поиска =======================
-
+// ======= Обработчик поиска (как было) =======
 $(document).ready(function () {
   let typingTimer;
   const typingDelay = 1000;
@@ -214,3 +201,7 @@ $(document).ready(function () {
     }, 300);
   });
 });
+
+// ======= Инициализация =======
+addSearchContainer();
+window.addEventListener('resize', addSearchContainer);
