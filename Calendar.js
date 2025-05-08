@@ -1,16 +1,30 @@
 document.addEventListener('DOMContentLoaded', function () {
-  (function () {
+  let attempts = 0;
+  const maxAttempts = 10; // 10 * 100ms = 1000ms
+
+  const intervalId = setInterval(() => {
     const block = document.querySelector('.xdget-lessonSchedule');
-    const header = block?.querySelector('h3');
-    const scheduleBlock = block?.querySelector('.schedule-block');
+    if (block || attempts >= maxAttempts) {
+      clearInterval(intervalId);
+      if (block) {
+        initLessonSchedule(block); // запускаем основную функцию
+      } else {
+        console.warn('Блок .xdget-lessonSchedule не найден за 1000 мс');
+      }
+    }
+    attempts++;
+  }, 100);
+
+  function initLessonSchedule(block) {
+    const header = block.querySelector('h3');
+    const scheduleBlock = block.querySelector('.schedule-block');
     const days = scheduleBlock?.querySelectorAll('.day');
 
-    if (!block || !header || !scheduleBlock || !days) {
-      console.warn('Не найдены необходимые элементы');
+    if (!header || !scheduleBlock || !days) {
+      console.warn('Не найдены необходимые вложенные элементы');
       return;
     }
 
-    // Анимация открытия/закрытия расписания
     scheduleBlock.style.overflow = 'hidden';
     scheduleBlock.style.maxHeight = '0';
     scheduleBlock.style.transition = 'max-height 0.5s ease';
@@ -24,7 +38,6 @@ document.addEventListener('DOMContentLoaded', function () {
       expanded = !expanded;
       header.classList.toggle('open', expanded);
       header.classList.toggle('closed', !expanded);
-
       scheduleBlock.style.maxHeight = expanded ? scheduleBlock.scrollHeight + 'px' : '0';
     });
 
@@ -43,7 +56,6 @@ document.addEventListener('DOMContentLoaded', function () {
     days.forEach(day => {
       const dateLabel = day.querySelector('.day-label');
       const records = day.querySelectorAll('.record');
-
       if (!dateLabel || !records.length) return;
 
       const dateText = dateLabel.textContent.trim().replace(/\s+/g, ' ');
@@ -52,7 +64,6 @@ document.addEventListener('DOMContentLoaded', function () {
         const timeEl = record.querySelector('.time');
         const eventEl = record.querySelector('.event');
         const eventLink = eventEl?.querySelector('a');
-
         if (!timeEl || !eventEl || !eventLink) return;
 
         const timeText = timeEl.textContent.trim();
@@ -60,7 +71,6 @@ document.addEventListener('DOMContentLoaded', function () {
         const eventDesc = eventEl.textContent.trim();
 
         let eventDate = null;
-
         if (dateText.toLowerCase().includes('сегодня')) {
           eventDate = new Date(today);
         } else if (dateText.toLowerCase().includes('завтра')) {
@@ -127,5 +137,5 @@ document.addEventListener('DOMContentLoaded', function () {
         }
       });
     });
-  })();
+  }
 });
