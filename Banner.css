@@ -16,6 +16,18 @@ transform: scale(1.2);
 .custom-banner {
   margin-top: 0px !important;
 }
+.banner-buttons{
+width: auto !important;
+margin-left: auto !important;
+right: calc(5px + 15px + 30%) !important;
+transform: scale(0.8) !important;
+top: 70% !important;
+    
+}
+.banner-button{
+font-size: 11px !important;    
+padding: 8px 16px !important;
+}
 .banner-text {
 font-family: 'Futura PT';
 font-style: normal !important;
