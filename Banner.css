@@ -16,6 +16,19 @@ transform: scale(1.2);
 .custom-banner {
   margin-top: 0px !important;
 }
+.banner-text {
+font-family: 'Futura PT';
+font-style: normal;
+font-weight: 300;
+font-size: 21px;
+line-height: 15px;
+text-align: center;
+color: #2E2E2E;
+top: 25%;
+max-width: 60vw;
+left: auto;
+right: calc(5px + 15px + 20%) 
+}
 }
 /* Стили для текста на баннере */
 .banner-text {
