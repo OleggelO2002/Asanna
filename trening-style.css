@@ -71,8 +71,11 @@ max-width: 80%;
 /.header-trainigs img {
 display: none;    
 }
+
+@media screen and (min-width: 768px) {
 .container{
 margin-left: 5% !important;    
+}
 }
 body {
 background: #FAFAFA;   
