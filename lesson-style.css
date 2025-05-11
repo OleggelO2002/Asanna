@@ -86,6 +86,7 @@ border-radius: 10px !important;
 }
 .col-md-8{
 padding-left: 0px;
+padding-right: 0px !important;
 }
 .lesson-list li .info{
 margin-left: 0px !important;        
