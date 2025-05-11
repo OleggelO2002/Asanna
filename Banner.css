@@ -12,6 +12,11 @@ transform: scale(1.2);
   margin-top: 100px;
 }
 
+@media screen and (max-width: 768px) {
+.custom-banner {
+  margin-top: 0px !important;
+}
+}
 /* Стили для текста на баннере */
 .banner-text {
   font-family: 'Futura PT', sans-serif;
