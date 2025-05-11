@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
   setTimeout(() => {
-    const maxChecks = 40;
+    const maxChecks = 30;
     let checkCount = 0;
 
     const intervalId = setInterval(() => {
@@ -10,101 +10,84 @@ document.addEventListener('DOMContentLoaded', function () {
       if (lessonBlock) {
         clearInterval(intervalId);
 
-        const url = 'https://asanna.online/page359';
+        // Функция для извлечения числа или возврата 0
+        const cleanNumber = (el) => {
+          if (!el) return 0;
+          const match = el.textContent.match(/\d+/);
+          return match ? parseInt(match[0], 10) : 0;
+        };
 
-        fetch(url)
-          .then(response => {
-            if (!response.ok) throw new Error(`Ошибка загрузки: ${response.statusText}`);
-            return response.text();
-          })
-          .then(html => {
-            const tempDiv = document.createElement('div');
-            tempDiv.innerHTML = html;
+        const oldBlock = document.querySelector('.old-count-lesson');
+        const newBlock = document.querySelector('.new-count-lesson');
 
-            const oldBlock = tempDiv.querySelector('.old-count-lesson');
-            const newBlock = tempDiv.querySelector('.new-count-lesson');
+        const old = cleanNumber(oldBlock);
+        const newCount = cleanNumber(newBlock);
 
-            if (!oldBlock || !newBlock) {
-              console.error('Не найдены .old-count-lesson и .new-count-lesson');
-              return;
-            }
+        const total = Math.max(old, newCount);
+        const oldPercent = total === 0 ? 0 : Math.round((old / total) * 100);
+        const newPercent = total === 0 ? 0 : Math.round((newCount / total) * 100);
 
-            const old = parseInt(oldBlock.textContent.trim(), 10);
-            const newCount = parseInt(newBlock.textContent.trim(), 10);
-            if (isNaN(old) || isNaN(newCount)) {
-              console.error('Ошибка разбора чисел');
-              return;
-            }
+        const difference = newCount - old;
 
-            const difference = newCount - old;
+        // Склонение слова "урок"
+        const getLessonWord = (num) => {
+          const n = Math.abs(num) % 100;
+          const n1 = n % 10;
+          if (n > 10 && n < 20) return 'уроков';
+          if (n1 > 1 && n1 < 5) return 'урока';
+          if (n1 === 1) return 'урок';
+          return 'уроков';
+        };
 
-            const getEnding = (num) => {
-              if ([11, 12, 13, 14].includes(num % 100)) return 'уроков';
-              const lastDigit = num % 10;
-              if (lastDigit === 1) return 'урок';
-              if ([2, 3, 4].includes(lastDigit)) return 'урока';
-              return 'уроков';
-            };
+        // Вариативный текст
+        let progressText = '';
+        if (difference > 7) {
+          progressText = 'Ого, мы восхищаемся вами — вы наш герой!';
+        } else if (difference >= 3 && difference <= 7) {
+          progressText = `Вы прошли на ${difference} ${getLessonWord(difference)} больше — так держать!`;
+        } else if (difference >= 1 && difference < 3) {
+          progressText = `Вы прошли на ${difference} ${getLessonWord(difference)} больше — вы большая молодец!`;
+        } else if (difference === 0) {
+          progressText = 'Вы идёте в том же темпе, продолжайте в том же духе!';
+        } else if (difference < 0 && difference >= -2) {
+          progressText = `Осталось ${Math.abs(difference)} ${getLessonWord(difference)} — совсем немного, вы справитесь!`;
+        } else if (difference < -2 && difference >= -6) {
+          progressText = 'Мы в вас верим — у вас всё получится!';
+        } else if (difference < -6) {
+          progressText = 'Вы немного отстаёте, поднажмите — у вас всё получится!';
+        }
 
-            let progressText = '';
+        // Создание блока
+        const achievementBlock = document.createElement('div');
+        achievementBlock.className = 'achievement-block';
+        achievementBlock.style.marginTop = '20px';
+        achievementBlock.style.padding = '20px';
+        achievementBlock.style.backgroundColor = '#fdfdfd';
+        achievementBlock.style.border = '1px solid #eee';
+        achievementBlock.style.borderRadius = '8px';
+        achievementBlock.style.boxShadow = '0 2px 6px rgba(0,0,0,0.05)';
+        achievementBlock.innerHTML = `
+          <div style="font-size: 18px; font-weight: bold; margin-bottom: 10px;">Ваши достижения</div>
+          <div style="margin-bottom: 6px;">В прошлом месяце — ${old} ${getLessonWord(old)}</div>
+          <div style="background-color: #eee; border-radius: 4px; height: 10px; margin-bottom: 12px;">
+            <div style="width: ${oldPercent}%; height: 100%; background-color: #ccc; border-radius: 4px;"></div>
+          </div>
+          <div style="margin-bottom: 6px;">В этом месяце — ${newCount} ${getLessonWord(newCount)}</div>
+          <div style="background-color: #eee; border-radius: 4px; height: 10px; margin-bottom: 16px;">
+            <div style="width: ${newPercent}%; height: 100%; background-color: #76c7c0; border-radius: 4px;"></div>
+          </div>
+          <div style="font-style: italic;">${progressText}</div>
+        `;
 
-            if (difference > 7) {
-              progressText = 'Ого, мы восхищаемся вами — вы наш герой!';
-            } else if (difference >= 3 && difference <= 7) {
-              progressText = `Вы прошли на ${difference} ${getEnding(difference)} больше — так держать!`;
-            } else if (difference === 2 || difference === 1) {
-              progressText = `Вы прошли на ${difference} ${getEnding(difference)} больше — отличная работа!`;
-            } else if (difference === 0) {
-              progressText = 'Пока вы на том же уровне, но впереди ещё много возможностей!';
-            } else if (difference < 0 && difference >= -2) {
-              progressText = `Осталось ${Math.abs(difference)} ${getEnding(Math.abs(difference))} — вы почти догнали, так держать!`;
-            } else if (difference <= -3 && difference >= -6) {
-              progressText = 'Мы в вас верим — у вас всё получится!';
-            } else if (difference < -6) {
-              progressText = 'Вы немного отстаете — поднажмите, у вас всё получится!';
-            }
-
-            const maxValue = Math.max(old, newCount);
-            const oldWidth = (old / maxValue) * 100;
-            const newWidth = (newCount / maxValue) * 100;
-
-            const achievementsBlock = document.createElement('div');
-            achievementsBlock.className = 'achievementsBlock';
-            achievementsBlock.style.marginTop = '20px';
-            achievementsBlock.style.padding = '20px';
-            achievementsBlock.style.backgroundColor = '#f9f9f9';
-            achievementsBlock.style.border = '1px solid #ddd';
-            achievementsBlock.style.borderRadius = '8px';
-            achievementsBlock.style.boxShadow = '0 2px 6px rgba(0,0,0,0.05)';
-
-            achievementsBlock.innerHTML = `
-              <div style="font-size: 20px; font-weight: 600; margin-bottom: 16px;">Ваши достижения</div>
-
-              <div style="margin-bottom: 6px;">В прошлом месяце — ${old} ${getEnding(old)}</div>
-              <div style="width: 100%; height: 12px; background: #e0e0e0; border-radius: 6px; margin-bottom: 14px;">
-                <div style="width: ${oldWidth}%; height: 100%; background: #b0c4de; border-radius: 6px;"></div>
-              </div>
-
-              <div style="margin-bottom: 6px;">В этом месяце — ${newCount} ${getEnding(newCount)}</div>
-              <div style="width: 100%; height: 12px; background: #e0e0e0; border-radius: 6px; margin-bottom: 18px;">
-                <div style="width: ${newWidth}%; height: 100%; background: #6ca86c; border-radius: 6px;"></div>
-              </div>
-
-              <div style="font-size: 16px; font-weight: 500; color: #444;">${progressText}</div>
-            `;
-
-            if (lessonBlock.parentNode) {
-              lessonBlock.parentNode.insertBefore(achievementsBlock, lessonBlock.nextSibling);
-              console.log('Блок достижений добавлен');
-            }
-          })
-          .catch(error => console.error('Ошибка загрузки:', error));
+        // Вставляем блок под .lastLessonBlock
+        lessonBlock.parentNode.insertBefore(achievementBlock, lessonBlock.nextSibling);
+        console.log('Блок достижений добавлен!');
       }
 
       if (checkCount >= maxChecks) {
         clearInterval(intervalId);
-        console.log('Не удалось найти .lastLessonBlock в течение 4 секунд');
+        console.log('Не удалось найти .lastLessonBlock в течение времени ожидания');
       }
     }, 100);
-  }, 100);
+  }, 1100); // на 1 сек позже
 });
