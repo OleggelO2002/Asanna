@@ -66,26 +66,20 @@ document.addEventListener('DOMContentLoaded', function () {
               progressText = 'Вы немного отстаёте, поднажмите — у вас всё получится!';
             }
 
-            const achievementBlock = document.createElement('div');
-            achievementBlock.className = 'achievement-block';
-            achievementBlock.style.marginTop = '20px';
-            achievementBlock.style.padding = '20px';
-            achievementBlock.style.backgroundColor = '#fdfdfd';
-            achievementBlock.style.border = '1px solid #eee';
-            achievementBlock.style.borderRadius = '8px';
-            achievementBlock.style.boxShadow = '0 2px 6px rgba(0,0,0,0.05)';
-            achievementBlock.innerHTML = `
-              <div style="font-size: 18px; font-weight: bold; margin-bottom: 10px;">Ваши достижения</div>
-              <div style="margin-bottom: 6px;">В прошлом месяце — ${old} ${getLessonWord(old)}</div>
-              <div style="background-color: #eee; border-radius: 4px; height: 10px; margin-bottom: 12px;">
-                <div style="width: ${oldPercent}%; height: 100%; background-color: #ccc; border-radius: 4px;"></div>
-              </div>
-              <div style="margin-bottom: 6px;">В этом месяце — ${newCount} ${getLessonWord(newCount)}</div>
-              <div style="background-color: #eee; border-radius: 4px; height: 10px; margin-bottom: 16px;">
-                <div style="width: ${newPercent}%; height: 100%; background-color: #76c7c0; border-radius: 4px;"></div>
-              </div>
-              <div style="font-style: italic;">${progressText}</div>
-            `;
+           const achievementBlock = document.createElement('div');
+achievementBlock.className = 'achievement-block';
+achievementBlock.innerHTML = `
+  <div class="achievement-title">Ваши достижения</div>
+  <div class="achievement-previous">В прошлом месяце — ${old} ${getLessonWord(old)}</div>
+  <div class="achievement-progress-bar background-bar">
+    <div class="bar bar-old" style="width: ${oldPercent}%"></div>
+  </div>
+  <div class="achievement-current">В этом месяце — ${newCount} ${getLessonWord(newCount)}</div>
+  <div class="achievement-progress-bar background-bar">
+    <div class="bar bar-new" style="width: ${newPercent}%"></div>
+  </div>
+  <div class="achievement-comment">${progressText}</div>
+`;
 
             lessonBlock.parentNode.insertBefore(achievementBlock, lessonBlock.nextSibling);
           })
