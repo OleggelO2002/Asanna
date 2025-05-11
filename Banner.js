@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const container = document.querySelector('.container');
   if (!container) return;
 
+  
   const bannerWrapper = document.createElement('div');
   bannerWrapper.classList.add('custom-banner');
 
