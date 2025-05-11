@@ -1,1 +1,67 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&display=swap');
 
+.achievement-block {
+margin-top: 20px;
+padding: 20px;
+background-color: #FFF;
+border: 0px solid rgb(238, 238, 238) !important;
+border-radius: 15px !important;
+box-shadow: 0px -6px 21.4px rgba(0, 0, 0, 0.05) !important;
+}
+
+.achievement-title {
+  font-size: 30px;
+  margin-bottom: 10px;
+  font-family: 'Futura PT' !important;
+  font-style: normal !important;
+  font-weight: 450 !important;   
+  color: #292929; 
+}
+
+.achievement-previous,
+.achievement-current {
+margin-bottom: 6px;
+font-family: 'Montserrat';
+font-style: normal;
+font-weight: 500;
+font-size: 13px;
+line-height: 15px;
+color: #292929;
+}
+
+.achievement-progress-bar {
+  background: #FFFFFF;
+  box-shadow: inset 0px 0px 6px rgba(0, 0, 0, 0.25);
+  border-radius: 20px;
+  height: 25px;
+  margin-bottom: 12px;
+  overflow: hidden;
+  position: relative;
+}
+
+.bar {
+  height: 100%;
+  border-radius: 4px;
+}
+
+.bar-old {
+  background: #D5BAAF;
+  box-shadow: inset 0px 0px 6px rgba(0, 0, 0, 0.25);
+  border-radius: 20px;
+}
+
+.bar-new {
+  background: #D5BAAF;
+  box-shadow: inset 0px 0px 6px rgba(0, 0, 0, 0.25);
+  border-radius: 20px;
+}
+
+.achievement-comment {
+font-family: 'Montserrat';
+font-style: normal;
+font-weight: 500;
+font-size: 15px;
+line-height: 22px;
+color: #292929;
+  margin-top: 10px;
+}
