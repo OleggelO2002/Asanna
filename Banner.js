@@ -2,52 +2,55 @@ document.addEventListener('DOMContentLoaded', function () {
   const container = document.querySelector('.container');
   if (!container) return;
 
-  
   const bannerWrapper = document.createElement('div');
   bannerWrapper.classList.add('custom-banner');
 
+  // Создаём изображение
   const img = document.createElement('img');
   img.alt = 'Banner Image';
   img.style.width = '100%';
   img.style.height = 'auto';
 
   if (window.innerWidth <= 768) {
-    // Мобильная версия — только картинка
-    img.src = 'https://static.tildacdn.info/tild6163-6164-4136-b063-633465616136/Frame_290.png';
-    bannerWrapper.appendChild(img);
+    // Мобильная версия
+    img.src = 'https://static.tildacdn.com/tild3932-3635-4636-b231-653333666631/Frame_290.png';
   } else {
-    // Десктопная версия — картинка, текст и кнопка
+    // Десктопная версия
     img.src = 'https://static.tildacdn.info/tild3636-3765-4834-b862-323336663562/Frame_279.png';
-    bannerWrapper.appendChild(img);
-
-    const bannerText = document.createElement('div');
-    bannerText.classList.add('banner-text');
-    bannerText.textContent = 'Искусство построения отношений между мужчиной и женщиной';
-    bannerWrapper.appendChild(bannerText);
-
-    const buttonGroup = document.createElement('div');
-    buttonGroup.classList.add('banner-buttons');
-
-    const buttonsData = [
-      {
-        label: 'Отзывы ДО/ПОСЛЕ',
-        link: 'https://asanna.online/pl/teach/control/lesson/view?id=342464869'
-      }
-    ];
-
-    buttonsData.forEach(data => {
-      const buttonLink = document.createElement('a');
-      buttonLink.href = data.link;
-      buttonLink.classList.add('banner-button');
-      buttonLink.textContent = data.label;
-      buttonGroup.appendChild(buttonLink);
-    });
-
-    bannerWrapper.appendChild(buttonGroup);
   }
+
+  bannerWrapper.appendChild(img);
+
+  // Добавляем общий текст
+  const bannerText = document.createElement('div');
+  bannerText.classList.add('banner-text');
+  bannerText.textContent = 'Искусство построения отношений между мужчиной и женщиной';
+  bannerWrapper.appendChild(bannerText);
+
+  // Создаём обёртку и кнопки
+  const buttonGroup = document.createElement('div');
+  buttonGroup.classList.add('banner-buttons');
+
+  const buttonsData = [
+    {
+      label: 'Отзывы ДО/ПОСЛЕ',
+      link: 'https://asanna.online/pl/teach/control/lesson/view?id=342464869'
+    }
+  ];
+
+  buttonsData.forEach(data => {
+    const buttonLink = document.createElement('a');
+    buttonLink.href = data.link;
+    buttonLink.classList.add('banner-button');
+    buttonLink.textContent = data.label;
+    buttonGroup.appendChild(buttonLink);
+  });
+
+  bannerWrapper.appendChild(buttonGroup);
 
   container.prepend(bannerWrapper);
 });
+
 
 document.addEventListener('DOMContentLoaded', function () {
   const targetContainer = document.querySelector('.col-md-4');
