@@ -18,16 +18,16 @@ transform: scale(1.2);
 }
 .banner-text {
 font-family: 'Futura PT';
-font-style: normal;
-font-weight: 300;
-font-size: 21px;
-line-height: 15px;
-text-align: center;
-color: #2E2E2E;
-top: 25%;
-max-width: 60vw;
-left: auto;
-right: calc(5px + 15px + 20%) 
+font-style: normal !important;
+font-weight: 300 !important;
+font-size: 21px !important;
+line-height: 15px !important;
+text-align: center !important;
+color: #2E2E2E !important;
+top: 25% !important;
+max-width: 60vw !important;
+left: auto !important;
+right: calc(5px + 15px + 20%) !important; 
 }
 }
 /* Стили для текста на баннере */
