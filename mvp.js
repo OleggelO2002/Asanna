@@ -98,5 +98,5 @@ document.addEventListener('DOMContentLoaded', function () {
       lessonCompleted = true;
       fetchCountsAndSend();
     }
-  }, 1 * 60 * 1000); // 15 минут
+  }, 15 * 60 * 1000); // 15 минут
 });
