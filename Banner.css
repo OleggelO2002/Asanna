@@ -1,9 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&display=swap');
 /* Стили для обёртки баннера */
-@media screen and (max-width: 768px) {
-.custom-banner{
-display: none !important;
-}  
+
 }
 .banner-button {
 transform: scale(1.2);    
