@@ -13,24 +13,13 @@
   align-items: center;
 }
 
-#daily-card-close {
-  position: absolute;
-  top: 20px;
-  right: 60px;
-  font-size: 50px;
-  color: #fff;
-  cursor: pointer;
-  z-index: 10000;
-  transition: transform 0.3s, color 0.3s;
-}
-
 #daily-card-close:hover {
   color: #e7e7e7;
   transform: scale(1.1);
 }
 
 #daily-card-text {
-  position: absolute;
+  .position: absolute;
   top: 7%;
   font-family: 'Futura PT', sans-serif;
   font-weight: 400;
@@ -45,22 +34,14 @@
   display: grid;
   gap: 16px;
   justify-items: center;
-  margin-top: 100px;
+  /margin-top: 100px;
 }
 
 @media (min-width: 769px) {
   #daily-card-container {
     grid-template-columns: repeat(3, 1fr);
   }
-}
-
-@media (max-width: 768px) {
-  #daily-card-container {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-.card {
+  .card {
   width: 200px;
   height: 280px;
   perspective: 1000px;
@@ -69,6 +50,80 @@
   transition: transform 0.6s ease, opacity 0.6s ease;
   transform-origin: center center;
 }
+  #daily-card-text {
+  margin-bottom: 100px 
+    }
+  #daily-card-close {
+  position: absolute;
+  top: 20px;
+  right: 60px;
+  font-size: 50px;
+  color: #fff;
+  cursor: pointer;
+  z-index: 10000;
+  transition: transform 0.3s, color 0.3s;
+}
+.floating-card {
+  position: absolute;
+  pointer-events: none;
+  margin: 0 !important;
+  transition: left 1s ease, top 1s ease;
+  width: 200px !important;
+  height: 280px !important;
+  z-index: 9999999 !important;
+  /* Не используем transform для позиционирования, чтобы избежать "прыжков" */
+}
+}
+
+@media (max-width: 768px) {
+  #daily-card-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .card {
+  width: 140px;
+  height: 196px;
+  perspective: 1000px;
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.6s ease, opacity 0.6s ease;
+  transform-origin: center center;
+}
+  #daily-card-text {
+  margin-top: 70px;
+ .position: absolute;
+  .top: 7%;
+  font-family: 'Futura PT', sans-serif;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 17px;
+  text-align: center;
+  color: #ffffff;
+  max-width: 70%;
+  margin-bottom: 20px 
+}
+  #daily-card-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 30px;
+  color: #fff;
+  cursor: pointer;
+  z-index: 10000;
+  transition: transform 0.3s, color 0.3s;
+}
+.floating-card {
+  position: absolute;
+  pointer-events: none;
+  margin: 0 !important;
+  transition: left 1s ease, top 1s ease;
+  width: 140px !important;
+  height: 196px !important;
+  z-index: 9999999 !important;
+  /* Не используем transform для позиционирования, чтобы избежать "прыжков" */
+}
+}
+
+
 
 .card:hover {
   transform: scale(1.1);
@@ -101,7 +156,10 @@
 }
 
 .card-back {
-  background: #888;
+background-image: url('https://static.tildacdn.com/tild3036-3036-4663-b663-376135626139/Frame_291.png');
+background-size: contain;
+background-repeat: no-repeat;  
+/background: #888;
 }
 
 .card.hiding {
@@ -113,27 +171,18 @@
 .card.hide {
   display: none;
 }
-
-/* Новый класс для клонированной карточки, которая плавно летит в центр */
-.floating-card {
-  position: absolute;
-  pointer-events: none;
-  margin: 0 !important;
-  transition: left 1s ease, top 1s ease;
-  width: 200px !important;
-  height: 280px !important;
-  z-index: 9999999 !important;
-  /* Не используем transform для позиционирования, чтобы избежать "прыжков" */
-}
-
-/* Флип клона */
 .floating-card.flipped .card-inner {
   transform: rotateY(180deg) scale(1.4);
-}
+ }
 
+@media (max-width: 768px) {
+.floating-card.flipped .card-inner {
+  transform: rotateY(180deg) scale(1.8) !important;
+ }
+}
 /* Убираем position: fixed и transform для .card.chosen — не нужен */
-.card.chosen {
-  /* Можно удалить или отключить */
+/.card.chosen {
+  /* Можно удалить или отключить */ 
   position: fixed;
   left: 50%;
   top: 50%;
@@ -142,3 +191,4 @@
   z-index: 10001;
   transition: transform 0.8s ease;
 }
+
