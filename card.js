@@ -73,14 +73,12 @@ document.addEventListener('DOMContentLoaded', async function () {
         // Клонируем карточку
         const rect = card.getBoundingClientRect();
         floatingCard = card.cloneNode(true);
-        floatingCard.style.position = 'absolute';  // позиция absolute до анимации
+        floatingCard.classList.add('floating-card');
+        floatingCard.style.position = 'absolute';
         floatingCard.style.left = `${rect.left + window.scrollX}px`;
         floatingCard.style.top = `${rect.top + window.scrollY}px`;
         floatingCard.style.width = `${rect.width}px`;
         floatingCard.style.height = `${rect.height}px`;
-        floatingCard.style.transition = 'transform 1s ease, left 1s ease, top 1s ease';
-        floatingCard.style.zIndex = 1000;
-        floatingCard.classList.add('floating-card');
         document.body.appendChild(floatingCard);
 
         // Скрываем оригиналы
@@ -97,15 +95,14 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         // Через 1 секунду переключаем позицию на fixed
         setTimeout(() => {
-          if (!floatingCard) return;  // если карточка уже удалена
-          // Сохраняем текущие координаты
+          if (!floatingCard) return;
+
           const currentRect = floatingCard.getBoundingClientRect();
           floatingCard.style.position = 'fixed';
-          // Координаты фиксируются относительно окна, поэтому left/top берем из getBoundingClientRect
           floatingCard.style.left = `${currentRect.left}px`;
           floatingCard.style.top = `${currentRect.top}px`;
 
-          // Флип через 0.1 секунду после смены позиции
+          // Флип
           setTimeout(() => {
             if (floatingCard) {
               floatingCard.classList.add('flipped');
