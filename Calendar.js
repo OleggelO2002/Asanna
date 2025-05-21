@@ -1,13 +1,13 @@
 document.addEventListener('DOMContentLoaded', function () {
   let attempts = 0;
-  const maxAttempts = 10;
+  const maxAttempts = 10; // 10 * 100ms = 1000ms
 
   const intervalId = setInterval(() => {
     const block = document.querySelector('.xdget-lessonSchedule');
     if (block || attempts >= maxAttempts) {
       clearInterval(intervalId);
       if (block) {
-        initLessonSchedule(block);
+        initLessonSchedule(block); // запускаем основную функцию
       } else {
         console.warn('Блок .xdget-lessonSchedule не найден за 1000 мс');
       }
@@ -28,11 +28,14 @@ document.addEventListener('DOMContentLoaded', function () {
     scheduleBlock.style.overflow = 'hidden';
     scheduleBlock.style.transition = 'max-height 0.5s ease';
     scheduleBlock.style.display = 'block';
+    
+    // Изменено здесь: устанавливаем блок как открытый по умолчанию
     scheduleBlock.style.maxHeight = scheduleBlock.scrollHeight + 'px';
     header.classList.add('open');
-
-    let expanded = true;
+    
+    let expanded = true; // Изменено: начинаем с открытого состояния
     header.style.cursor = 'pointer';
+
     header.addEventListener('click', () => {
       expanded = !expanded;
       header.classList.toggle('open', expanded);
@@ -40,6 +43,7 @@ document.addEventListener('DOMContentLoaded', function () {
       scheduleBlock.style.maxHeight = expanded ? scheduleBlock.scrollHeight + 'px' : '0';
     });
 
+    // Остальной код остается без изменений
     const months = {
       'Январь': '01', 'Февраль': '02', 'Март': '03', 'Апрель': '04',
       'Май': '05', 'Июнь': '06', 'Июль': '07', 'Август': '08',
@@ -82,29 +86,59 @@ document.addEventListener('DOMContentLoaded', function () {
           const month = months[monthStr];
           if (!month) return;
           const year = today.getFullYear();
-          eventDate = new Date(`${year}-${month}-${dayStr.padStart(2, '0')}T${timeText}:00`);
+          eventDate = new Date(${year}-${month}-${dayStr.padStart(2, '0')}T${timeText}:00);
         }
 
         const eventDayOnly = new Date(eventDate);
         eventDayOnly.setHours(0, 0, 0, 0);
 
-        if (eventDayOnly >= today && !record.querySelector('.addeventatc')) {
-          const a = document.createElement('a');
-          a.className = 'addeventatc';
-          a.title = 'Добавить в календарь';
-          a.innerHTML = `
-            Добавить в календарь
-            <span class="start">${eventDate.getFullYear()}-${(eventDate.getMonth()+1).toString().padStart(2, '0')}-${eventDate.getDate().toString().padStart(2, '0')} ${timeText}</span>
-            <span class="end">${eventDate.getFullYear()}-${(eventDate.getMonth()+1).toString().padStart(2, '0')}-${eventDate.getDate().toString().padStart(2, '0')} ${String(Number(timeText.split(':')[0]) + 1).padStart(2, '0')}:${timeText.split(':')[1]}</span>
-            <span class="timezone">Europe/Moscow</span>
-            <span class="title">${eventTitle}</span>
-            <span class="description">${eventDesc}</span>
-            <span class="location">Онлайн</span>
-          `;
-          record.appendChild(a);
+        if (eventDayOnly >= today && !record.querySelector('.calendar-btn')) {
+          const btn = document.createElement('button');
+          btn.textContent = 'Добавить в календарь';
+          btn.className = 'calendar-btn';
+          btn.style.marginTop = '10px';
+          btn.style.display = 'inline-block';
+          btn.style.padding = '6px 12px';
+          btn.style.background = '#3498db';
+          btn.style.color = 'white';
+          btn.style.border = 'none';
+          btn.style.borderRadius = '4px';
+          btn.style.cursor = 'pointer';
+
+          btn.addEventListener('click', () => {
+            const [h, m] = timeText.split(':');
+            const pad = n => n.toString().padStart(2, '0');
+            const y = eventDate.getFullYear();
+            const mo = pad(eventDate.getMonth() + 1);
+            const d = pad(eventDate.getDate());
+            const start = ${y}${mo}${d}T${pad(h)}${pad(m)}00;
+            const endHour = String(Number(h) + 1).padStart(2, '0');
+            const end = ${y}${mo}${d}T${endHour}${pad(m)}00;
+
+            const icsContent = [
+              'BEGIN:VCALENDAR',
+              'VERSION:2.0',
+              'BEGIN:VEVENT',
+              DTSTART:${start},
+              DTEND:${end},
+              SUMMARY:${eventTitle},
+              DESCRIPTION:${eventDesc},
+              'END:VEVENT',
+              'END:VCALENDAR'
+            ].join('\n');
+
+            const blob = new Blob([icsContent], { type: 'text/calendar' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = ${eventTitle}.ics;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+          });
+
+          record.appendChild(btn);
         }
       });
     });
   }
 });
-
