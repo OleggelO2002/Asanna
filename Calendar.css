@@ -35,6 +35,14 @@ body{
 background: #FAFAFA;
 }
 
+.xdget-lessonSchedule .closed{
+border-radius: 15px 15px 15px 15px !important;
+}
+
+.xdget-lessonSchedule .open{
+border-radius: 15px 15px 0 0 !important;    
+}
+
 .xdget-lessonSchedule h3 {
 font-family: 'Futura PT', sans-serif;
 font-style: normal;
@@ -42,7 +50,6 @@ font-weight: 500;
 color: #2E2E2E;
 background: #fff;
 padding: 30px 0px 30px 15px;
-border-radius: 15px 15px 15px 15px;
 box-shadow: 0px -6px 21.4px rgba(0, 0, 0, 0.05);
 position: relative;
 padding-right: 14px; /* место под стрелку */
