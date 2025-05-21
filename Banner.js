@@ -1,54 +1,67 @@
 document.addEventListener('DOMContentLoaded', function () {
-  const container = document.querySelector('.container');
-  if (!container) return;
+  // Универсальная функция вставки баннера
+  function insertBanner(targetElement) {
+    const bannerWrapper = document.createElement('div');
+    bannerWrapper.classList.add('custom-banner');
 
-  const bannerWrapper = document.createElement('div');
-  bannerWrapper.classList.add('custom-banner');
+    // Изображение
+    const img = document.createElement('img');
+    img.alt = 'Banner Image';
+    img.style.width = '100%';
+    img.style.height = 'auto';
 
-  // Создаём изображение
-  const img = document.createElement('img');
-  img.alt = 'Banner Image';
-  img.style.width = '100%';
-  img.style.height = 'auto';
+    if (window.innerWidth <= 768) {
+      img.src = 'https://static.tildacdn.info/tild6163-6164-4136-b063-633465616136/Frame_290.png';
+    } else {
+      img.src = 'https://static.tildacdn.info/tild3636-3765-4834-b862-323336663562/Frame_279.png';
+    }
 
-  if (window.innerWidth <= 768) {
-    // Мобильная версия
-    img.src = 'https://static.tildacdn.info/tild6163-6164-4136-b063-633465616136/Frame_290.png';
-  } else {
-    // Десктопная версия
-    img.src = 'https://static.tildacdn.info/tild3636-3765-4834-b862-323336663562/Frame_279.png';
+    bannerWrapper.appendChild(img);
+
+    // Текст
+    const bannerText = document.createElement('div');
+    bannerText.classList.add('banner-text');
+    bannerText.textContent = 'Искусство построения отношений между мужчиной и женщиной';
+    bannerWrapper.appendChild(bannerText);
+
+    // Кнопки
+    const buttonGroup = document.createElement('div');
+    buttonGroup.classList.add('banner-buttons');
+
+    const buttonsData = [
+      {
+        label: 'Отзывы ДО/ПОСЛЕ',
+        link: 'https://asanna.online/pl/teach/control/lesson/view?id=342464869'
+      }
+    ];
+
+    buttonsData.forEach(data => {
+      const buttonLink = document.createElement('a');
+      buttonLink.href = data.link;
+      buttonLink.classList.add('banner-button');
+      buttonLink.textContent = data.label;
+      buttonGroup.appendChild(buttonLink);
+    });
+
+    bannerWrapper.appendChild(buttonGroup);
+
+    // Вставляем баннер перед целевым элементом
+    targetElement.parentNode.insertBefore(bannerWrapper, targetElement);
   }
 
-  bannerWrapper.appendChild(img);
+  // Пытаемся найти .container (браузер)
+  const container = document.querySelector('.container');
 
-  // Добавляем общий текст
-  const bannerText = document.createElement('div');
-  bannerText.classList.add('banner-text');
-  bannerText.textContent = 'Искусство построения отношений между мужчиной и женщиной';
-  bannerWrapper.appendChild(bannerText);
-
-  // Создаём обёртку и кнопки
-  const buttonGroup = document.createElement('div');
-  buttonGroup.classList.add('banner-buttons');
-
-  const buttonsData = [
-    {
-      label: 'Отзывы ДО/ПОСЛЕ',
-      link: 'https://asanna.online/pl/teach/control/lesson/view?id=342464869'
+  if (container) {
+    container.prepend = container.prepend || function (el) { this.insertBefore(el, this.firstChild); };
+    insertBanner(container.firstChild || container);
+  } else {
+    // Иначе, ищем .stream-table (приложение)
+    const streamTable = document.querySelector('.stream-table');
+    if (streamTable) {
+      insertBanner(streamTable);
     }
-  ];
-
-  buttonsData.forEach(data => {
-    const buttonLink = document.createElement('a');
-    buttonLink.href = data.link;
-    buttonLink.classList.add('banner-button');
-    buttonLink.textContent = data.label;
-    buttonGroup.appendChild(buttonLink);
-  });
-
-  bannerWrapper.appendChild(buttonGroup);
-
-  container.prepend(bannerWrapper);
+  }
 });
 
 
