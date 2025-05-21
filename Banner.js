@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Приложению добавляем дополнительные стили
     if (isApp) {
-      bannerWrapper.style.maxWidth = '80vw';
+      bannerWrapper.style.maxWidth = '90vw';
       bannerWrapper.style.margin = '0 auto';
     }
 
