@@ -1,8 +1,13 @@
 document.addEventListener('DOMContentLoaded', function () {
-  // Универсальная функция вставки баннера
-  function insertBanner(targetElement) {
+  function insertBanner(targetElement, isApp = false) {
     const bannerWrapper = document.createElement('div');
     bannerWrapper.classList.add('custom-banner');
+
+    // Приложению добавляем дополнительные стили
+    if (isApp) {
+      bannerWrapper.style.maxWidth = '90vw';
+      bannerWrapper.style.margin = '0 auto';
+    }
 
     // Изображение
     const img = document.createElement('img');
@@ -45,24 +50,22 @@ document.addEventListener('DOMContentLoaded', function () {
 
     bannerWrapper.appendChild(buttonGroup);
 
-    // Вставляем баннер перед целевым элементом
     targetElement.parentNode.insertBefore(bannerWrapper, targetElement);
   }
 
-  // Пытаемся найти .container (браузер)
   const container = document.querySelector('.container');
 
   if (container) {
     container.prepend = container.prepend || function (el) { this.insertBefore(el, this.firstChild); };
     insertBanner(container.firstChild || container);
   } else {
-    // Иначе, ищем .stream-table (приложение)
     const streamTable = document.querySelector('.stream-table');
     if (streamTable) {
-      insertBanner(streamTable);
+      insertBanner(streamTable, true); // <- передаём флаг, что это приложение
     }
   }
 });
+
 
 
 document.addEventListener('DOMContentLoaded', function () {
