@@ -29,11 +29,11 @@ document.addEventListener('DOMContentLoaded', function () {
     scheduleBlock.style.transition = 'max-height 0.5s ease';
     scheduleBlock.style.display = 'block';
     
-    // Изменено здесь: устанавливаем блок как открытый по умолчанию
+    // Устанавливаем блок как открытый по умолчанию
     scheduleBlock.style.maxHeight = scheduleBlock.scrollHeight + 'px';
     header.classList.add('open');
     
-    let expanded = true; // Изменено: начинаем с открытого состояния
+    let expanded = true;
     header.style.cursor = 'pointer';
 
     header.addEventListener('click', () => {
@@ -43,7 +43,6 @@ document.addEventListener('DOMContentLoaded', function () {
       scheduleBlock.style.maxHeight = expanded ? scheduleBlock.scrollHeight + 'px' : '0';
     });
 
-    // Остальной код остается без изменений
     const months = {
       'Январь': '01', 'Февраль': '02', 'Март': '03', 'Апрель': '04',
       'Май': '05', 'Июнь': '06', 'Июль': '07', 'Август': '08',
@@ -127,9 +126,10 @@ document.addEventListener('DOMContentLoaded', function () {
               'END:VCALENDAR'
             ].join('\n');
 
-            const blob = new Blob([icsContent], { type: 'text/calendar' });
+            // Используем data URI вместо Blob для совместимости с WebView
+            const icsData = encodeURIComponent(icsContent);
             const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
+            a.href = `data:text/calendar;charset=utf8,${icsData}`;
             a.download = `${eventTitle}.ics`;
             document.body.appendChild(a);
             a.click();
