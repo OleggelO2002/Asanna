@@ -14,7 +14,11 @@ transform: scale(1.2);
 
 @media screen and (max-width: 768px) {
 .custom-banner {
-  margin-top: 0px !important;
+  margin-top: 20px !important;
+}
+.stream-table{
+    max-width: 90vw !important;
+    margin: 0 auto !important;
 }
 .banner-buttons{
 width: auto !important;
