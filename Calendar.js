@@ -1,6 +1,3 @@
-<script type="text/javascript" src="https://addevent.com/libs/atc/1.6.1/atc.min.js" async defer></script>
-
-
 document.addEventListener('DOMContentLoaded', function () {
   let attempts = 0;
   const maxAttempts = 10;
