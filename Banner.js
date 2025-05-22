@@ -1,39 +1,34 @@
-document.addEventListener('DOMContentLoaded', function () {
-  function insertBanner(targetElement, isApp = false) {
-    const bannerWrapper = document.createElement('div');
-    bannerWrapper.classList.add('custom-banner');
+document.addEventListener('DOMContentLoaded', async function () {
+  const bannerPageUrl = 'https://asanna.online/page358';
 
-    if (isApp) {
-      bannerWrapper.style.maxWidth = '90vw';
-      bannerWrapper.style.margin = '0 auto';
-    }
+  try {
+    const res = await fetch(bannerPageUrl);
+    const html = await res.text();
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
 
-    // ===== Получаем текст =====
-    const textElement = document.querySelector('.text-for-banner .text-large');
+    // ====== ТЕКСТ ======
+    const textBlock = doc.querySelector('.text-for-banner .text-large');
     const bannerText = document.createElement('div');
     bannerText.classList.add('banner-text');
-    if (textElement) {
-      bannerText.innerHTML = textElement.innerHTML;
+    if (textBlock) {
+      bannerText.innerHTML = textBlock.innerHTML;
     }
 
-    // ===== Получаем изображения =====
+    // ====== КАРТИНКА ======
+    const isMobile = window.innerWidth <= 768;
+    const imgSelector = isMobile ? '.img-for-banner-mob img' : '.img-for-banner-pc img';
+    const imgElement = doc.querySelector(imgSelector);
+
     const img = document.createElement('img');
     img.alt = 'Banner Image';
     img.style.width = '100%';
     img.style.height = 'auto';
-
-    const isMobile = window.innerWidth <= 768;
-    const imgSelector = isMobile ? '.img-for-banner-mob img' : '.img-for-banner-pc img';
-    const imgElement = document.querySelector(imgSelector);
-
     if (imgElement) {
       img.src = imgElement.getAttribute('src') || imgElement.getAttribute('data-src');
-    } else {
-      console.warn('Изображение баннера не найдено.');
-      img.src = ''; // или задай дефолтное изображение
     }
 
-    // ===== Кнопки =====
+    // ====== КНОПКИ ======
     const buttonGroup = document.createElement('div');
     buttonGroup.classList.add('banner-buttons');
 
@@ -52,23 +47,25 @@ document.addEventListener('DOMContentLoaded', function () {
       buttonGroup.appendChild(buttonLink);
     });
 
-    // ===== Добавляем в DOM =====
+    // ====== СОЗДАНИЕ БАННЕРА ======
+    const bannerWrapper = document.createElement('div');
+    bannerWrapper.classList.add('custom-banner');
     bannerWrapper.appendChild(img);
-    if (textElement) bannerWrapper.appendChild(bannerText);
+    if (textBlock) bannerWrapper.appendChild(bannerText);
     bannerWrapper.appendChild(buttonGroup);
 
-    targetElement.parentNode.insertBefore(bannerWrapper, targetElement);
-  }
-
-  const container = document.querySelector('.container');
-
-  if (container) {
-    container.prepend = container.prepend || function (el) { this.insertBefore(el, this.firstChild); };
-    insertBanner(container.firstChild || container);
-  } else {
-    const streamTable = document.querySelector('.xdget-root');
-    if (streamTable) {
-      insertBanner(streamTable, true);
+    // ====== ДОБАВЛЯЕМ В DOM ======
+    const container = document.querySelector('.container');
+    if (container) {
+      container.insertBefore(bannerWrapper, container.firstChild);
+    } else {
+      const streamTable = document.querySelector('.xdget-root');
+      if (streamTable) {
+        streamTable.parentNode.insertBefore(bannerWrapper, streamTable);
+      }
     }
+
+  } catch (error) {
+    console.error('Ошибка при загрузке баннера:', error);
   }
 });
