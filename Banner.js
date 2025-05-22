@@ -1,16 +1,4 @@
 document.addEventListener('DOMContentLoaded', function () {
-  function getBannerText() {
-    const textBlock = document.querySelector('.text-for-banner .f-text');
-    return textBlock ? textBlock.textContent.trim() : 'Загружаем текст...';
-  }
-
-  function getBannerImageSrc() {
-    const isMobile = window.innerWidth <= 768;
-    const selector = isMobile ? '.img-for-banner-mob img' : '.img-for-banner-pc img';
-    const imageEl = document.querySelector(selector);
-    return imageEl ? imageEl.getAttribute('src') || imageEl.getAttribute('data-src') : null;
-  }
-
   function insertBanner(targetElement, isApp = false) {
     const bannerWrapper = document.createElement('div');
     bannerWrapper.classList.add('custom-banner');
@@ -20,28 +8,32 @@ document.addEventListener('DOMContentLoaded', function () {
       bannerWrapper.style.margin = '0 auto';
     }
 
-    // Изображение
+    // ===== Получаем текст =====
+    const textElement = document.querySelector('.text-for-banner .text-large');
+    const bannerText = document.createElement('div');
+    bannerText.classList.add('banner-text');
+    if (textElement) {
+      bannerText.innerHTML = textElement.innerHTML;
+    }
+
+    // ===== Получаем изображения =====
     const img = document.createElement('img');
     img.alt = 'Banner Image';
     img.style.width = '100%';
     img.style.height = 'auto';
 
-    const bannerImgSrc = getBannerImageSrc();
-    if (bannerImgSrc) {
-      img.src = bannerImgSrc.startsWith('//') ? 'https:' + bannerImgSrc : bannerImgSrc;
+    const isMobile = window.innerWidth <= 768;
+    const imgSelector = isMobile ? '.img-for-banner-mob img' : '.img-for-banner-pc img';
+    const imgElement = document.querySelector(imgSelector);
+
+    if (imgElement) {
+      img.src = imgElement.getAttribute('src') || imgElement.getAttribute('data-src');
     } else {
-      img.src = 'https://static.tildacdn.info/tild6163-6164-4136-b063-633465616136/Frame_290.png'; // fallback
+      console.warn('Изображение баннера не найдено.');
+      img.src = ''; // или задай дефолтное изображение
     }
 
-    bannerWrapper.appendChild(img);
-
-    // Текст
-    const bannerText = document.createElement('div');
-    bannerText.classList.add('banner-text');
-    bannerText.textContent = getBannerText();
-    bannerWrapper.appendChild(bannerText);
-
-    // Кнопки
+    // ===== Кнопки =====
     const buttonGroup = document.createElement('div');
     buttonGroup.classList.add('banner-buttons');
 
@@ -60,6 +52,9 @@ document.addEventListener('DOMContentLoaded', function () {
       buttonGroup.appendChild(buttonLink);
     });
 
+    // ===== Добавляем в DOM =====
+    bannerWrapper.appendChild(img);
+    if (textElement) bannerWrapper.appendChild(bannerText);
     bannerWrapper.appendChild(buttonGroup);
 
     targetElement.parentNode.insertBefore(bannerWrapper, targetElement);
@@ -77,4 +72,3 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 });
-
