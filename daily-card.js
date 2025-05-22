@@ -1,4 +1,13 @@
-document.addEventListener('DOMContentLoaded', async function () { 
+document.addEventListener('DOMContentLoaded', async function () {
+  const today = new Date().toISOString().split('T')[0];
+  const lastShownDate = localStorage.getItem('dailyCardShownDate');
+
+  if (lastShownDate === today) {
+    return; // Уже показывали сегодня — ничего не делаем
+  }
+
+  localStorage.setItem('dailyCardShownDate', today);
+
   const cardPageUrl = 'https://asanna.online/page361';
 
   // Создаем overlay
