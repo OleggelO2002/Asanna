@@ -1,9 +1,20 @@
 document.addEventListener('DOMContentLoaded', function () {
+  function getBannerText() {
+    const textBlock = document.querySelector('.text-for-banner .f-text');
+    return textBlock ? textBlock.textContent.trim() : 'Загружаем текст...';
+  }
+
+  function getBannerImageSrc() {
+    const isMobile = window.innerWidth <= 768;
+    const selector = isMobile ? '.img-for-banner-mob img' : '.img-for-banner-pc img';
+    const imageEl = document.querySelector(selector);
+    return imageEl ? imageEl.getAttribute('src') || imageEl.getAttribute('data-src') : null;
+  }
+
   function insertBanner(targetElement, isApp = false) {
     const bannerWrapper = document.createElement('div');
     bannerWrapper.classList.add('custom-banner');
 
-    // Приложению добавляем дополнительные стили
     if (isApp) {
       bannerWrapper.style.maxWidth = '90vw';
       bannerWrapper.style.margin = '0 auto';
@@ -15,10 +26,11 @@ document.addEventListener('DOMContentLoaded', function () {
     img.style.width = '100%';
     img.style.height = 'auto';
 
-    if (window.innerWidth <= 768) {
-      img.src = 'https://static.tildacdn.info/tild6163-6164-4136-b063-633465616136/Frame_290.png';
+    const bannerImgSrc = getBannerImageSrc();
+    if (bannerImgSrc) {
+      img.src = bannerImgSrc.startsWith('//') ? 'https:' + bannerImgSrc : bannerImgSrc;
     } else {
-      img.src = 'https://static.tildacdn.info/tild3636-3765-4834-b862-323336663562/Frame_279.png';
+      img.src = 'https://static.tildacdn.info/tild6163-6164-4136-b063-633465616136/Frame_290.png'; // fallback
     }
 
     bannerWrapper.appendChild(img);
@@ -26,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Текст
     const bannerText = document.createElement('div');
     bannerText.classList.add('banner-text');
-    bannerText.textContent = 'Искусство построения отношений между мужчиной и женщиной';
+    bannerText.textContent = getBannerText();
     bannerWrapper.appendChild(bannerText);
 
     // Кнопки
@@ -61,32 +73,8 @@ document.addEventListener('DOMContentLoaded', function () {
   } else {
     const streamTable = document.querySelector('.xdget-root');
     if (streamTable) {
-      insertBanner(streamTable, true); // <- передаём флаг, что это приложение
+      insertBanner(streamTable, true);
     }
   }
 });
 
-
-
-document.addEventListener('DOMContentLoaded', function () {
-  const targetContainer = document.querySelector('.col-md-4');
-  if (!targetContainer) return;
-
-  if (targetContainer.querySelector('.xdget-lessonSchedule')) return;
-
-  fetch('/teach/control/stream/index')
-    .then(response => response.text())
-    .then(htmlText => {
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(htmlText, 'text/html');
-      const lessonSchedule = doc.querySelector('.xdget-lessonSchedule');
-
-      if (lessonSchedule) {
-        const clone = lessonSchedule.cloneNode(true);
-        targetContainer.appendChild(clone);
-      }
-    })
-    .catch(err => {
-      console.error('Ошибка при загрузке расписания:', err);
-    });
-});
