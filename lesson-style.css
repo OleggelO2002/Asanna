@@ -247,10 +247,10 @@ top: 10px;
 color:#424242;
 display: flex; /* Включаем Flexbox для контейнера */
 align-items: center; /* Выравнивание по центру по вертикали */       
-position: absolute;
-top: 40%;
-left: 20% !important;
-transform: scale(1.2)!important;
+/position: absolute;
+/top: 40%;
+/left: 20% !important;
+/transform: scale(1.2)!important;
 z-index: 2;
 }
 }
@@ -268,7 +268,7 @@ z-index: 2;
 color: #363636 !important;    
 }
 
-.user-state-not_reached::after{
+/.user-state-not_reached::after{
 content: ""; /* Пустое содержимое */
   position: absolute; /* Абсолютное позиционирование */
   top: 0;
