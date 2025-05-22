@@ -244,7 +244,7 @@ position: absolute;
 top: 10px;    
 } 
 .user-state-not_reached .user-state-label{
-color:#424242;
+color:#9e7c6e;
 display: flex; /* Включаем Flexbox для контейнера */
 align-items: center; /* Выравнивание по центру по вертикали */       
 /position: absolute;
@@ -254,7 +254,7 @@ align-items: center; /* Выравнивание по центру по верт
 z-index: 2;
 }
 }
-.user-state-not_reached .user-state-label{
+/.user-state-not_reached .user-state-label{
 color:#424242;
 display: flex; /* Включаем Flexbox для контейнера */
 align-items: center; /* Выравнивание по центру по вертикали */       
