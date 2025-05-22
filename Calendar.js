@@ -29,11 +29,11 @@ document.addEventListener('DOMContentLoaded', function () {
     scheduleBlock.style.transition = 'max-height 0.5s ease';
     scheduleBlock.style.display = 'block';
     
-    // Изменено здесь: устанавливаем блок как открытый по умолчанию
+    // Устанавливаем блок как открытый по умолчанию
     scheduleBlock.style.maxHeight = scheduleBlock.scrollHeight + 'px';
     header.classList.add('open');
     
-    let expanded = true; // Изменено: начинаем с открытого состояния
+    let expanded = true;
     header.style.cursor = 'pointer';
 
     header.addEventListener('click', () => {
@@ -43,7 +43,6 @@ document.addEventListener('DOMContentLoaded', function () {
       scheduleBlock.style.maxHeight = expanded ? scheduleBlock.scrollHeight + 'px' : '0';
     });
 
-    // Остальной код остается без изменений
     const months = {
       'Январь': '01', 'Февраль': '02', 'Март': '03', 'Апрель': '04',
       'Май': '05', 'Июнь': '06', 'Июль': '07', 'Август': '08',
@@ -86,7 +85,7 @@ document.addEventListener('DOMContentLoaded', function () {
           const month = months[monthStr];
           if (!month) return;
           const year = today.getFullYear();
-          eventDate = new Date(${year}-${month}-${dayStr.padStart(2, '0')}T${timeText}:00);
+          eventDate = new Date(`${year}-${month}-${dayStr.padStart(2, '0')}T${timeText}:00`);
         }
 
         const eventDayOnly = new Date(eventDate);
@@ -111,26 +110,27 @@ document.addEventListener('DOMContentLoaded', function () {
             const y = eventDate.getFullYear();
             const mo = pad(eventDate.getMonth() + 1);
             const d = pad(eventDate.getDate());
-            const start = ${y}${mo}${d}T${pad(h)}${pad(m)}00;
+            const start = `${y}${mo}${d}T${pad(h)}${pad(m)}00`;
             const endHour = String(Number(h) + 1).padStart(2, '0');
-            const end = ${y}${mo}${d}T${endHour}${pad(m)}00;
+            const end = `${y}${mo}${d}T${endHour}${pad(m)}00`;
 
             const icsContent = [
               'BEGIN:VCALENDAR',
               'VERSION:2.0',
               'BEGIN:VEVENT',
-              DTSTART:${start},
-              DTEND:${end},
-              SUMMARY:${eventTitle},
-              DESCRIPTION:${eventDesc},
+              `DTSTART:${start}`,
+              `DTEND:${end}`,
+              `SUMMARY:${eventTitle}`,
+              `DESCRIPTION:${eventDesc}`,
               'END:VEVENT',
               'END:VCALENDAR'
             ].join('\n');
 
-            const blob = new Blob([icsContent], { type: 'text/calendar' });
+            // Используем data URI вместо Blob для совместимости с WebView
+            const icsData = encodeURIComponent(icsContent);
             const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = ${eventTitle}.ics;
+            a.href = `data:text/calendar;charset=utf8,${icsData}`;
+            a.download = `${eventTitle}.ics`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
