@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', function () {
     container.prepend = container.prepend || function (el) { this.insertBefore(el, this.firstChild); };
     insertBanner(container.firstChild || container);
   } else {
-    const streamTable = document.querySelector('.stream-table');
+    const streamTable = document.querySelector('.xdget-root');
     if (streamTable) {
       insertBanner(streamTable, true); // <- передаём флаг, что это приложение
     }
