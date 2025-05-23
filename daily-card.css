@@ -3,7 +3,7 @@ font-family: 'Montserrat';
 text-transform: uppercase;
 font-weight: 600;
 margin-top: 70px;
-display: block;
+display: none;
 padding: 12px 20px;
 background: linear-gradient(274.27deg, rgba(255, 255, 255, 0) -14.6%, rgba(255, 255, 255, 0.39) 39.52%, rgba(255, 255, 255, 0) 110.6%), linear-gradient(263.81deg, #D5BAAF 10.32%, #D5BAAF 98.17%);
 color: #ffffff;
