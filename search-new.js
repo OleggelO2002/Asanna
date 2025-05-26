@@ -44,7 +44,7 @@ function addSearchContainer() {
     if (banner) {
       clearInterval(interval);
       if (!document.querySelector('#searchContainerMobile')) {
-        banner.insertAdjacentHTML('beforebegin', searchContainerHTMLMobile);
+        banner.insertAdjacentHTML('afterend', searchContainerHTMLMobile);
         
         const searchMobile = document.getElementById('searchContainerMobile');
         if (searchMobile) {
