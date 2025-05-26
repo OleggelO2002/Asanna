@@ -40,34 +40,31 @@ function addSearchContainer() {
   const maxAttempts = 10;
   const interval = setInterval(() => {
     attempts++;
-    const banner = document.querySelector('.custom-banner');
-    if (banner) {
+    const firstVisibleElement = Array.from(document.body.children).find(
+      el => el.offsetParent !== null && el.tagName !== 'SCRIPT' && el.tagName !== 'STYLE'
+    );
+
+    if (firstVisibleElement || attempts >= maxAttempts) {
       clearInterval(interval);
+
       if (!document.querySelector('#searchContainerMobile')) {
-        banner.insertAdjacentHTML('afterend', searchContainerHTMLMobile);
-        
+        if (firstVisibleElement) {
+          firstVisibleElement.insertAdjacentHTML('beforebegin', searchContainerHTMLMobile);
+        } else {
+          document.body.insertAdjacentHTML('afterbegin', searchContainerHTMLMobile);
+        }
+
         const searchMobile = document.getElementById('searchContainerMobile');
         if (searchMobile) {
           searchMobile.style.marginBottom = '30px';
         }
-        
-        setupMobileSearchHandlers();
-      }
-    } else if (attempts >= maxAttempts) {
-      clearInterval(interval);
-      if (!document.querySelector('#searchContainerMobile')) {
-        document.body.insertAdjacentHTML('afterbegin', searchContainerHTMLMobile);
-        
-        const searchMobile = document.getElementById('searchContainerMobile');
-        if (searchMobile) {
-          searchMobile.style.marginBottom = '30px';
-        }
-        
+
         setupMobileSearchHandlers();
       }
     }
   }, 100);
 }
+
  else {
       // Мобильная версия сайта — вставляем в левую панель, как раньше
       let attempts = 0;
