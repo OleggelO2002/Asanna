@@ -35,35 +35,40 @@ function addSearchContainer() {
   const isLessonPage = window.location.href.includes('/pl/teach/control/lesson/view/');
 
   if (isMobile) {
-    if (isApp()) {
-      // Если это приложение на мобиле — вставляем поиск над баннером
-      // Баннер, судя по коду, вставляется в .container (на сайте) или перед .xdget-root (в приложении)
-      // Раз баннера нет в приложении (нет .container), вставим поиск в DOM там, где есть баннер или в начало body
-
-      let attempts = 0;
-      const maxAttempts = 10;
-      const interval = setInterval(() => {
-        attempts++;
-
-        // Ищем баннер или элемент рядом с баннером, например .custom-banner (если он есть)
-        const banner = document.querySelector('.custom-banner');
-        if (banner) {
-          clearInterval(interval);
-          if (!document.querySelector('#searchContainerMobile')) {
-            banner.insertAdjacentHTML('beforebegin', searchContainerHTMLMobile);
-            setupMobileSearchHandlers();
-          }
-        } else if (attempts >= maxAttempts) {
-          clearInterval(interval);
-          // Если баннер не найден, вставляем поиск в начало body как fallback
-          if (!document.querySelector('#searchContainerMobile')) {
-            document.body.insertAdjacentHTML('afterbegin', searchContainerHTMLMobile);
-            setupMobileSearchHandlers();
-          }
+   if (isApp()) {
+  let attempts = 0;
+  const maxAttempts = 10;
+  const interval = setInterval(() => {
+    attempts++;
+    const banner = document.querySelector('.custom-banner');
+    if (banner) {
+      clearInterval(interval);
+      if (!document.querySelector('#searchContainerMobile')) {
+        banner.insertAdjacentHTML('beforebegin', searchContainerHTMLMobile);
+        
+        const searchMobile = document.getElementById('searchContainerMobile');
+        if (searchMobile) {
+          searchMobile.style.marginBottom = '30px';
         }
-      }, 100);
-
-    } else {
+        
+        setupMobileSearchHandlers();
+      }
+    } else if (attempts >= maxAttempts) {
+      clearInterval(interval);
+      if (!document.querySelector('#searchContainerMobile')) {
+        document.body.insertAdjacentHTML('afterbegin', searchContainerHTMLMobile);
+        
+        const searchMobile = document.getElementById('searchContainerMobile');
+        if (searchMobile) {
+          searchMobile.style.marginBottom = '30px';
+        }
+        
+        setupMobileSearchHandlers();
+      }
+    }
+  }, 100);
+}
+ else {
       // Мобильная версия сайта — вставляем в левую панель, как раньше
       let attempts = 0;
       const maxAttempts = 10;
