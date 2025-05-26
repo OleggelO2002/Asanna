@@ -56,7 +56,7 @@ function addSearchContainer() {
 
         const searchMobile = document.getElementById('searchContainerMobile');
         if (searchMobile) {
-          searchMobile.style.marginBottom = '30px';
+          searchMobile.style.marginBottom = '100px';
         }
 
         setupMobileSearchHandlers();
