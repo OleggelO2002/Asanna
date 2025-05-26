@@ -54,6 +54,9 @@ document.addEventListener('DOMContentLoaded', async function () {
     if (textBlock) bannerWrapper.appendChild(bannerText);
     bannerWrapper.appendChild(buttonGroup);
 
+// Добавляем margin-top в 30px
+bannerWrapper.style.marginTop = '30px';
+
     // ====== ДОБАВЛЯЕМ В DOM ======
     const container = document.querySelector('.container');
     if (container) {
