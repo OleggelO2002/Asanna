@@ -1,4 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&display=swap');
+body.chatium_body{
+padding-right: 15px !important;
+padding-left: 15px !important;    
+}
+
 .center-block {
     max-width: 100% !important;
     margin-bottom: 20px !important;
