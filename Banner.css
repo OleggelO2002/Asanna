@@ -1,7 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&display=swap');
 /* Стили для обёртки баннера */
-.xdget-root .custom-banner{
+.chatium_body .custom-banner{
 opacity: 0.2;
+padding-left: 15px !important;
+padding-right: 15px !important;
 }
 .banner-button {
 transform: scale(1.2);    
