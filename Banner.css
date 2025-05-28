@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&display=swap');
 /* Стили для обёртки баннера */
-
+.xdget-root .custom-banner{
+opacity: 0.2;
 }
 .banner-button {
 transform: scale(1.2);    
