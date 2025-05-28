@@ -58,6 +58,10 @@ function addSearchContainer() {
         if (searchMobile) {
           searchMobile.style.marginBottom = '100px';
         }
+        const customBanner = document.querySelector('.custom-banner');
+        if (customBanner) {
+        customBanner.style.setProperty('margin-top', '70px', 'important');
+        }
 
         setupMobileSearchHandlers();
       }
