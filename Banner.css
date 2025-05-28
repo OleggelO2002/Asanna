@@ -2,6 +2,7 @@
 /* Стили для приложения отступы баннера */
 body.chatium_body .custom-banner {
   margin-top: 70px !important;
+  opacity: 1 !important;
   padding-left: 15px !important;
   padding-right: 15px !important;
 }
