@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function() {
   let attempts = 0;
   const maxAttempts = 10;
 
@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', function () {
       return;
     }
 
+    // Стили и обработчики сворачивания/разворачивания
     scheduleBlock.style.overflow = 'hidden';
     scheduleBlock.style.transition = 'max-height 0.5s ease';
     scheduleBlock.style.display = 'block';
@@ -116,7 +117,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const endHour = String(Number(h) + 1).padStart(2, '0');
             const end = `${y}${mo}${d}T${endHour}${pad(m)}00`;
 
-            // Формируем .ics файл
+            // Формируем данные для календаря
             const icsContent = [
               'BEGIN:VCALENDAR',
               'VERSION:2.0',
@@ -130,47 +131,36 @@ document.addEventListener('DOMContentLoaded', function () {
               'END:VCALENDAR'
             ].join('\n');
 
-            // Пытаемся открыть календарь напрямую
-            const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
-            const url = URL.createObjectURL(blob);
-            
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `${eventTitle}.ics`.replace(/[^a-z0-9а-яё\-_ ]/gi, '');
-            document.body.appendChild(a);
-            a.click();
+            // Проверяем, находимся ли мы в приложении (Chatium)
+            const isChatiumApp = document.body.classList.contains('chatium_body');
 
-            // Флаг для отслеживания успешного открытия календаря
-            let calendarOpened = false;
-
-            // Если календарь открылся, окно потеряет фокус
-            window.addEventListener('blur', function onBlur() {
-              calendarOpened = true;
-              cleanup();
-            });
-
-            // Функция очистки
-            function cleanup() {
-              document.body.removeChild(a);
-              URL.revokeObjectURL(url);
-              window.removeEventListener('blur', onBlur);
-              if (timeoutId) clearTimeout(timeoutId);
+            if (isChatiumApp) {
+              // В приложении - редирект на страницу обработчик
+              const params = new URLSearchParams();
+              params.append('title', encodeURIComponent(eventTitle));
+              params.append('description', encodeURIComponent(eventDesc));
+              params.append('start', start);
+              params.append('end', end);
+              
+              const redirectUrl = `https://asanna.online/page381?${params.toString()}`;
+              window.location.href = redirectUrl;
+            } else {
+              // В браузере - создаем и скачиваем .ics файл
+              const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+              const url = URL.createObjectURL(blob);
+              
+              const a = document.createElement('a');
+              a.href = url;
+              a.download = `${eventTitle}.ics`.replace(/[^a-z0-9а-яё\-_ ]/gi, '');
+              document.body.appendChild(a);
+              a.click();
+              
+              // Очистка
+              setTimeout(() => {
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+              }, 100);
             }
-
-            // Если через 1.5 секунды календарь не открылся, делаем редирект
-            const timeoutId = setTimeout(() => {
-              if (!calendarOpened) {
-                const params = new URLSearchParams();
-                params.append('title', encodeURIComponent(eventTitle));
-                params.append('description', encodeURIComponent(eventDesc));
-                params.append('start', start);
-                params.append('end', end);
-                
-                const redirectUrl = `https://asanna.online/page381?${params.toString()}`;
-                window.location.href = redirectUrl;
-              }
-              cleanup();
-            }, 1500);
           });
 
           record.appendChild(btn);
