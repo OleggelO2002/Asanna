@@ -58,12 +58,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    // Функция для определения, что мы в WebView (упрощенно)
-    function isWebView() {
-      const ua = navigator.userAgent || navigator.vendor || window.opera;
-      return /webview|wv|android.*chrome/i.test(ua);
-    }
-
     days.forEach(day => {
       const dateLabel = day.querySelector('.day-label');
       const records = day.querySelectorAll('.record');
@@ -133,23 +127,20 @@ document.addEventListener('DOMContentLoaded', function () {
               `DESCRIPTION:${eventDesc}`,
               'END:VEVENT',
               'END:VCALENDAR'
-            ].join('\n');
+            ].join('\r\n');
 
-            const icsData = encodeURIComponent(icsContent);
-            const fileUrl = `data:text/calendar;charset=utf8,${icsData}`;
+            // Создаем Blob и генерируем URL для скачивания
+            const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
 
-            if (isWebView()) {
-              // В WebView меняем location.href для открытия
-              window.location.href = fileUrl;
-            } else {
-              // В браузере скачиваем файл
-              const a = document.createElement('a');
-              a.href = fileUrl;
-              a.download = `${eventTitle}.ics`;
-              document.body.appendChild(a);
-              a.click();
-              document.body.removeChild(a);
-            }
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${eventTitle}.ics`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+
+            URL.revokeObjectURL(url);
           });
 
           record.appendChild(btn);
