@@ -131,10 +131,12 @@ document.addEventListener('DOMContentLoaded', function() {
               'END:VCALENDAR'
             ].join('\n');
 
-            // Проверяем, находимся ли мы в приложении (Chatium)
+            // Проверяем, находимся ли мы в приложении
             const isChatiumApp = document.body.classList.contains('chatium_body');
+            const hasGcAccountLeftbar = document.querySelector('.gc-account-leftbar');
+            const isAppEnvironment = isChatiumApp || !hasGcAccountLeftbar;
 
-            if (isChatiumApp) {
+            if (isAppEnvironment) {
               // В приложении - редирект на страницу обработчик
               const params = new URLSearchParams();
               params.append('title', encodeURIComponent(eventTitle));
