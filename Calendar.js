@@ -58,6 +58,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
+    // Функция для определения, что мы в WebView (упрощенно)
+    function isWebView() {
+      const ua = navigator.userAgent || navigator.vendor || window.opera;
+      return /webview|wv|android.*chrome/i.test(ua);
+    }
+
     days.forEach(day => {
       const dateLabel = day.querySelector('.day-label');
       const records = day.querySelectorAll('.record');
@@ -132,9 +138,11 @@ document.addEventListener('DOMContentLoaded', function () {
             const icsData = encodeURIComponent(icsContent);
             const fileUrl = `data:text/calendar;charset=utf8,${icsData}`;
 
-            if (window.location.href.includes('webview')) {
-              window.open(fileUrl, '_blank');
+            if (isWebView()) {
+              // В WebView меняем location.href для открытия
+              window.location.href = fileUrl;
             } else {
+              // В браузере скачиваем файл
               const a = document.createElement('a');
               a.href = fileUrl;
               a.download = `${eventTitle}.ics`;
