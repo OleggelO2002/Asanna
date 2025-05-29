@@ -144,7 +144,7 @@ document.addEventListener('DOMContentLoaded', function() {
               params.append('start', start);
               params.append('end', end);
               
-              const redirectUrl = `https://asanna.online/page381?${params.toString()}`;
+              const redirectUrl = `https://project13151639.tilda.ws/test?${params.toString()}`;
               window.location.href = redirectUrl;
             } else {
               // В браузере - создаем и скачиваем .ics файл
