@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function () { 
   let attempts = 0;
   const maxAttempts = 10;
 
@@ -28,11 +28,16 @@ document.addEventListener('DOMContentLoaded', function () {
     scheduleBlock.style.overflow = 'hidden';
     scheduleBlock.style.transition = 'max-height 0.5s ease';
     scheduleBlock.style.display = 'block';
-    scheduleBlock.style.maxHeight = scheduleBlock.scrollHeight + 'px';
-    header.classList.add('open');
 
     let expanded = true;
+    header.classList.add('open');
     header.style.cursor = 'pointer';
+
+    // Костыль: программно свернуть и развернуть, чтобы пересчиталась высота
+    scheduleBlock.style.maxHeight = '0';
+    setTimeout(() => {
+      scheduleBlock.style.maxHeight = scheduleBlock.scrollHeight + 'px';
+    }, 100);
 
     header.addEventListener('click', () => {
       expanded = !expanded;
@@ -52,7 +57,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    const isInApp = window.location.href.includes('webview');
 
     days.forEach(day => {
       const dateLabel = day.querySelector('.day-label');
@@ -125,18 +129,18 @@ document.addEventListener('DOMContentLoaded', function () {
               'END:VCALENDAR'
             ].join('\n');
 
-            if (isInApp) {
-              window.open(`data:text/calendar;charset=utf8,${encodeURIComponent(icsContent)}`, '_blank');
+            const icsData = encodeURIComponent(icsContent);
+            const fileUrl = `data:text/calendar;charset=utf8,${icsData}`;
+
+            if (window.location.href.includes('webview')) {
+              window.open(fileUrl, '_blank');
             } else {
-              const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
-              const url = URL.createObjectURL(blob);
               const a = document.createElement('a');
-              a.href = url;
+              a.href = fileUrl;
               a.download = `${eventTitle}.ics`;
               document.body.appendChild(a);
               a.click();
               document.body.removeChild(a);
-              URL.revokeObjectURL(url);
             }
           });
 
@@ -146,3 +150,4 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 });
+
