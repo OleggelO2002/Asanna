@@ -33,7 +33,6 @@ document.addEventListener('DOMContentLoaded', function () {
     header.classList.add('open');
     header.style.cursor = 'pointer';
 
-    // Костыль: программно свернуть и развернуть, чтобы пересчиталась высота
     scheduleBlock.style.maxHeight = '0';
     setTimeout(() => {
       scheduleBlock.style.maxHeight = scheduleBlock.scrollHeight + 'px';
@@ -108,45 +107,61 @@ document.addEventListener('DOMContentLoaded', function () {
           btn.style.cursor = 'pointer';
 
           btn.addEventListener('click', () => {
-            const [h, m] = timeText.split(':');
-            const pad = n => n.toString().padStart(2, '0');
-            const y = eventDate.getFullYear();
-            const mo = pad(eventDate.getMonth() + 1);
-            const d = pad(eventDate.getDate());
-            const start = `${y}${mo}${d}T${pad(h)}${pad(m)}00`;
-            const endHour = String(Number(h) + 1).padStart(2, '0');
-            const end = `${y}${mo}${d}T${endHour}${pad(m)}00`;
-
-            const icsContent = [
-              'BEGIN:VCALENDAR',
-              'VERSION:2.0',
-              'BEGIN:VEVENT',
-              `DTSTART:${start}`,
-              `DTEND:${end}`,
-              `SUMMARY:${eventTitle}`,
-              `DESCRIPTION:${eventDesc}`,
-              'END:VEVENT',
-              'END:VCALENDAR'
-            ].join('\r\n');
-
-            // Создаем Blob и генерируем URL для скачивания
-            const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
-            const url = URL.createObjectURL(blob);
-
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `${eventTitle}.ics`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-
-            URL.revokeObjectURL(url);
+            downloadICS(eventTitle, eventDesc, eventDate, timeText);
           });
 
           record.appendChild(btn);
         }
       });
     });
+  }
+
+  // Функция скачивания .ics с Blob и fallback
+  function downloadICS(eventTitle, eventDesc, eventDate, timeText) {
+    try {
+      const [h, m] = timeText.split(':');
+      const pad = n => n.toString().padStart(2, '0');
+      const y = eventDate.getFullYear();
+      const mo = pad(eventDate.getMonth() + 1);
+      const d = pad(eventDate.getDate());
+      const start = `${y}${mo}${d}T${pad(h)}${pad(m)}00`;
+      const endHour = String(Number(h) + 1).padStart(2, '0');
+      const end = `${y}${mo}${d}T${endHour}${pad(m)}00`;
+
+      const icsContent = [
+        'BEGIN:VCALENDAR',
+        'VERSION:2.0',
+        'PRODID:-//Your Company//EN',
+        'BEGIN:VEVENT',
+        `UID:${Date.now()}@yourdomain.com`,
+        `DTSTAMP:${new Date().toISOString().replace(/[-:]/g, '').split('.')[0]}Z`,
+        `DTSTART:${start}`,
+        `DTEND:${end}`,
+        `SUMMARY:${eventTitle}`,
+        `DESCRIPTION:${eventDesc.replace(/\n/g, '\\n')}`,
+        'END:VEVENT',
+        'END:VCALENDAR'
+      ].join('\r\n');
+
+      const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `${eventTitle}.ics`);
+      document.body.appendChild(link);
+
+      link.click();
+      window.open(url, '_blank');
+
+      setTimeout(() => {
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+      }, 1500);
+
+    } catch (e) {
+      window.open(`data:text/calendar;charset=utf8,${encodeURIComponent(icsContent)}`, '_blank');
+    }
   }
 });
 
