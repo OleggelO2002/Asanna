@@ -117,30 +117,47 @@ document.addEventListener('DOMContentLoaded', function () {
             const endHour = String(Number(h) + 1).padStart(2, '0');
             const end = `${y}${mo}${d}T${endHour}${pad(m)}00`;
 
-            const icsContent = [
-              'BEGIN:VCALENDAR',
-              'VERSION:2.0',
-              'BEGIN:VEVENT',
-              `DTSTART:${start}`,
-              `DTEND:${end}`,
-              `SUMMARY:${eventTitle}`,
-              `DESCRIPTION:${eventDesc}`,
-              'END:VEVENT',
-              'END:VCALENDAR'
-            ].join('\n');
-
-            const icsData = encodeURIComponent(icsContent);
-            const fileUrl = `data:text/calendar;charset=utf8,${icsData}`;
+            // Формируем URL для редиректа с параметрами
+            const params = new URLSearchParams();
+            params.append('title', eventTitle);
+            params.append('description', eventDesc);
+            params.append('start', start);
+            params.append('end', end);
+            
+            const redirectUrl = `https://asanna.online/page381?${params.toString()}`;
 
             if (window.location.href.includes('webview')) {
-              window.open(fileUrl, '_blank');
+              // В приложении - редирект на страницу с обработчиком
+              window.location.href = redirectUrl;
             } else {
+              // В браузере - создаем и скачиваем ics файл
+              const icsContent = [
+                'BEGIN:VCALENDAR',
+                'VERSION:2.0',
+                'PRODID:-//Asanna//Calendar Event//RU',
+                'BEGIN:VEVENT',
+                `DTSTART:${start}`,
+                `DTEND:${end}`,
+                `SUMMARY:${eventTitle}`,
+                `DESCRIPTION:${eventDesc}`,
+                'END:VEVENT',
+                'END:VCALENDAR'
+              ].join('\n');
+
+              const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+              const url = URL.createObjectURL(blob);
+              
               const a = document.createElement('a');
-              a.href = fileUrl;
+              a.href = url;
               a.download = `${eventTitle}.ics`;
               document.body.appendChild(a);
               a.click();
-              document.body.removeChild(a);
+              
+              // Освобождаем память
+              setTimeout(() => {
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+              }, 100);
             }
           });
 
