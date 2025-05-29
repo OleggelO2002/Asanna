@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function () { 
+document.addEventListener('DOMContentLoaded', function () {
   let attempts = 0;
   const maxAttempts = 10;
 
@@ -33,7 +33,6 @@ document.addEventListener('DOMContentLoaded', function () {
     header.classList.add('open');
     header.style.cursor = 'pointer';
 
-    // Костыль: программно свернуть и развернуть, чтобы пересчиталась высота
     scheduleBlock.style.maxHeight = '0';
     setTimeout(() => {
       scheduleBlock.style.maxHeight = scheduleBlock.scrollHeight + 'px';
@@ -107,7 +106,7 @@ document.addEventListener('DOMContentLoaded', function () {
           btn.style.borderRadius = '4px';
           btn.style.cursor = 'pointer';
 
-          btn.addEventListener('click', () => {
+          btn.addEventListener('click', function() {
             const [h, m] = timeText.split(':');
             const pad = n => n.toString().padStart(2, '0');
             const y = eventDate.getFullYear();
@@ -117,51 +116,61 @@ document.addEventListener('DOMContentLoaded', function () {
             const endHour = String(Number(h) + 1).padStart(2, '0');
             const end = `${y}${mo}${d}T${endHour}${pad(m)}00`;
 
-            // Формируем URL для редиректа с параметрами
-            const params = new URLSearchParams();
-            params.append('title', encodeURIComponent(eventTitle));
-            params.append('description', encodeURIComponent(eventDesc));
-            params.append('start', start);
-            params.append('end', end);
+            // Формируем .ics файл
+            const icsContent = [
+              'BEGIN:VCALENDAR',
+              'VERSION:2.0',
+              'PRODID:-//Asanna//Calendar Event//RU',
+              'BEGIN:VEVENT',
+              `DTSTART:${start}`,
+              `DTEND:${end}`,
+              `SUMMARY:${eventTitle.replace(/\n/g, '\\n')}`,
+              `DESCRIPTION:${eventDesc.replace(/\n/g, '\\n')}`,
+              'END:VEVENT',
+              'END:VCALENDAR'
+            ].join('\n');
+
+            // Пытаемся открыть календарь напрямую
+            const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
             
-            const redirectUrl = `https://asanna.online/page381?${params.toString()}`;
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${eventTitle}.ics`.replace(/[^a-z0-9а-яё\-_ ]/gi, '');
+            document.body.appendChild(a);
+            a.click();
 
-            // Проверяем, находимся ли мы в webview (приложении)
-            const isWebview = window.location.hash === '#undefined' || window.location.hash === '#null';
+            // Флаг для отслеживания успешного открытия календаря
+            let calendarOpened = false;
 
-            if (isWebview) {
-              // В приложении - редирект на страницу с обработчиком
-              window.location.href = redirectUrl;
-            } else {
-              // В браузере - создаем и скачиваем ics файл
-              const icsContent = [
-                'BEGIN:VCALENDAR',
-                'VERSION:2.0',
-                'PRODID:-//Asanna//Calendar Event//RU',
-                'BEGIN:VEVENT',
-                `DTSTART:${start}`,
-                `DTEND:${end}`,
-                `SUMMARY:${eventTitle.replace(/\n/g, '\\n')}`,
-                `DESCRIPTION:${eventDesc.replace(/\n/g, '\\n')}`,
-                'END:VEVENT',
-                'END:VCALENDAR'
-              ].join('\n');
+            // Если календарь открылся, окно потеряет фокус
+            window.addEventListener('blur', function onBlur() {
+              calendarOpened = true;
+              cleanup();
+            });
 
-              const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
-              const url = URL.createObjectURL(blob);
-              
-              const a = document.createElement('a');
-              a.href = url;
-              a.download = `${eventTitle}.ics`.replace(/[^a-z0-9а-яё\-_ ]/gi, '');
-              document.body.appendChild(a);
-              a.click();
-              
-              // Освобождаем память
-              setTimeout(() => {
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-              }, 100);
+            // Функция очистки
+            function cleanup() {
+              document.body.removeChild(a);
+              URL.revokeObjectURL(url);
+              window.removeEventListener('blur', onBlur);
+              if (timeoutId) clearTimeout(timeoutId);
             }
+
+            // Если через 1.5 секунды календарь не открылся, делаем редирект
+            const timeoutId = setTimeout(() => {
+              if (!calendarOpened) {
+                const params = new URLSearchParams();
+                params.append('title', encodeURIComponent(eventTitle));
+                params.append('description', encodeURIComponent(eventDesc));
+                params.append('start', start);
+                params.append('end', end);
+                
+                const redirectUrl = `https://asanna.online/page381?${params.toString()}`;
+                window.location.href = redirectUrl;
+              }
+              cleanup();
+            }, 1500);
           });
 
           record.appendChild(btn);
