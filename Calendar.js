@@ -119,14 +119,17 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Формируем URL для редиректа с параметрами
             const params = new URLSearchParams();
-            params.append('title', eventTitle);
-            params.append('description', eventDesc);
+            params.append('title', encodeURIComponent(eventTitle));
+            params.append('description', encodeURIComponent(eventDesc));
             params.append('start', start);
             params.append('end', end);
             
             const redirectUrl = `https://asanna.online/page381?${params.toString()}`;
 
-            if (window.location.href.includes('webview')) {
+            // Проверяем, находимся ли мы в webview (приложении)
+            const isWebview = window.location.hash === '#undefined' || window.location.hash === '#null';
+
+            if (isWebview) {
               // В приложении - редирект на страницу с обработчиком
               window.location.href = redirectUrl;
             } else {
@@ -138,8 +141,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 'BEGIN:VEVENT',
                 `DTSTART:${start}`,
                 `DTEND:${end}`,
-                `SUMMARY:${eventTitle}`,
-                `DESCRIPTION:${eventDesc}`,
+                `SUMMARY:${eventTitle.replace(/\n/g, '\\n')}`,
+                `DESCRIPTION:${eventDesc.replace(/\n/g, '\\n')}`,
                 'END:VEVENT',
                 'END:VCALENDAR'
               ].join('\n');
@@ -149,7 +152,7 @@ document.addEventListener('DOMContentLoaded', function () {
               
               const a = document.createElement('a');
               a.href = url;
-              a.download = `${eventTitle}.ics`;
+              a.download = `${eventTitle}.ics`.replace(/[^a-z0-9а-яё\-_ ]/gi, '');
               document.body.appendChild(a);
               a.click();
               
