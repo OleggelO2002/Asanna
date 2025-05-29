@@ -1,13 +1,13 @@
 document.addEventListener('DOMContentLoaded', function () {
   let attempts = 0;
-  const maxAttempts = 10; // 10 * 100ms = 1000ms
+  const maxAttempts = 10;
 
   const intervalId = setInterval(() => {
     const block = document.querySelector('.xdget-lessonSchedule');
     if (block || attempts >= maxAttempts) {
       clearInterval(intervalId);
       if (block) {
-        initLessonSchedule(block); // запускаем основную функцию
+        initLessonSchedule(block);
       } else {
         console.warn('Блок .xdget-lessonSchedule не найден за 1000 мс');
       }
@@ -28,11 +28,9 @@ document.addEventListener('DOMContentLoaded', function () {
     scheduleBlock.style.overflow = 'hidden';
     scheduleBlock.style.transition = 'max-height 0.5s ease';
     scheduleBlock.style.display = 'block';
-    
-    // Устанавливаем блок как открытый по умолчанию
     scheduleBlock.style.maxHeight = scheduleBlock.scrollHeight + 'px';
     header.classList.add('open');
-    
+
     let expanded = true;
     header.style.cursor = 'pointer';
 
@@ -54,6 +52,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const today = new Date();
     today.setHours(0, 0, 0, 0);
+    const isInApp = window.location.href.includes('webview');
 
     days.forEach(day => {
       const dateLabel = day.querySelector('.day-label');
@@ -126,14 +125,19 @@ document.addEventListener('DOMContentLoaded', function () {
               'END:VCALENDAR'
             ].join('\n');
 
-            // Используем data URI вместо Blob для совместимости с WebView
-            const icsData = encodeURIComponent(icsContent);
-            const a = document.createElement('a');
-            a.href = `data:text/calendar;charset=utf8,${icsData}`;
-            a.download = `${eventTitle}.ics`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
+            if (isInApp) {
+              window.open(`data:text/calendar;charset=utf8,${encodeURIComponent(icsContent)}`, '_blank');
+            } else {
+              const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement('a');
+              a.href = url;
+              a.download = `${eventTitle}.ics`;
+              document.body.appendChild(a);
+              a.click();
+              document.body.removeChild(a);
+              URL.revokeObjectURL(url);
+            }
           });
 
           record.appendChild(btn);
