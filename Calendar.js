@@ -162,7 +162,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             // Логика показа выбора
-            if (isIOS && (isSafari || isAppEnvironment)) {
+            if (isIOS && isSafari) {
               // Показываем выбор календаря
               showCalendarChoicePopup({
                 onGoogle: openGoogleCalendar,
