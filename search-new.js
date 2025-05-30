@@ -1,8 +1,16 @@
 // ======= HTML-код для поиска =======
 const searchContainerHTMLMobile = `
-  <div id="searchContainerMobile" style="position: relative; z-index: 1000; display: flex; align-items: center; background-color: white; border-radius: 20px; overflow: hidden; width: ${isApp() ? '100%' : '40px'}; transition: width 0.3s ease;">
+  <div id="searchContainerMobile" style="position: relative; z-index: 1000; display: flex; align-items: center; background-color: white; border-radius: 20px; overflow: hidden; width: 40px; transition: width 0.3s ease;">
     <img src="https://static.tildacdn.info/tild3764-3665-4662-b664-373066626139/Search_Magnifying_Gl.svg" alt="Search" style="width: 20px; height: 20px; margin: 10px; cursor: pointer;">
-    <input type="text" id="searchInputMobile" placeholder="Введите название тренинга или урока" style="border: none; outline: none; flex-grow: 1; padding: 5px; ${isApp() ? 'display: block;' : 'display: none;'}">
+    <input type="text" id="searchInputMobile" placeholder="Введите название тренинга или урока" style="border: none; outline: none; flex-grow: 1; padding: 5px; display: none;">
+    <div id="searchResultsMobile" style="display: none; position: absolute; top: 100%; left: 0; width: 100%; background-color: white; border: 1px solid #ccc; border-radius: 5px; max-height: 200px; overflow-y: auto; z-index: 1001;"></div>
+  </div>
+`;
+
+const searchContainerHTMLMobileApp = `
+  <div id="searchContainerMobile" style="position: relative; z-index: 1000; display: flex; align-items: center; background-color: white; border-radius: 20px; overflow: hidden; width: 100%; transition: width 0.3s ease;">
+    <img src="https://static.tildacdn.info/tild3764-3665-4662-b664-373066626139/Search_Magnifying_Gl.svg" alt="Search" style="width: 20px; height: 20px; margin: 10px; cursor: pointer;">
+    <input type="text" id="searchInputMobile" placeholder="Введите название тренинга или урока" style="border: none; outline: none; flex-grow: 1; padding: 5px; display: block;">
     <div id="searchResultsMobile" style="display: none; position: absolute; top: 100%; left: 0; width: 100%; background-color: white; border: 1px solid #ccc; border-radius: 5px; max-height: 200px; overflow-y: auto; z-index: 1001;"></div>
   </div>
 `;
@@ -20,78 +28,66 @@ const searchContainerHTMLDesktop = `
 `;
 
 // ======= Улучшенная функция для определения приложения =======
-function isApp() {
-  // Проверяем несколько признаков приложения
-  const isInApp = 
-    navigator.userAgent.includes('YourAppName') || // Замените на имя вашего приложения
-    !document.querySelector('#gcAccountUserMenu') || 
-    document.querySelector('div.xdget-root') ||
-    !document.querySelector('.container');
-  
-  // Дополнительная проверка после загрузки страницы
-  if (!isInApp) {
+async function checkIsApp() {
+  // 1. Проверка по userAgent (если известно название приложения)
+  if (navigator.userAgent.includes('YourAppName')) {
+    return true;
+  }
+
+  // 2. Проверка по DOM-элементам с таймаутом 2 секунды
+  return new Promise(resolve => {
     let attempts = 0;
-    const maxAttempts = 5;
+    const maxAttempts = 20; // 20 попыток с интервалом 100мс = 2 секунды
     const interval = setInterval(() => {
       attempts++;
-      if (document.querySelector('div.xdget-root') || attempts >= maxAttempts) {
+
+      // Приоритет 1: Если нашли левую панель - точно не приложение
+      if (document.querySelector('.gc-account-leftbar')) {
         clearInterval(interval);
-        return !!document.querySelector('div.xdget-root');
+        resolve(false);
+        return;
       }
-    }, 500);
-  }
-  
-  return isInApp;
+
+      // Приоритет 2: Если нашли корневой элемент приложения
+      if (document.querySelector('div.xdget-root')) {
+        clearInterval(interval);
+        resolve(true);
+        return;
+      }
+
+      // Приоритет 3: Если превысили количество попыток
+      if (attempts >= maxAttempts) {
+        clearInterval(interval);
+        // Если после 2 секунд не нашли левую панель - считаем приложением
+        resolve(true);
+      }
+    }, 100);
+  });
 }
 
-// ======= Функция для добавления поиска с проверкой блоков =======
-function addSearchContainer() {
+// ======= Функция для добавления поиска =======
+async function addSearchContainer() {
   const isMobile = window.innerWidth <= 768;
   const isTrainingPage = window.location.href.includes('/teach/control/stream/view/id/');
   const isLessonPage = window.location.href.includes('/pl/teach/control/lesson/view/');
 
   if (isMobile) {
-    if (isApp()) {
-      // Для приложения - вставляем в div.xdget-root в начало
-      let attempts = 0;
-      const maxAttempts = 10;
-      const interval = setInterval(() => {
-        attempts++;
-        const xdgetRoot = document.querySelector('div.xdget-root');
-
-        if (xdgetRoot) {
-          clearInterval(interval);
-          if (!xdgetRoot.querySelector('#searchContainerMobile')) {
-            xdgetRoot.insertAdjacentHTML('afterbegin', searchContainerHTMLMobile);
-            setupMobileSearchHandlers(true); // true - для приложения
-          }
-        } else if (attempts >= maxAttempts) {
-          clearInterval(interval);
-          // Если не нашли xdget-root, вставляем в начало body
-          if (!document.querySelector('#searchContainerMobile')) {
-            document.body.insertAdjacentHTML('afterbegin', searchContainerHTMLMobile);
-            setupMobileSearchHandlers(true);
-          }
-        }
-      }, 100);
+    const isApp = await checkIsApp();
+    
+    if (isApp) {
+      // Для приложения - вставляем в div.xdget-root или в начало body
+      const targetElement = document.querySelector('div.xdget-root') || document.body;
+      if (!targetElement.querySelector('#searchContainerMobile')) {
+        targetElement.insertAdjacentHTML('afterbegin', searchContainerHTMLMobileApp);
+        setupMobileSearchHandlers(true);
+      }
     } else {
-      // Мобильная версия сайта - вставляем в левую панель
-      let attempts = 0;
-      const maxAttempts = 10;
-      const interval = setInterval(() => {
-        attempts++;
-        const leftBar = document.querySelector('.gc-account-leftbar');
-
-        if (leftBar) {
-          clearInterval(interval);
-          if (!leftBar.querySelector('#searchContainerMobile')) {
-            leftBar.insertAdjacentHTML('afterbegin', searchContainerHTMLMobile);
-            setupMobileSearchHandlers(false); // false - для мобильного сайта
-          }
-        } else if (attempts >= maxAttempts) {
-          clearInterval(interval);
-        }
-      }, 100);
+      // Для мобильного сайта - вставляем в левую панель
+      const leftBar = document.querySelector('.gc-account-leftbar');
+      if (leftBar && !leftBar.querySelector('#searchContainerMobile')) {
+        leftBar.insertAdjacentHTML('afterbegin', searchContainerHTMLMobile);
+        setupMobileSearchHandlers(false);
+      }
     }
   } else {
     // Десктопная версия
@@ -131,7 +127,14 @@ function setupMobileSearchHandlers(isAppVersion) {
   if (isAppVersion) {
     searchContainer.style.width = '100%';
     searchInput.style.display = 'block';
-    return; // Остальные обработчики не нужны для приложения
+    
+    // Обработчик ввода для приложения
+    searchInput.addEventListener('input', () => {
+      searchResults.style.display = 'block';
+      searchResults.innerHTML = `<p>Результаты для "${searchInput.value}"</p>`;
+    });
+    
+    return;
   }
 
   // Оригинальные обработчики для мобильного сайта
@@ -158,7 +161,6 @@ function setupMobileSearchHandlers(isAppVersion) {
   });
 }
 
-// Остальной код (setupDesktopSearchHandlers, обработчик поиска и т.д.) остается без изменений
 // ======= Настройка обработчиков поиска для десктопной версии =======
 function setupDesktopSearchHandlers() {
   const searchInput = document.getElementById('searchInput');
@@ -173,7 +175,7 @@ function setupDesktopSearchHandlers() {
 }
 
 // ======= Обработчик поиска =======
-$(document).ready(function () {
+$(document).ready(async function () {
   let typingTimer;
   const typingDelay = 1000;
 
@@ -277,7 +279,7 @@ $(document).ready(function () {
   }
 
   // Запуск
-  addSearchContainer();
+  await addSearchContainer();
 
   // Запускаем после вставки DOM
   setTimeout(() => {
