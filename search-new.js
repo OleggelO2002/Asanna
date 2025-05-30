@@ -1,9 +1,8 @@
 // ======= HTML-код для поиска =======
-// ======= HTML-код для поиска =======
 const searchContainerHTMLMobile = `
   <div id="searchContainerMobile" style="position: relative; z-index: 1000; display: flex; align-items: center; background-color: white; border-radius: 20px; overflow: hidden; width: 40px; transition: width 0.3s ease;">
     <img src="https://static.tildacdn.info/tild3764-3665-4662-b664-373066626139/Search_Magnifying_Gl.svg" alt="Search" style="width: 20px; height: 20px; margin: 10px; cursor: pointer;">
-    <input type="text" id="searchInputMobile" placeholder="Введите название тренинга или урока" style="border: none; outline: none; flex-grow: 1; padding: 5px; display: block;">
+    <input type="text" id="searchInputMobile" placeholder="Введите название тренинга или урока" style="border: none; outline: none; flex-grow: 1; padding: 5px; display: none;">
     <div id="searchResultsMobile" style="display: none; position: absolute; top: 100%; left: 0; width: 100%; background-color: white; border: 1px solid #ccc; border-radius: 5px; max-height: 200px; overflow-y: auto; z-index: 1001;"></div>
   </div>
 `;
@@ -25,7 +24,7 @@ function isApp() {
   // В оригинальном баннере приложение определялось через наличие .container
   // Здесь можно добавить более точную логику, если она есть в баннере
   // Например, если на странице есть .container — это сайт, иначе — приложение
-  const container = document.querySelector('.gc-account-leftbar');
+  const container = document.querySelector('.container');
   return !container; // Если контейнера нет — значит, приложение
 }
 
@@ -41,16 +40,18 @@ function addSearchContainer() {
   const maxAttempts = 10;
   const interval = setInterval(() => {
     attempts++;
-    const targetElement = document.querySelector('.custom-banner');
+    const firstVisibleElement = Array.from(document.body.children).find(
+      el => el.offsetParent !== null && el.tagName !== 'SCRIPT' && el.tagName !== 'STYLE'
+    );
 
-    if (targetElement || attempts >= maxAttempts) {
+    if (firstVisibleElement || attempts >= maxAttempts) {
       clearInterval(interval);
 
       if (!document.querySelector('#searchContainerMobile')) {
-        if (targetElement) {
-          targetElement.insertAdjacentHTML('afterend', searchContainerHTMLMobile);
+        if (firstVisibleElement) {
+          firstVisibleElement.insertAdjacentHTML('beforebegin', searchContainerHTMLMobile);
         } else {
-          document.body.insertAdjacentHTML('beforeend', searchContainerHTMLMobile);
+          document.body.insertAdjacentHTML('afterbegin', searchContainerHTMLMobile);
         }
 
         setupMobileSearchHandlers();
