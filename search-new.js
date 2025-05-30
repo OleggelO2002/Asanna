@@ -25,7 +25,7 @@ function isApp() {
   // В оригинальном баннере приложение определялось через наличие .container
   // Здесь можно добавить более точную логику, если она есть в баннере
   // Например, если на странице есть .container — это сайт, иначе — приложение
-  const container = document.querySelector('.container');
+  const container = document.querySelector('.gc-account-leftbar');
   return !container; // Если контейнера нет — значит, приложение
 }
 
@@ -41,18 +41,16 @@ function addSearchContainer() {
   const maxAttempts = 10;
   const interval = setInterval(() => {
     attempts++;
-    const firstVisibleElement = Array.from(document.body.children).find(
-      el => el.offsetParent !== null && el.tagName !== 'SCRIPT' && el.tagName !== 'STYLE'
-    );
+    const targetElement = document.querySelector('.custom-banner');
 
-    if (firstVisibleElement || attempts >= maxAttempts) {
+    if (targetElement || attempts >= maxAttempts) {
       clearInterval(interval);
 
       if (!document.querySelector('#searchContainerMobile')) {
-        if (firstVisibleElement) {
-          firstVisibleElement.insertAdjacentHTML('beforebegin', searchContainerHTMLMobile);
+        if (targetElement) {
+          targetElement.insertAdjacentHTML('afterend', searchContainerHTMLMobile);
         } else {
-          document.body.insertAdjacentHTML('afterbegin', searchContainerHTMLMobile);
+          document.body.insertAdjacentHTML('beforeend', searchContainerHTMLMobile);
         }
 
         setupMobileSearchHandlers();
