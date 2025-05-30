@@ -20,7 +20,10 @@ document.addEventListener('DOMContentLoaded', function () {
     const scheduleBlock = block.querySelector('.schedule-block');
     const days = scheduleBlock?.querySelectorAll('.day');
 
-    if (!header || !scheduleBlock || !days) return;
+    if (!header || !scheduleBlock || !days) {
+      console.warn('Не найдены необходимые вложенные элементы');
+      return;
+    }
 
     scheduleBlock.style.overflow = 'hidden';
     scheduleBlock.style.transition = 'max-height 0.5s ease';
@@ -118,10 +121,15 @@ document.addEventListener('DOMContentLoaded', function () {
             const hasGcAccountLeftbar = document.querySelector('.gc-account-leftbar');
             const isAppEnvironment = isChatiumApp || !hasGcAccountLeftbar;
 
-            if (isAppEnvironment) {
-              openGoogleCalendar({ title: eventTitle, desc: eventDesc, start, end });
-            } else if (isSafari) {
-              showCalendarPopup({ title: eventTitle, desc: eventDesc, start, end });
+            const shouldShowPopup = (isSafari || isAppEnvironment) && isIOS;
+
+            if (shouldShowPopup) {
+              showCalendarPopup({
+                title: eventTitle,
+                desc: eventDesc,
+                start,
+                end
+              });
             } else {
               openGoogleCalendar({ title: eventTitle, desc: eventDesc, start, end });
             }
@@ -174,4 +182,3 @@ document.addEventListener('DOMContentLoaded', function () {
     window.open(calendarUrl.toString(), '_blank');
   }
 });
-
