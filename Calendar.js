@@ -93,40 +93,65 @@ document.addEventListener('DOMContentLoaded', function () {
         const eventDayOnly = new Date(eventDate);
         eventDayOnly.setHours(0, 0, 0, 0);
 
-        if (eventDayOnly >= today && !record.querySelector('.calendar-btn')) {
-          const btn = document.createElement('button');
-          btn.textContent = 'Добавить в календарь';
-          btn.className = 'calendar-btn';
-          btn.style.marginTop = '10px';
-          btn.style.display = 'inline-block';
-          btn.style.padding = '6px 12px';
-          btn.style.background = '#3498db';
-          btn.style.color = 'white';
-          btn.style.border = 'none';
-          btn.style.borderRadius = '4px';
-          btn.style.cursor = 'pointer';
+        if (eventDayOnly >= today && !record.querySelector('.calendar-btn, .calendar-choice')) {
+          const [h, m] = timeText.split(':');
+          const pad = n => n.toString().padStart(2, '0');
+          const y = eventDate.getFullYear();
+          const mo = pad(eventDate.getMonth() + 1);
+          const d = pad(eventDate.getDate());
+          const start = `${y}${mo}${d}T${pad(h)}${pad(m)}00`;
+          const endHour = String(Number(h) + 1).padStart(2, '0');
+          const end = `${y}${mo}${d}T${endHour}${pad(m)}00`;
 
-          btn.addEventListener('click', function () {
-            const [h, m] = timeText.split(':');
-            const pad = n => n.toString().padStart(2, '0');
-            const y = eventDate.getFullYear();
-            const mo = pad(eventDate.getMonth() + 1);
-            const d = pad(eventDate.getDate());
-            const start = `${y}${mo}${d}T${pad(h)}${pad(m)}00`;
-            const endHour = String(Number(h) + 1).padStart(2, '0');
-            const end = `${y}${mo}${d}T${endHour}${pad(m)}00`;
+          const googleUrl = new URL('https://calendar.google.com/calendar/render');
+          googleUrl.searchParams.set('action', 'TEMPLATE');
+          googleUrl.searchParams.set('text', eventTitle);
+          googleUrl.searchParams.set('details', eventDesc);
+          googleUrl.searchParams.set('dates', `${start}/${end}`);
+          googleUrl.searchParams.set('ctz', 'Europe/Moscow');
 
-            const calendarUrl = new URL('https://calendar.google.com/calendar/render');
-            calendarUrl.searchParams.set('action', 'TEMPLATE');
-            calendarUrl.searchParams.set('text', eventTitle);
-            calendarUrl.searchParams.set('details', eventDesc);
-            calendarUrl.searchParams.set('dates', `${start}/${end}`);
-            calendarUrl.searchParams.set('ctz', 'Europe/Moscow');
+          const appleUrl = `data:text/calendar;charset=utf8,BEGIN:VCALENDAR
+VERSION:2.0
+BEGIN:VEVENT
+DTSTART:${start}
+DTEND:${end}
+SUMMARY:${eventTitle}
+DESCRIPTION:${eventDesc}
+END:VEVENT
+END:VCALENDAR`.replace(/\n/g, '\r\n');
 
-            window.open(calendarUrl.toString(), '_blank');
-          });
+          const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+          const isIOS = /iPhone|iPad/i.test(navigator.userAgent);
 
-          record.appendChild(btn);
+          if (isIOS && isSafari) {
+            const container = document.createElement('div');
+            container.className = 'calendar-choice';
+
+            const gBtn = document.createElement('button');
+            gBtn.className = 'calendar-btn calendar-google';
+            gBtn.textContent = 'Google Календарь';
+            gBtn.addEventListener('click', () => {
+              window.open(googleUrl.toString(), '_blank');
+            });
+
+            const aBtn = document.createElement('a');
+            aBtn.className = 'calendar-btn calendar-apple';
+            aBtn.textContent = 'Apple Календарь';
+            aBtn.href = appleUrl;
+            aBtn.download = `${eventTitle}.ics`;
+
+            container.appendChild(gBtn);
+            container.appendChild(aBtn);
+            record.appendChild(container);
+          } else {
+            const gBtn = document.createElement('button');
+            gBtn.textContent = 'Добавить в календарь';
+            gBtn.className = 'calendar-btn';
+            gBtn.addEventListener('click', () => {
+              window.open(googleUrl.toString(), '_blank');
+            });
+            record.appendChild(gBtn);
+          }
         }
       });
     });
