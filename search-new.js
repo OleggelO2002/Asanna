@@ -54,7 +54,7 @@ function addSearchContainer() {
       }
     }, 100);
   }
-
+}
  else {
       // Мобильная версия сайта — вставляем в левую панель, как раньше
       let attempts = 0;
