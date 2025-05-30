@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   let attempts = 0;
   const maxAttempts = 10;
 
@@ -25,7 +25,6 @@ document.addEventListener('DOMContentLoaded', function() {
       return;
     }
 
-    // Стили и обработчики сворачивания/разворачивания
     scheduleBlock.style.overflow = 'hidden';
     scheduleBlock.style.transition = 'max-height 0.5s ease';
     scheduleBlock.style.display = 'block';
@@ -107,7 +106,7 @@ document.addEventListener('DOMContentLoaded', function() {
           btn.style.borderRadius = '4px';
           btn.style.cursor = 'pointer';
 
-          btn.addEventListener('click', function() {
+          btn.addEventListener('click', function () {
             const [h, m] = timeText.split(':');
             const pad = n => n.toString().padStart(2, '0');
             const y = eventDate.getFullYear();
@@ -117,52 +116,14 @@ document.addEventListener('DOMContentLoaded', function() {
             const endHour = String(Number(h) + 1).padStart(2, '0');
             const end = `${y}${mo}${d}T${endHour}${pad(m)}00`;
 
-            // Формируем данные для календаря
-            const icsContent = [
-              'BEGIN:VCALENDAR',
-              'VERSION:2.0',
-              'PRODID:-//Asanna//Calendar Event//RU',
-              'BEGIN:VEVENT',
-              `DTSTART:${start}`,
-              `DTEND:${end}`,
-              `SUMMARY:${eventTitle.replace(/\n/g, '\\n')}`,
-              `DESCRIPTION:${eventDesc.replace(/\n/g, '\\n')}`,
-              'END:VEVENT',
-              'END:VCALENDAR'
-            ].join('\n');
+            const calendarUrl = new URL('https://calendar.google.com/calendar/render');
+            calendarUrl.searchParams.set('action', 'TEMPLATE');
+            calendarUrl.searchParams.set('text', eventTitle);
+            calendarUrl.searchParams.set('details', eventDesc);
+            calendarUrl.searchParams.set('dates', `${start}/${end}`);
+            calendarUrl.searchParams.set('ctz', 'Europe/Moscow');
 
-            // Проверяем, находимся ли мы в приложении
-            const isChatiumApp = document.body.classList.contains('chatium_body');
-            const hasGcAccountLeftbar = document.querySelector('.gc-account-leftbar');
-            const isAppEnvironment = isChatiumApp || !hasGcAccountLeftbar;
-
-            if (isAppEnvironment) {
-              // В приложении - редирект на страницу обработчик
-              const params = new URLSearchParams();
-              params.append('title', encodeURIComponent(eventTitle));
-              params.append('description', encodeURIComponent(eventDesc));
-              params.append('start', start);
-              params.append('end', end);
-              
-              const redirectUrl = `intent://asanna.online/page381?${params.toString()}#Intent;scheme=https;end`;
-              window.location.href = redirectUrl;
-            } else {
-              // В браузере - создаем и скачиваем .ics файл
-              const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
-              const url = URL.createObjectURL(blob);
-              
-              const a = document.createElement('a');
-              a.href = url;
-              a.download = `${eventTitle}.ics`.replace(/[^a-z0-9а-яё\-_ ]/gi, '');
-              document.body.appendChild(a);
-              a.click();
-              
-              // Очистка
-              setTimeout(() => {
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-              }, 100);
-            }
+            window.open(calendarUrl.toString(), '_blank');
           });
 
           record.appendChild(btn);
