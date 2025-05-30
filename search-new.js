@@ -19,13 +19,9 @@ const searchContainerHTMLDesktop = `
   </div>
 `;
 
-// ======= Функция для определения, что мы в приложении (по примеру баннера) =======
+// ======= Правильное определение: если НЕТ .gc-account-leftbar, значит приложение =======
 function isApp() {
-  // В оригинальном баннере приложение определялось через наличие .container
-  // Здесь можно добавить более точную логику, если она есть в баннере
-  // Например, если на странице есть .container — это сайт, иначе — приложение
-  const container = document.querySelector('.container');
-  return !container; // Если контейнера нет — значит, приложение
+  return !document.querySelector('.gc-account-leftbar');
 }
 
 // ======= Функция для добавления поиска с проверкой блоков =======
@@ -34,31 +30,30 @@ function addSearchContainer() {
   const isTrainingPage = window.location.href.includes('/teach/control/stream/view/id/');
   const isLessonPage = window.location.href.includes('/pl/teach/control/lesson/view/');
 
-  if (isMobile) {
-   if (isApp()) {
-  let attempts = 0;
-  const maxAttempts = 10;
-  const interval = setInterval(() => {
-    attempts++;
-    const firstVisibleElement = Array.from(document.body.children).find(
-      el => el.offsetParent !== null && el.tagName !== 'SCRIPT' && el.tagName !== 'STYLE'
-    );
+  if (isMobile && isApp()) {
+    let attempts = 0;
+    const maxAttempts = 10;
 
-    if (firstVisibleElement || attempts >= maxAttempts) {
-      clearInterval(interval);
+    const interval = setInterval(() => {
+      attempts++;
 
-      if (!document.querySelector('#searchContainerMobile')) {
-        if (firstVisibleElement) {
-          firstVisibleElement.insertAdjacentHTML('beforebegin', searchContainerHTMLMobile);
-        } else {
-          document.body.insertAdjacentHTML('afterbegin', searchContainerHTMLMobile);
+      const xdgetRoot = document.querySelector('div.xdget-root');
+
+      if (xdgetRoot || attempts >= maxAttempts) {
+        clearInterval(interval);
+
+        if (!document.querySelector('#searchContainerMobile')) {
+          if (xdgetRoot) {
+            xdgetRoot.insertAdjacentHTML('beforebegin', searchContainerHTMLMobile);
+          } else {
+            document.body.insertAdjacentHTML('afterbegin', searchContainerHTMLMobile);
+          }
+
+          setupMobileSearchHandlers();
         }
-
-        setupMobileSearchHandlers();
       }
-    }
-  }, 100);
-}
+    }, 100);
+  }
 
  else {
       // Мобильная версия сайта — вставляем в левую панель, как раньше
@@ -107,22 +102,30 @@ function addSearchContainer() {
   }
 }
 
-// ======= Настройка обработчиков поиска для мобильной версии =======
 function setupMobileSearchHandlers() {
   const searchContainer = document.getElementById('searchContainerMobile');
   const searchInput = document.getElementById('searchInputMobile');
   const searchIcon = searchContainer.querySelector('img');
   const searchResults = document.getElementById('searchResultsMobile');
 
-  searchIcon.addEventListener('click', (event) => {
-    event.stopPropagation();
-    const isExpanded = searchContainer.style.width === '72vw';
-    searchContainer.style.width = isExpanded ? '40px' : '72vw';
-    searchInput.style.display = isExpanded ? 'none' : 'block';
-    searchResults.style.display = 'none';
-    if (!isExpanded) searchInput.focus();
-  });
-
+  if (isApp()) {
+    // В приложении — сразу разворачиваем и не вешаем обработчик
+    searchContainer.style.width = '72vw';
+    searchInput.style.display = 'block';
+    searchResults.style.display = 'none'; // оставим скрытым, пока пользователь не начнёт ввод
+    searchInput.focus();
+  } else {
+    // Мобильная версия сайта — обычное поведение
+    searchIcon.addEventListener('click', (event) => {
+      event.stopPropagation();
+      const isExpanded = searchContainer.style.width === '72vw';
+      searchContainer.style.width = isExpanded ? '40px' : '72vw';
+      searchInput.style.display = isExpanded ? 'none' : 'block';
+      searchResults.style.display = 'none';
+      if (!isExpanded) searchInput.focus();
+    });
+  }
+}
   searchInput.addEventListener('input', () => {
     searchResults.style.display = 'block';
     searchResults.innerHTML = `<p>Результаты для "${searchInput.value}"</p>`;
