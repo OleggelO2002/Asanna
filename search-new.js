@@ -1,16 +1,8 @@
 // ======= HTML-код для поиска =======
 const searchContainerHTMLMobile = `
-  <div id="searchContainerMobile" style="position: relative; z-index: 1000; display: flex; align-items: center; background-color: white; border-radius: 20px; overflow: hidden; width: 40px; transition: width 0.3s ease;">
+  <div id="searchContainerMobile" style="position: relative; z-index: 1000; display: flex; align-items: center; background-color: white; border-radius: 20px; overflow: hidden; width: ${isApp() ? '72vw' : '40px'}; transition: width 0.3s ease;">
     <img src="https://static.tildacdn.info/tild3764-3665-4662-b664-373066626139/Search_Magnifying_Gl.svg" alt="Search" style="width: 20px; height: 20px; margin: 10px; cursor: pointer;">
-    <input type="text" id="searchInputMobile" placeholder="Введите название тренинга или урока" style="border: none; outline: none; flex-grow: 1; padding: 5px; display: none;">
-    <div id="searchResultsMobile" style="display: none; position: absolute; top: 100%; left: 0; width: 100%; background-color: white; border: 1px solid #ccc; border-radius: 5px; max-height: 200px; overflow-y: auto; z-index: 1001;"></div>
-  </div>
-`;
-
-const searchContainerHTMLMobileApp = `
-  <div id="searchContainerMobile" style="position: relative; z-index: 1000; display: flex; align-items: center; background-color: white; border-radius: 20px; overflow: hidden; width: 100%; transition: width 0.3s ease;">
-    <img src="https://static.tildacdn.info/tild3764-3665-4662-b664-373066626139/Search_Magnifying_Gl.svg" alt="Search" style="width: 20px; height: 20px; margin: 10px; cursor: pointer;">
-    <input type="text" id="searchInputMobile" placeholder="Введите название тренинга или урока" style="border: none; outline: none; flex-grow: 1; padding: 5px; display: block;">
+    <input type="text" id="searchInputMobile" placeholder="Введите название тренинга или урока" style="border: none; outline: none; flex-grow: 1; padding: 5px; display: ${isApp() ? 'block' : 'none'};">
     <div id="searchResultsMobile" style="display: none; position: absolute; top: 100%; left: 0; width: 100%; background-color: white; border: 1px solid #ccc; border-radius: 5px; max-height: 200px; overflow-y: auto; z-index: 1001;"></div>
   </div>
 `;
@@ -27,70 +19,104 @@ const searchContainerHTMLDesktop = `
   </div>
 `;
 
-// ======= Улучшенная функция для определения приложения =======
-async function checkIsApp() {
-  // 1. Проверка по userAgent (если известно название приложения)
-  if (navigator.userAgent.includes('YourAppName')) {
-    return true;
+// ======= Функция для определения, что мы в приложении =======
+let appCheckComplete = false;
+let isAppResult = false;
+
+function checkIsApp(callback) {
+  if (appCheckComplete) {
+    callback(isAppResult);
+    return;
   }
 
-  // 2. Проверка по DOM-элементам с таймаутом 2 секунды
-  return new Promise(resolve => {
-    let attempts = 0;
-    const maxAttempts = 20; // 20 попыток с интервалом 100мс = 2 секунды
-    const interval = setInterval(() => {
-      attempts++;
-
-      // Приоритет 1: Если нашли левую панель - точно не приложение
-      if (document.querySelector('.gc-account-leftbar')) {
-        clearInterval(interval);
-        resolve(false);
-        return;
-      }
-
-      // Приоритет 2: Если нашли корневой элемент приложения
-      if (document.querySelector('div.xdget-root')) {
-        clearInterval(interval);
-        resolve(true);
-        return;
-      }
-
-      // Приоритет 3: Если превысили количество попыток
-      if (attempts >= maxAttempts) {
-        clearInterval(interval);
-        // Если после 2 секунд не нашли левую панель - считаем приложением
-        resolve(true);
-      }
-    }, 100);
-  });
+  let attempts = 0;
+  const maxAttempts = 20; // 20 попыток * 100мс = 2 секунды
+  const interval = setInterval(() => {
+    attempts++;
+    const leftBar = document.querySelector('.gc-account-leftbar');
+    const xdgetRoot = document.querySelector('div.xdget-root');
+    
+    // Если нашли левую панель - точно не приложение
+    if (leftBar) {
+      clearInterval(interval);
+      appCheckComplete = true;
+      isAppResult = false;
+      callback(false);
+    }
+    // Если нашли xdget-root и нет левой панели - вероятно приложение
+    else if (xdgetRoot) {
+      clearInterval(interval);
+      appCheckComplete = true;
+      isAppResult = true;
+      callback(true);
+    }
+    // Если превысили количество попыток
+    else if (attempts >= maxAttempts) {
+      clearInterval(interval);
+      appCheckComplete = true;
+      isAppResult = false;
+      callback(false);
+    }
+  }, 100);
 }
 
-// ======= Функция для добавления поиска =======
-async function addSearchContainer() {
+function isApp(callback) {
+  checkIsApp(callback);
+}
+
+// ======= Функция для добавления поиска с проверкой блоков =======
+function addSearchContainer() {
   const isMobile = window.innerWidth <= 768;
   const isTrainingPage = window.location.href.includes('/teach/control/stream/view/id/');
   const isLessonPage = window.location.href.includes('/pl/teach/control/lesson/view/');
 
   if (isMobile) {
-    const isApp = await checkIsApp();
-    
-    if (isApp) {
-      // Для приложения - вставляем в div.xdget-root или в начало body
-      const targetElement = document.querySelector('div.xdget-root') || document.body;
-      if (!targetElement.querySelector('#searchContainerMobile')) {
-        targetElement.insertAdjacentHTML('afterbegin', searchContainerHTMLMobileApp);
-        setupMobileSearchHandlers(true);
+    isApp(function(isApp) {
+      if (isApp) {
+        // Версия для приложения - вставляем в xdget-root
+        let attempts = 0;
+        const maxAttempts = 20;
+        const interval = setInterval(() => {
+          attempts++;
+          const xdgetRoot = document.querySelector('div.xdget-root');
+
+          if (xdgetRoot) {
+            clearInterval(interval);
+            if (!xdgetRoot.querySelector('#searchContainerMobile')) {
+              xdgetRoot.insertAdjacentHTML('afterbegin', searchContainerHTMLMobile);
+              setupMobileSearchHandlers(true); // true - передаем что это приложение
+            }
+          } else if (attempts >= maxAttempts) {
+            clearInterval(interval);
+            // Если не нашли xdget-root, вставляем в начало body
+            if (!document.querySelector('#searchContainerMobile')) {
+              document.body.insertAdjacentHTML('afterbegin', searchContainerHTMLMobile);
+              setupMobileSearchHandlers(true);
+            }
+          }
+        }, 100);
+      } else {
+        // Мобильная версия сайта — вставляем в левую панель
+        let attempts = 0;
+        const maxAttempts = 20;
+        const interval = setInterval(() => {
+          attempts++;
+          const leftBar = document.querySelector('.gc-account-leftbar');
+
+          if (leftBar) {
+            clearInterval(interval);
+            if (!leftBar.querySelector('#searchContainerMobile')) {
+              leftBar.insertAdjacentHTML('afterbegin', searchContainerHTMLMobile);
+              setupMobileSearchHandlers(false); // false - не приложение
+            }
+          } else if (attempts >= maxAttempts) {
+            clearInterval(interval);
+          }
+        }, 100);
       }
-    } else {
-      // Для мобильного сайта - вставляем в левую панель
-      const leftBar = document.querySelector('.gc-account-leftbar');
-      if (leftBar && !leftBar.querySelector('#searchContainerMobile')) {
-        leftBar.insertAdjacentHTML('afterbegin', searchContainerHTMLMobile);
-        setupMobileSearchHandlers(false);
-      }
-    }
+    });
   } else {
-    // Десктопная версия
+    // Десктопная версия (остается без изменений)
     let attempts = 0;
     const maxAttempts = 10;
     const interval = setInterval(() => {
@@ -117,50 +143,45 @@ async function addSearchContainer() {
 }
 
 // ======= Настройка обработчиков поиска для мобильной версии =======
-function setupMobileSearchHandlers(isAppVersion) {
+function setupMobileSearchHandlers(isApp) {
   const searchContainer = document.getElementById('searchContainerMobile');
   const searchInput = document.getElementById('searchInputMobile');
   const searchIcon = searchContainer.querySelector('img');
   const searchResults = document.getElementById('searchResultsMobile');
 
-  // В приложении поиск всегда развернут
-  if (isAppVersion) {
-    searchContainer.style.width = '100%';
-    searchInput.style.display = 'block';
-    
-    // Обработчик ввода для приложения
-    searchInput.addEventListener('input', () => {
-      searchResults.style.display = 'block';
-      searchResults.innerHTML = `<p>Результаты для "${searchInput.value}"</p>`;
+  if (!isApp) {
+    // Только для браузера - добавляем обработчик клика по иконке
+    searchIcon.addEventListener('click', (event) => {
+      event.stopPropagation();
+      const isExpanded = searchContainer.style.width === '72vw';
+      searchContainer.style.width = isExpanded ? '40px' : '72vw';
+      searchInput.style.display = isExpanded ? 'none' : 'block';
+      searchResults.style.display = 'none';
+      if (!isExpanded) searchInput.focus();
     });
-    
-    return;
+
+    document.addEventListener('click', (event) => {
+      if (!searchContainer.contains(event.target)) {
+        searchContainer.style.width = '40px';
+        searchInput.style.display = 'none';
+        searchResults.style.display = 'none';
+      }
+    });
+  } else {
+    // В приложении фокусируемся на поле ввода при загрузке
+    setTimeout(() => {
+      searchInput.focus();
+    }, 300);
   }
 
-  // Оригинальные обработчики для мобильного сайта
-  searchIcon.addEventListener('click', (event) => {
-    event.stopPropagation();
-    const isExpanded = searchContainer.style.width === '72vw';
-    searchContainer.style.width = isExpanded ? '40px' : '72vw';
-    searchInput.style.display = isExpanded ? 'none' : 'block';
-    searchResults.style.display = 'none';
-    if (!isExpanded) searchInput.focus();
-  });
-
+  // Общий обработчик для поиска
   searchInput.addEventListener('input', () => {
     searchResults.style.display = 'block';
     searchResults.innerHTML = `<p>Результаты для "${searchInput.value}"</p>`;
   });
-
-  document.addEventListener('click', (event) => {
-    if (!searchContainer.contains(event.target)) {
-      searchContainer.style.width = '40px';
-      searchInput.style.display = 'none';
-      searchResults.style.display = 'none';
-    }
-  });
 }
 
+// Остальной код (setupDesktopSearchHandlers, обработка поиска и т.д.) остается без изменений
 // ======= Настройка обработчиков поиска для десктопной версии =======
 function setupDesktopSearchHandlers() {
   const searchInput = document.getElementById('searchInput');
@@ -175,7 +196,7 @@ function setupDesktopSearchHandlers() {
 }
 
 // ======= Обработчик поиска =======
-$(document).ready(async function () {
+$(document).ready(function () {
   let typingTimer;
   const typingDelay = 1000;
 
@@ -279,7 +300,7 @@ $(document).ready(async function () {
   }
 
   // Запуск
-  await addSearchContainer();
+  addSearchContainer();
 
   // Запускаем после вставки DOM
   setTimeout(() => {
