@@ -24,7 +24,7 @@ function isApp() {
   // Проверяем несколько признаков приложения
   const isInApp = 
     navigator.userAgent.includes('YourAppName') || // Замените на имя вашего приложения
-    !document.querySelector('.gc-account-leftbar') || 
+    !document.querySelector('#gcAccountUserMenu') || 
     document.querySelector('div.xdget-root') ||
     !document.querySelector('.container');
   
