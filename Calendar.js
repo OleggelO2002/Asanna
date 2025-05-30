@@ -20,10 +20,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const scheduleBlock = block.querySelector('.schedule-block');
     const days = scheduleBlock?.querySelectorAll('.day');
 
-    if (!header || !scheduleBlock || !days) {
-      console.warn('Не найдены необходимые вложенные элементы');
-      return;
-    }
+    if (!header || !scheduleBlock || !days) return;
 
     scheduleBlock.style.overflow = 'hidden';
     scheduleBlock.style.transition = 'max-height 0.5s ease';
@@ -98,79 +95,35 @@ document.addEventListener('DOMContentLoaded', function () {
           btn.textContent = 'Добавить в календарь';
           btn.className = 'calendar-btn';
           btn.style.marginTop = '10px';
-          btn.style.display = 'inline-block';
-          btn.style.padding = '6px 12px';
-          btn.style.background = '#3498db';
-          btn.style.color = 'white';
-          btn.style.border = 'none';
-          btn.style.borderRadius = '4px';
-          btn.style.cursor = 'pointer';
 
           btn.addEventListener('click', function () {
-            // Формируем даты для календаря
             const [h, m] = timeText.split(':');
             const pad = n => n.toString().padStart(2, '0');
             const y = eventDate.getFullYear();
             const mo = pad(eventDate.getMonth() + 1);
             const d = pad(eventDate.getDate());
             const start = `${y}${mo}${d}T${pad(h)}${pad(m)}00`;
-            const endHourNum = Number(h) + 1;
-            const endHour = pad(endHourNum);
+            const endHour = String(Number(h) + 1).padStart(2, '0');
             const end = `${y}${mo}${d}T${endHour}${pad(m)}00`;
 
-            // Определяем устройство и окружение
             const ua = navigator.userAgent || navigator.vendor || window.opera;
-            const isIOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
-            const isSafari = /^((?!chrome|android).)*safari/i.test(ua);
+            const isIOS = /iP(ad|hone|od)/.test(ua);
+            const isSafari = isIOS && ua.includes("Safari") &&
+              !ua.includes("CriOS") && !ua.includes("FxiOS") &&
+              !ua.includes("EdgiOS") && !ua.includes("YaBrowser") &&
+              !ua.includes("OPiOS") && !ua.includes("DuckDuckGo") &&
+              !ua.includes("Brave");
 
             const isChatiumApp = document.body.classList.contains('chatium_body');
             const hasGcAccountLeftbar = document.querySelector('.gc-account-leftbar');
             const isAppEnvironment = isChatiumApp || !hasGcAccountLeftbar;
 
-            function openGoogleCalendar() {
-              const calendarUrl = new URL('https://calendar.google.com/calendar/render');
-              calendarUrl.searchParams.set('action', 'TEMPLATE');
-              calendarUrl.searchParams.set('text', eventTitle);
-              calendarUrl.searchParams.set('details', eventDesc);
-              calendarUrl.searchParams.set('dates', `${start}/${end}`);
-              calendarUrl.searchParams.set('ctz', 'Europe/Moscow');
-              window.open(calendarUrl.toString(), '_blank');
-            }
-
-            function openAppleCalendar() {
-              const icsContent = [
-                "BEGIN:VCALENDAR",
-                "VERSION:2.0",
-                "BEGIN:VEVENT",
-                `SUMMARY:${eventTitle}`,
-                `DESCRIPTION:${eventDesc}`,
-                `DTSTART;TZID=Europe/Moscow:${start}`,
-                `DTEND;TZID=Europe/Moscow:${end}`,
-                "END:VEVENT",
-                "END:VCALENDAR"
-              ].join("\n");
-
-              const blob = new Blob([icsContent], { type: 'text/calendar' });
-              const url = URL.createObjectURL(blob);
-              const a = document.createElement('a');
-              a.href = url;
-              a.download = `${eventTitle}.ics`;
-              document.body.appendChild(a);
-              a.click();
-              document.body.removeChild(a);
-              URL.revokeObjectURL(url);
-            }
-
-            // Логика показа выбора
-            if (isIOS && (isSafari || isAppEnvironment)) {
-              // Показываем выбор календаря
-              showCalendarChoicePopup({
-                onGoogle: openGoogleCalendar,
-                onApple: openAppleCalendar,
-              });
+            if (isAppEnvironment) {
+              openGoogleCalendar({ title: eventTitle, desc: eventDesc, start, end });
+            } else if (isSafari) {
+              showCalendarPopup({ title: eventTitle, desc: eventDesc, start, end });
             } else {
-              // Сразу открываем Google календарь
-              openGoogleCalendar();
+              openGoogleCalendar({ title: eventTitle, desc: eventDesc, start, end });
             }
           });
 
@@ -180,35 +133,45 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  function showCalendarChoicePopup({ onGoogle, onApple }) {
-    const overlay = document.createElement('div');
-    overlay.className = 'calendar-choice-overlay';
+  function showCalendarPopup({ title, desc, start, end }) {
+    if (document.querySelector('.calendar-popup')) return;
 
     const popup = document.createElement('div');
-    popup.className = 'calendar-choice-popup';
-
+    popup.className = 'calendar-popup';
     popup.innerHTML = `
-      <div class="calendar-choice-title">Выберите календарь для добавления события</div>
-      <button class="calendar-choice-btn google-btn">Google Календарь</button>
-      <button class="calendar-choice-btn apple-btn">Apple Календарь</button>
-      <button class="calendar-choice-close">Отмена</button>
+      <div class="calendar-popup-content">
+        <p>Выберите календарь:</p>
+        <button class="calendar-option google">Google Календарь</button>
+        <button class="calendar-option apple">Apple Календарь</button>
+        <button class="calendar-close">Отмена</button>
+      </div>
     `;
+    document.body.appendChild(popup);
 
-    overlay.appendChild(popup);
-    document.body.appendChild(overlay);
-
-    popup.querySelector('.google-btn').addEventListener('click', () => {
-      onGoogle();
-      closePopup();
+    popup.querySelector('.google').addEventListener('click', () => {
+      openGoogleCalendar({ title, desc, start, end });
+      popup.remove();
     });
-    popup.querySelector('.apple-btn').addEventListener('click', () => {
-      onApple();
-      closePopup();
-    });
-    popup.querySelector('.calendar-choice-close').addEventListener('click', closePopup);
 
-    function closePopup() {
-      document.body.removeChild(overlay);
-    }
+    popup.querySelector('.apple').addEventListener('click', () => {
+      const appleUrl = `webcal://calendar.apple.com/?title=${encodeURIComponent(title)}&details=${encodeURIComponent(desc)}`;
+      window.location.href = appleUrl;
+      popup.remove();
+    });
+
+    popup.querySelector('.calendar-close').addEventListener('click', () => {
+      popup.remove();
+    });
+  }
+
+  function openGoogleCalendar({ title, desc, start, end }) {
+    const calendarUrl = new URL('https://calendar.google.com/calendar/render');
+    calendarUrl.searchParams.set('action', 'TEMPLATE');
+    calendarUrl.searchParams.set('text', title);
+    calendarUrl.searchParams.set('details', desc);
+    calendarUrl.searchParams.set('dates', `${start}/${end}`);
+    calendarUrl.searchParams.set('ctz', 'Europe/Moscow');
+    window.open(calendarUrl.toString(), '_blank');
   }
 });
+
