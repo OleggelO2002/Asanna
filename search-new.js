@@ -1,4 +1,4 @@
-// ======= HTML-код для поиска ======= 
+// ======= HTML-код для поиска =======
 const searchContainerHTMLMobile = `
   <div id="searchContainerMobile" style="position: relative; z-index: 1000; display: flex; align-items: center; background-color: white; border-radius: 20px; overflow: hidden; width: 40px; transition: width 0.3s ease;">
     <img src="https://static.tildacdn.info/tild3764-3665-4662-b664-373066626139/Search_Magnifying_Gl.svg" alt="Search" style="width: 20px; height: 20px; margin: 10px; cursor: pointer;">
@@ -19,57 +19,71 @@ const searchContainerHTMLDesktop = `
   </div>
 `;
 
-// ======= Проверка: если НЕТ .gc-account-leftbar, значит приложение =======
+// ======= Функция для определения, что мы в приложении (по примеру баннера) =======
 function isApp() {
-  return !document.querySelector('.gc-account-leftbar');
+  // В оригинальном баннере приложение определялось через наличие .container
+  // Здесь можно добавить более точную логику, если она есть в баннере
+  // Например, если на странице есть .container — это сайт, иначе — приложение
+  const container = document.querySelector('.container');
+  return !container; // Если контейнера нет — значит, приложение
 }
 
-// ======= Добавление контейнера поиска =======
+// ======= Функция для добавления поиска с проверкой блоков =======
 function addSearchContainer() {
   const isMobile = window.innerWidth <= 768;
+  const isTrainingPage = window.location.href.includes('/teach/control/stream/view/id/');
+  const isLessonPage = window.location.href.includes('/pl/teach/control/lesson/view/');
 
-  if (isMobile && isApp()) {
-    let attempts = 0;
-    const maxAttempts = 10;
+  if (isMobile) {
+   if (isApp()) {
+  let attempts = 0;
+  const maxAttempts = 10;
+  const interval = setInterval(() => {
+    attempts++;
+    const firstVisibleElement = Array.from(document.body.children).find(
+      el => el.offsetParent !== null && el.tagName !== 'SCRIPT' && el.tagName !== 'STYLE'
+    );
 
-    const interval = setInterval(() => {
-      attempts++;
-      const xdgetRoot = document.querySelector('div.xdget-root');
+    if (firstVisibleElement || attempts >= maxAttempts) {
+      clearInterval(interval);
 
-      if (xdgetRoot || attempts >= maxAttempts) {
-        clearInterval(interval);
-        if (!document.querySelector('#searchContainerMobile')) {
-          if (xdgetRoot) {
-            xdgetRoot.insertAdjacentHTML('beforebegin', searchContainerHTMLMobile);
-          } else {
-            document.body.insertAdjacentHTML('afterbegin', searchContainerHTMLMobile);
+      if (!document.querySelector('#searchContainerMobile')) {
+        if (firstVisibleElement) {
+          firstVisibleElement.insertAdjacentHTML('beforebegin', searchContainerHTMLMobile);
+        } else {
+          document.body.insertAdjacentHTML('afterbegin', searchContainerHTMLMobile);
+        }
+
+        setupMobileSearchHandlers();
+      }
+    }
+  }, 100);
+}
+
+ else {
+      // Мобильная версия сайта — вставляем в левую панель, как раньше
+      let attempts = 0;
+      const maxAttempts = 10;
+      const interval = setInterval(() => {
+        attempts++;
+        const leftBar = document.querySelector('.gc-account-leftbar');
+
+        if (leftBar) {
+          clearInterval(interval);
+          if (!leftBar.querySelector('#searchContainerMobile')) {
+            leftBar.insertAdjacentHTML('afterbegin', searchContainerHTMLMobile);
+            setupMobileSearchHandlers();
           }
-          setupMobileSearchHandlers();
+        } else if (attempts >= maxAttempts) {
+          clearInterval(interval);
         }
-      }
-    }, 100);
-  } else if (isMobile && !isApp()) {
-    let attempts = 0;
-    const maxAttempts = 10;
+      }, 100);
+    }
 
-    const interval = setInterval(() => {
-      attempts++;
-      const leftBar = document.querySelector('.gc-account-leftbar');
-
-      if (leftBar) {
-        clearInterval(interval);
-        if (!leftBar.querySelector('#searchContainerMobile')) {
-          leftBar.insertAdjacentHTML('afterbegin', searchContainerHTMLMobile);
-          setupMobileSearchHandlers();
-        }
-      } else if (attempts >= maxAttempts) {
-        clearInterval(interval);
-      }
-    }, 100);
   } else {
+    // Десктопная версия
     let attempts = 0;
     const maxAttempts = 10;
-
     const interval = setInterval(() => {
       attempts++;
       const breadcrumbs = document.querySelector('.breadcrumbs, .empty-breadcrumbs');
@@ -93,44 +107,37 @@ function addSearchContainer() {
   }
 }
 
-// ======= Обработчики мобильного поиска =======
+// ======= Настройка обработчиков поиска для мобильной версии =======
 function setupMobileSearchHandlers() {
   const searchContainer = document.getElementById('searchContainerMobile');
   const searchInput = document.getElementById('searchInputMobile');
   const searchIcon = searchContainer.querySelector('img');
   const searchResults = document.getElementById('searchResultsMobile');
 
-  if (isApp()) {
-    searchContainer.style.width = '72vw';
-    searchInput.style.display = 'block';
+  searchIcon.addEventListener('click', (event) => {
+    event.stopPropagation();
+    const isExpanded = searchContainer.style.width === '72vw';
+    searchContainer.style.width = isExpanded ? '40px' : '72vw';
+    searchInput.style.display = isExpanded ? 'none' : 'block';
     searchResults.style.display = 'none';
-    searchInput.focus();
-  } else {
-    searchIcon.addEventListener('click', (event) => {
-      event.stopPropagation();
-      const isExpanded = searchContainer.style.width === '72vw';
-      searchContainer.style.width = isExpanded ? '40px' : '72vw';
-      searchInput.style.display = isExpanded ? 'none' : 'block';
+    if (!isExpanded) searchInput.focus();
+  });
+
+  searchInput.addEventListener('input', () => {
+    searchResults.style.display = 'block';
+    searchResults.innerHTML = `<p>Результаты для "${searchInput.value}"</p>`;
+  });
+
+  document.addEventListener('click', (event) => {
+    if (!searchContainer.contains(event.target)) {
+      searchContainer.style.width = '40px';
+      searchInput.style.display = 'none';
       searchResults.style.display = 'none';
-      if (!isExpanded) searchInput.focus();
-    });
-
-    searchInput.addEventListener('input', () => {
-      searchResults.style.display = 'block';
-      searchResults.innerHTML = `<p>Результаты для "${searchInput.value}"</p>`;
-    });
-
-    document.addEventListener('click', (event) => {
-      if (!searchContainer.contains(event.target)) {
-        searchContainer.style.width = '40px';
-        searchInput.style.display = 'none';
-        searchResults.style.display = 'none';
-      }
-    });
-  }
+    }
+  });
 }
 
-// ======= Обработчики десктопного поиска =======
+// ======= Настройка обработчиков поиска для десктопной версии =======
 function setupDesktopSearchHandlers() {
   const searchInput = document.getElementById('searchInput');
   const searchResults = document.getElementById('searchResults');
@@ -143,10 +150,8 @@ function setupDesktopSearchHandlers() {
   }
 }
 
-// ======= AJAX-поиск и рендер =======
+// ======= Обработчик поиска =======
 $(document).ready(function () {
-  addSearchContainer();
-
   let typingTimer;
   const typingDelay = 1000;
 
@@ -211,6 +216,7 @@ $(document).ready(function () {
 
       searchResults.innerHTML = resultItems;
       searchResults.style.display = 'block';
+
     } else {
       searchResults.innerHTML = '<p>Результаты не найдены</p>';
       searchResults.style.display = 'block';
@@ -231,23 +237,28 @@ $(document).ready(function () {
     }, typingDelay);
   }
 
-  // Делегируем обработку ввода после загрузки контейнеров
-  const inputCheckInterval = setInterval(() => {
-    const inputMobile = document.getElementById('searchInputMobile');
-    const resultsMobile = document.getElementById('searchResultsMobile');
-    const inputDesktop = document.getElementById('searchInput');
-    const resultsDesktop = document.getElementById('searchResults');
-
-    if ((inputMobile && resultsMobile) || (inputDesktop && resultsDesktop)) {
-      clearInterval(inputCheckInterval);
-
+  // Инициализация поиска для мобильного и десктопного вариантов
+  function initSearchHandlers() {
+    if (isMobile()) {
+      const inputMobile = document.getElementById('searchInputMobile');
+      const resultsMobile = document.getElementById('searchResultsMobile');
       if (inputMobile && resultsMobile) {
         inputMobile.addEventListener('input', () => onSearchInput(inputMobile, resultsMobile));
       }
+    } else {
+      const inputDesktop = document.getElementById('searchInput');
+      const resultsDesktop = document.getElementById('searchResults');
       if (inputDesktop && resultsDesktop) {
         inputDesktop.addEventListener('input', () => onSearchInput(inputDesktop, resultsDesktop));
       }
     }
-  }, 200);
-});
+  }
 
+  // Запуск
+  addSearchContainer();
+
+  // Запускаем после вставки DOM
+  setTimeout(() => {
+    initSearchHandlers();
+  }, 1500);
+});
