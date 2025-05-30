@@ -100,7 +100,7 @@ background: #fff !important;
 
 @media screen and (max-width: 768px) {
 .xdget-root #searchContainerMobile {
-top: 0px !!important;
+top: 160px !!important;
 }
 #searchContainerMobile{
 top: 0px ;
