@@ -133,7 +133,6 @@ function setupMobileSearchHandlers() {
       searchResults.style.display = 'none';
     }
   });
-}
 
 // ======= Настройка обработчиков поиска для десктопной версии =======
 function setupDesktopSearchHandlers() {
