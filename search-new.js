@@ -36,7 +36,6 @@ function addSearchContainer() {
 
     const interval = setInterval(() => {
       attempts++;
-
       const xdgetRoot = document.querySelector('div.xdget-root');
 
       if (xdgetRoot || attempts >= maxAttempts) {
@@ -53,28 +52,24 @@ function addSearchContainer() {
         }
       }
     }, 100);
-  }
-}
- else {
-      // Мобильная версия сайта — вставляем в левую панель, как раньше
-      let attempts = 0;
-      const maxAttempts = 10;
-      const interval = setInterval(() => {
-        attempts++;
-        const leftBar = document.querySelector('.gc-account-leftbar');
+  } else if (isMobile) {
+    // Мобильная версия сайта — вставляем в левую панель, как раньше
+    let attempts = 0;
+    const maxAttempts = 10;
+    const interval = setInterval(() => {
+      attempts++;
+      const leftBar = document.querySelector('.gc-account-leftbar');
 
-        if (leftBar) {
-          clearInterval(interval);
-          if (!leftBar.querySelector('#searchContainerMobile')) {
-            leftBar.insertAdjacentHTML('afterbegin', searchContainerHTMLMobile);
-            setupMobileSearchHandlers();
-          }
-        } else if (attempts >= maxAttempts) {
-          clearInterval(interval);
+      if (leftBar) {
+        clearInterval(interval);
+        if (!leftBar.querySelector('#searchContainerMobile')) {
+          leftBar.insertAdjacentHTML('afterbegin', searchContainerHTMLMobile);
+          setupMobileSearchHandlers();
         }
-      }, 100);
-    }
-
+      } else if (attempts >= maxAttempts) {
+        clearInterval(interval);
+      }
+    }, 100);
   } else {
     // Десктопная версия
     let attempts = 0;
