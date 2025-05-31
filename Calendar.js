@@ -107,7 +107,6 @@ document.addEventListener('DOMContentLoaded', function () {
           btn.style.cursor = 'pointer';
 
           btn.addEventListener('click', function () {
-            // Формируем даты для календаря
             const [h, m] = timeText.split(':');
             const pad = n => n.toString().padStart(2, '0');
             const y = eventDate.getFullYear();
@@ -118,7 +117,9 @@ document.addEventListener('DOMContentLoaded', function () {
             const endHour = pad(endHourNum);
             const end = `${y}${mo}${d}T${endHour}${pad(m)}00`;
 
-            // Определяем устройство и окружение
+            // 🌍 Получаем текущий часовой пояс пользователя
+            const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
             const ua = navigator.userAgent || navigator.vendor || window.opera;
             const isIOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
             const isSafari = /^((?!chrome|android).)*safari/i.test(ua);
@@ -133,7 +134,7 @@ document.addEventListener('DOMContentLoaded', function () {
               calendarUrl.searchParams.set('text', eventTitle);
               calendarUrl.searchParams.set('details', eventDesc);
               calendarUrl.searchParams.set('dates', `${start}/${end}`);
-              calendarUrl.searchParams.set('ctz', 'Europe/Moscow');
+              calendarUrl.searchParams.set('ctz', userTimeZone);
               window.open(calendarUrl.toString(), '_blank');
             }
 
@@ -144,8 +145,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 "BEGIN:VEVENT",
                 `SUMMARY:${eventTitle}`,
                 `DESCRIPTION:${eventDesc}`,
-                `DTSTART;TZID=Europe/Moscow:${start}`,
-                `DTEND;TZID=Europe/Moscow:${end}`,
+                `DTSTART;TZID=${userTimeZone}:${start}`,
+                `DTEND;TZID=${userTimeZone}:${end}`,
                 "END:VEVENT",
                 "END:VCALENDAR"
               ].join("\n");
@@ -161,15 +162,12 @@ document.addEventListener('DOMContentLoaded', function () {
               URL.revokeObjectURL(url);
             }
 
-            // Логика показа выбора
             if (isSafari) {
-              // Показываем выбор календаря
               showCalendarChoicePopup({
                 onGoogle: openGoogleCalendar,
                 onApple: openAppleCalendar,
               });
             } else {
-              // Сразу открываем Google календарь
               openGoogleCalendar();
             }
           });
