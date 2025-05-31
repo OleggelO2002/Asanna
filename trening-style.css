@@ -38,6 +38,9 @@ margin-right: 0px !important;
 .no-children div{
 max-width: 60%;    
 }
+.has-children div{
+max-width: 60%;    
+}
 .breadcrumbs {
 margin-top: 20px !important;    
 }
