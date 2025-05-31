@@ -1,5 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&display=swap');
-
+.top-notification-notice {
+position: relative;
+    z-index: 999999999;    
+}
 @media screen and (max-width: 768px) {
 .container {
     width: 100% !important;
