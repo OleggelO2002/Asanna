@@ -30,6 +30,21 @@ margin: 0 auto !important;
 }
 /* тест*/
 @media screen and (max-width: 768px) {
+
+.banner-text{
+width: 65% !important;
+max-width: none !important;
+left: auto !important;
+text-align: center !important;
+}
+.banner-text p{
+max-width: 100%;
+text-align: center !important; 
+margin: 0 auto !important;
+}
+
+
+
 .custom-banner {
   /* top: 40px !important;*/
   margin-top: 60px !important;
