@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', function () {
-  // Проверка, что это страница урока
   if (!window.location.href.includes('lesson')) {
     console.log('⏭ Не страница урока — логика не выполняется');
     return;
@@ -23,9 +22,8 @@ document.addEventListener('DOMContentLoaded', function () {
     return (date2.year - date1.year) * 12 + (date2.month - date1.month);
   }
 
-  function calculateNewCounts(oldCount, newCount, dateText, currentDateText) {
+  function calculateNewCounts(newCount, oldCount, dateText, currentDateText) {
     if (!dateText) {
-      // Если даты нет, создаем новую
       return {
         newCount: 1,
         oldCount: 0,
@@ -38,28 +36,24 @@ document.addEventListener('DOMContentLoaded', function () {
     const diff = monthsDifference(saved, current);
 
     if (diff === 0) {
-      // Текущий месяц
       return {
         newCount: newCount + 1,
         oldCount,
         dateText
       };
     } else if (diff === 1) {
-      // Следующий месяц
       return {
         newCount: 1,
         oldCount: newCount,
         dateText: currentDateText
       };
     } else if (diff > 1) {
-      // Пропущено больше месяца — сброс
       return {
         newCount: 1,
         oldCount: 0,
         dateText: currentDateText
       };
     } else {
-      // Дата из будущего или ошибка — ничего не делаем
       return null;
     }
   }
@@ -72,31 +66,47 @@ document.addEventListener('DOMContentLoaded', function () {
     console.log('📤 Данные отправлены:', { newCount, oldCount, dateText });
   }
 
-  function fetchCountsAndSend() {
+  function fetchPreviousDataAndSend() {
     const currentDateText = getCurrentMonthYearText();
+    const url = 'https://asanna.online/page359';
 
-    const newBlock = document.querySelector('.new-count-lesson');
-    const oldBlock = document.querySelector('.old-count-lesson');
-    const dateBlock = document.querySelector('.date-count-lesson');
+    fetch(url)
+      .then(response => response.text())
+      .then(html => {
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = html;
 
-    const newCount = parseInt(newBlock?.innerText || '0') || 0;
-    const oldCount = parseInt(oldBlock?.innerText || '0') || 0;
-    const dateText = dateBlock?.innerText?.trim() || '';
+        const cleanNumber = (el) => {
+          if (!el) return 0;
+          const match = el.textContent.match(/\d+/);
+          return match ? parseInt(match[0], 10) : 0;
+        };
 
-    const updated = calculateNewCounts(oldCount, newCount, dateText, currentDateText);
+        const newBlock = tempDiv.querySelector('.new-count-lesson');
+        const oldBlock = tempDiv.querySelector('.old-count-lesson');
+        const dateBlock = tempDiv.querySelector('.date-count-lesson');
 
-    if (updated) {
-      sendLessonProgress(updated);
-    } else {
-      console.warn('⚠️ Невозможно отправить данные — дата некорректна или в будущем');
-    }
+        const newCount = cleanNumber(newBlock);
+        const oldCount = cleanNumber(oldBlock);
+        const dateText = dateBlock?.textContent.trim() || '';
+
+        const updated = calculateNewCounts(newCount, oldCount, dateText, currentDateText);
+        if (updated) {
+          sendLessonProgress(updated);
+        } else {
+          console.warn('⚠️ Невозможно отправить данные — дата некорректна или в будущем');
+        }
+      })
+      .catch(error => {
+        console.error('❌ Ошибка при получении предыдущих данных:', error);
+      });
   }
 
-  // Запуск таймера
+  // Запуск через 15 минут
   setTimeout(() => {
     if (!lessonCompleted) {
       lessonCompleted = true;
-      fetchCountsAndSend();
+      fetchPreviousDataAndSend();
     }
   }, 15 * 60 * 1000); // 15 минут
 });
