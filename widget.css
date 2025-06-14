@@ -1,0 +1,119 @@
+  background-color: transparent !important;
+  display: inline-block;
+  font-family: 'Montserrat' !important;
+  font-style: normal !important;
+  font-weight: 650 !important;
+  font-size: 14px !important;
+  text-transform: uppercase;
+  color: #363636;
+  border: none !important;
+  cursor: pointer;
+  border: 20px solid transparent !important;
+  -webkit-border-image: url('https://static.tildacdn.info/tild3133-3639-4330-b066-393865353137/Group_48097313.svg') 25 round !important;
+  background-clip: padding-box !important; /* чтобы фон не перекрывал края */ 
+  transition: transform 0.4s ease;
+}
+.btn-success:hover{
+transform: translatey(-15px)
+}
+
+
+.f-input {
+border: none !important; 
+background: #F4F4F4 !important;
+box-shadow: none !important;
+border-radius: 7px !important;
+font-family: 'Futura PT';
+font-style: normal;
+font-weight: 400;
+font-size: 20px;
+color: #999B9C;
+}
+
+.row {
+background: #FFF;    
+}
+
+.lt-form .label-value {
+font-family: 'Futura PT';
+font-style: normal;
+font-weight: 400;
+font-size: 15px;
+line-height: 16px;
+letter-spacing: 0.08em;
+text-transform: uppercase;
+color: #000000; 
+}
+
+.pull-left.form-position-checker input {
+    
+}
+input[type="radio"]:focus{
+outline: none !important;    
+}
+
+input[type="radio"] {
+  color: #D5BAAF !important;
+  accent-color: #D5BAAF; /* Синий цвет */
+}
+input[type="radio"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #D5BAAF; /* Серый для невыбранных */
+  border-radius: 50%;
+  outline: none;
+  cursor: pointer;
+  vertical-align: middle;
+  position: relative;
+  margin-right: 8px;
+  transition: all 0.2s ease;
+}
+
+input[type="radio"]:hover {
+  border-color: #D5BAAF; /* Темно-серый при наведении */
+  border: 4px solid #D5BAAF;
+}
+
+input[type="radio"]:checked {
+  border-color: #D5BAAF; /* Синий для выбранных */
+  background-color: #D5BAAF;
+}
+@media screen and (min-width: 768px) {
+.offer-title {
+font-family: 'Futura PT';
+font-style: normal;
+font-weight: 400;
+font-size: 20px;
+line-height: 38px;
+color: #000000;    
+}
+.form-position-price {
+font-family: 'Futura PT';
+font-style: normal;
+font-weight: 400;
+font-size: 20px;
+line-height: 38px;
+color: #000000;        
+}
+}
+@media screen and (max-width: 768px) {
+.offer-title {
+font-family: 'Futura PT';
+font-style: normal;
+font-weight: 400;
+font-size: 18px;
+color: #000000;
+display: inline-block !important;
+width: 70vw !important; 
+}
+.form-position-price {
+font-family: 'Futura PT';
+font-style: normal;
+font-weight: 400;
+font-size: 18px;
+color: #000000;        
+}
+}
