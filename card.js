@@ -40,9 +40,9 @@ document.addEventListener('DOMContentLoaded', async function () {
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, 'text/html');
 
-    // Изображения
-    const thumbs = doc.querySelectorAll('#links img');
-    const images = Array.from(thumbs).slice(0, 6).map(img => img.src);
+    // Получаем ссылки на полные изображения из <a href="...">
+    const links = doc.querySelectorAll('#links a');
+    const images = Array.from(links).slice(0, 6).map(link => link.href);
 
     // Текст
     const textBlock = doc.querySelector('.text-for-card p');
