@@ -40,9 +40,53 @@ document.addEventListener('DOMContentLoaded', async function () {
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, 'text/html');
 
-    // Получаем ссылки на полные изображения из <a href="...">
-    const links = doc.querySelectorAll('#links a');
-    const images = Array.from(links).slice(0, 6).map(link => link.href);
+    // --- Функция для конвертации миниатюры в оригинал ---
+    function convertThumbnailToDownload(src) {
+      if (!src) return src;
+      let full = src.startsWith('//') ? 'https:' + src : src;
+      const hIdx = full.indexOf('/h/');
+      if (hIdx === -1) return full;
+      const sIdx = full.indexOf('/s/', hIdx);
+      const aIdx = full.indexOf('/a/', (sIdx !== -1 ? sIdx : hIdx));
+      const filenameEnd = sIdx !== -1 ? sIdx : (aIdx !== -1 ? aIdx : full.length);
+      const filename = full.slice(hIdx + 3, filenameEnd);
+      const aPart = (aIdx !== -1) ? full.slice(aIdx) : '';
+      if (!aPart) return full;
+      return `https://fs22.getcourse.ru/fileservice/file/download${aPart}/h/${filename}`;
+    }
+
+    // --- Сбор изображений ---
+    const imageNodes = doc.querySelectorAll('#links a, #links img');
+    const images = [];
+    imageNodes.forEach(node => {
+      let url = null;
+
+      if (node.tagName.toLowerCase() === 'a') {
+        url = node.getAttribute('href') || node.href || null;
+        if (!url) {
+          const imgInside = node.querySelector && node.querySelector('img');
+          if (imgInside) {
+            url = imgInside.getAttribute('data-full') || imgInside.getAttribute('data-src') || imgInside.getAttribute('src');
+          }
+        }
+      } else if (node.tagName.toLowerCase() === 'img') {
+        const parentA = node.closest && node.closest('a');
+        url = (parentA && (parentA.getAttribute('href') || parentA.href)) || node.getAttribute('data-full') || node.getAttribute('data-src') || node.getAttribute('src');
+      }
+
+      if (url) {
+        if (/\/s\/|thumbnail/.test(url)) {
+          try {
+            const converted = convertThumbnailToDownload(url);
+            if (converted) url = converted;
+          } catch (e) {}
+        }
+        images.push(url);
+      }
+    });
+
+    const uniqueImages = Array.from(new Set(images)).slice(0, 6);
+    console.log('Загруженные изображения для карточек:', uniqueImages);
 
     // Текст
     const textBlock = doc.querySelector('.text-for-card p');
@@ -50,8 +94,8 @@ document.addEventListener('DOMContentLoaded', async function () {
       textContainer.textContent = textBlock.textContent;
     }
 
-    // Карточки
-    images.forEach((src) => {
+    // --- Создание карточек ---
+    uniqueImages.forEach((src) => {
       const card = document.createElement('div');
       card.className = 'card';
       card.innerHTML = `
@@ -111,6 +155,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         }, 1000);
       });
     });
+
   } catch (error) {
     console.error('Ошибка при загрузке данных:', error);
     overlay.remove();
