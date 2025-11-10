@@ -22,10 +22,9 @@ document.addEventListener('DOMContentLoaded', async function () {
   container.id = 'daily-card-container';
   overlay.appendChild(container);
 
-  // Переменная для хранения клона карточки
   let floatingCard = null;
 
-  // Закрытие overlay и удаление клона карточки
+  // Закрытие overlay
   closeButton.addEventListener('click', () => {
     overlay.remove();
     if (floatingCard) {
@@ -40,53 +39,19 @@ document.addEventListener('DOMContentLoaded', async function () {
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, 'text/html');
 
-    // --- Функция для конвертации миниатюры в оригинал ---
-    function convertThumbnailToDownload(src) {
-      if (!src) return src;
-      let full = src.startsWith('//') ? 'https:' + src : src;
-      const hIdx = full.indexOf('/h/');
-      if (hIdx === -1) return full;
-      const sIdx = full.indexOf('/s/', hIdx);
-      const aIdx = full.indexOf('/a/', (sIdx !== -1 ? sIdx : hIdx));
-      const filenameEnd = sIdx !== -1 ? sIdx : (aIdx !== -1 ? aIdx : full.length);
-      const filename = full.slice(hIdx + 3, filenameEnd);
-      const aPart = (aIdx !== -1) ? full.slice(aIdx) : '';
-      if (!aPart) return full;
-      return `https://fs22.getcourse.ru/fileservice/file/download${aPart}/h/${filename}`;
-    }
+    // Ищем все <a> внутри #links
+    const links = doc.querySelectorAll('#links a');
+    const images = Array.from(links).slice(0, 6).map(link => {
+      let url = link.href;
+      if (!url) return null;
 
-    // --- Сбор изображений ---
-    const imageNodes = doc.querySelectorAll('#links a, #links img');
-    const images = [];
-    imageNodes.forEach(node => {
-      let url = null;
+      // Убираем миниатюрную часть и меняем домен
+      url = url.replace('//fs-thb03.getcourse.ru/fileservice/file/thumbnail', 'https://fs22.getcourse.ru/fileservice/file/download');
+      url = url.replace(/\/s\/s\d+x\d+\//, '/'); // удаляем обрезку /s/s400x400/
+      return url;
+    }).filter(Boolean);
 
-      if (node.tagName.toLowerCase() === 'a') {
-        url = node.getAttribute('href') || node.href || null;
-        if (!url) {
-          const imgInside = node.querySelector && node.querySelector('img');
-          if (imgInside) {
-            url = imgInside.getAttribute('data-full') || imgInside.getAttribute('data-src') || imgInside.getAttribute('src');
-          }
-        }
-      } else if (node.tagName.toLowerCase() === 'img') {
-        const parentA = node.closest && node.closest('a');
-        url = (parentA && (parentA.getAttribute('href') || parentA.href)) || node.getAttribute('data-full') || node.getAttribute('data-src') || node.getAttribute('src');
-      }
-
-      if (url) {
-        if (/\/s\/|thumbnail/.test(url)) {
-          try {
-            const converted = convertThumbnailToDownload(url);
-            if (converted) url = converted;
-          } catch (e) {}
-        }
-        images.push(url);
-      }
-    });
-
-    const uniqueImages = Array.from(new Set(images)).slice(0, 6);
-    console.log('Загруженные изображения для карточек:', uniqueImages);
+    console.log('Оригинальные ссылки на изображения:', images);
 
     // Текст
     const textBlock = doc.querySelector('.text-for-card p');
@@ -94,8 +59,8 @@ document.addEventListener('DOMContentLoaded', async function () {
       textContainer.textContent = textBlock.textContent;
     }
 
-    // --- Создание карточек ---
-    uniqueImages.forEach((src) => {
+    // Создаём карточки
+    images.forEach((src) => {
       const card = document.createElement('div');
       card.className = 'card';
       card.innerHTML = `
@@ -114,7 +79,6 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         const allCards = Array.from(container.children);
 
-        // Клонируем карточку
         const rect = card.getBoundingClientRect();
         floatingCard = card.cloneNode(true);
         floatingCard.classList.add('floating-card');
@@ -125,10 +89,8 @@ document.addEventListener('DOMContentLoaded', async function () {
         floatingCard.style.height = `${rect.height}px`;
         document.body.appendChild(floatingCard);
 
-        // Скрываем оригиналы
         allCards.forEach(c => c.style.visibility = 'hidden');
 
-        // Центрирование
         const centerX = window.innerWidth / 2 - rect.width / 2;
         const centerY = window.innerHeight / 2 - rect.height / 2;
 
@@ -137,16 +99,13 @@ document.addEventListener('DOMContentLoaded', async function () {
           floatingCard.style.top = `${centerY + window.scrollY}px`;
         });
 
-        // Через 1 секунду переключаем позицию на fixed
         setTimeout(() => {
           if (!floatingCard) return;
-
           const currentRect = floatingCard.getBoundingClientRect();
           floatingCard.style.position = 'fixed';
           floatingCard.style.left = `${currentRect.left}px`;
           floatingCard.style.top = `${currentRect.top}px`;
 
-          // Флип
           setTimeout(() => {
             if (floatingCard) {
               floatingCard.classList.add('flipped');
