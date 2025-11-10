@@ -48,11 +48,23 @@ document.addEventListener('DOMContentLoaded', async function () {
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, 'text/html');
 
-    // Извлекаем все изображения
+    // === Извлекаем изображения ===
     const thumbs = doc.querySelectorAll('#links img');
-    const allImages = Array.from(thumbs).map(img => img.src);
+    const allImages = Array.from(thumbs).map(img => {
+      let src = img.src;
 
-    // Функция выбора случайных N элементов
+      // Убираем обрезку /s/s400x400/ если она есть
+      src = src.replace(/\/s\/s400x400\//, '/');
+
+      // Исправляем ссылки без протокола
+      if (src.startsWith('//')) {
+        src = 'https:' + src;
+      }
+
+      return src;
+    });
+
+    // === Выбор случайных N изображений ===
     function getRandomItems(arr, n) {
       const shuffled = arr.slice().sort(() => 0.5 - Math.random());
       return shuffled.slice(0, n);
@@ -60,13 +72,13 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     const images = getRandomItems(allImages, 6);
 
-    // Текст
+    // === Текст из блока ===
     const textBlock = doc.querySelector('.text-for-card p');
     if (textBlock) {
       textContainer.textContent = textBlock.textContent;
     }
 
-    // Карточки
+    // === Генерация карточек ===
     images.forEach((src) => {
       const card = document.createElement('div');
       card.className = 'card';
@@ -79,7 +91,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         </div>`;
       container.appendChild(card);
 
-      // Клик по карточке
+      // === Клик по карточке ===
       card.addEventListener('click', () => {
         if (container.classList.contains('done')) return;
         container.classList.add('done');
@@ -148,3 +160,4 @@ document.addEventListener('DOMContentLoaded', async function () {
     overlay.remove();
   }
 });
+
