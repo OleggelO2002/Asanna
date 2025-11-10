@@ -28,7 +28,6 @@ document.addEventListener('DOMContentLoaded', async function () {
   container.id = 'daily-card-container';
   overlay.appendChild(container);
 
-  // Переменная для хранения клона карточки
   let floatingCard = null;
 
   // Закрытие overlay и удаление клона карточки
@@ -48,23 +47,11 @@ document.addEventListener('DOMContentLoaded', async function () {
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, 'text/html');
 
-    // === Извлекаем изображения ===
-    const thumbs = doc.querySelectorAll('#links img');
-    const allImages = Array.from(thumbs).map(img => {
-      let src = img.src;
+    // === Извлекаем оригинальные изображения из <a href="..."> ===
+    const links = doc.querySelectorAll('#links a');
+    const allImages = Array.from(links).map(link => link.href);
 
-      // Убираем обрезку /s/s400x400/ если она есть
-      src = src.replace(/\/s\/s400x400\//, '/');
-
-      // Исправляем ссылки без протокола
-      if (src.startsWith('//')) {
-        src = 'https:' + src;
-      }
-
-      return src;
-    });
-
-    // === Выбор случайных N изображений ===
+    // Функция выбора случайных N элементов
     function getRandomItems(arr, n) {
       const shuffled = arr.slice().sort(() => 0.5 - Math.random());
       return shuffled.slice(0, n);
@@ -91,14 +78,13 @@ document.addEventListener('DOMContentLoaded', async function () {
         </div>`;
       container.appendChild(card);
 
-      // === Клик по карточке ===
+      // Клик по карточке
       card.addEventListener('click', () => {
         if (container.classList.contains('done')) return;
         container.classList.add('done');
 
         const allCards = Array.from(container.children);
 
-        // Клонируем карточку
         const rect = card.getBoundingClientRect();
         floatingCard = card.cloneNode(true);
         floatingCard.classList.add('floating-card');
@@ -110,10 +96,8 @@ document.addEventListener('DOMContentLoaded', async function () {
         floatingCard.style.zIndex = '9999';
         document.body.appendChild(floatingCard);
 
-        // Скрываем оригиналы
         allCards.forEach(c => c.style.visibility = 'hidden');
 
-        // Центрирование
         const centerX = window.innerWidth / 2 - rect.width / 2;
         const centerY = window.innerHeight / 2 - rect.height / 2;
 
@@ -122,16 +106,13 @@ document.addEventListener('DOMContentLoaded', async function () {
           floatingCard.style.top = `${centerY + window.scrollY}px`;
         });
 
-        // Через 1 секунду переключаем позицию на fixed
         setTimeout(() => {
           if (!floatingCard) return;
-
           const currentRect = floatingCard.getBoundingClientRect();
           floatingCard.style.position = 'fixed';
           floatingCard.style.left = `${currentRect.left}px`;
           floatingCard.style.top = `${currentRect.top}px`;
 
-          // Флип + добавляем кнопку
           setTimeout(() => {
             if (floatingCard) {
               floatingCard.classList.add('flipped');
@@ -155,9 +136,9 @@ document.addEventListener('DOMContentLoaded', async function () {
         }, 1000);
       });
     });
+
   } catch (error) {
     console.error('Ошибка при загрузке данных:', error);
     overlay.remove();
   }
 });
-
